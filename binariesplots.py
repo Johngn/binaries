@@ -118,7 +118,7 @@ plt.grid('both')
 plt.legend()
 # plt.savefig(f"distance_{str(sim.integrator)}", bbox_inches='tight')
 # %%
-lim = 20
+lim = 10
 fig, axes = plt.subplots(1, figsize=(9, 9))
 axes.set_xlabel("$x/R_\mathrm{h}$")
 axes.set_ylabel("$y/R_\mathrm{h}$")

@@ -18,7 +18,7 @@ m1, m2  = 4./3.*np.pi*dens1*s1**3,  4./3.*np.pi*dens2*s2**3
 r = 44.*au
 OmegaK = np.sqrt(G*(Msun+m1+m2)/r**3)
 Rhill = r*((m1+m2)/Msun/3.)**(1./3.)
-rbin = 0.5*Rhill
+rbin = 0.9*Rhill
 vorb = np.sqrt(G*(m1+m2)/rbin)
 vshear = -1.5*OmegaK*rbin
 Pbin = 2.*np.pi/np.sqrt(G*(m1+m2)/rbin**3)
@@ -74,7 +74,7 @@ ctheta0 = np.cos(theta0)
 sim.add(m=mimp, r=simp, x=(r+B)*ctheta0-r*np.cos(impi), y=(r+B)*stheta0*np.cos(impi), z=(r+B)*np.sin(impi), vx=-vorbi*stheta0, vy=vorbi*ctheta0, hash="impactor")
 
 
-Noutputs = 500
+Noutputs = 1000
 totaltime = T
 p, s, imp, sun = np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3))
 vp, vs, vimp, vsun = np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3))
@@ -144,7 +144,7 @@ plt.axhline(y=0, ls="--", color="black", lw=1.5)
 plt.xlabel("Time (years)")
 plt.ylabel("Energy (J/kg)")
 plt.xlim(0, np.amax(times)/year)
-# plt.ylim(-0.02, 0.02)
+plt.ylim(-0.02, 0.02)
 plt.grid('both')
 plt.legend()
 # plt.savefig(f"energy_{str(sim.integrator)}", bbox_inches='tight')
