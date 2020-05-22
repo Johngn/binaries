@@ -1,14 +1,17 @@
 # %%
-import glob, os, csv, rebound
+import glob, os, csv, rebound, mysql.connector, pymysql
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import mpl_toolkits.mplot3d.axes3d as p3
 from matplotlib import animation
+from scipy.spatial.distance import pdist
+from timeit import default_timer as timed
+from sqlalchemy import create_engine
 # %%
 b = 5.0
 simp = 40.0
-path = '/home/john/Desktop/mastersproject/results'
+path = '/home/john/Desktop/mastersproject'
 
 G = 6.67428e-11
 au = 1.496e11
@@ -18,7 +21,7 @@ T = 2.*np.pi/np.sqrt(G*(Msun)/r**3)
 n = 2*np.pi/T
 year = 365.25*24.*60.*60.
 
-data = pd.read_csv(f'{path}/particles__b-{b}__r-{simp}.csv')
+data = pd.read_csv(f'{path}/results/particles__b-{b}__r-{simp}.csv')
 
 times = data['time'].to_numpy()
 m1 = data['mass prim'].to_numpy()[0]
@@ -77,20 +80,6 @@ Cj = n**2*(x**2 + y**2) + 2*(mu1/r1 + mu2/r2) - vx**2 - vy**2
 # %%
 plt.figure(figsize=(15,8))
 # plt.title(f"Impactor radius={simp} km -- b={b} hill radii")
-plt.plot(times/year, boundps, label="Primary-Secondary", lw=3, alpha=0.7)
-plt.plot(times/year, boundpimp, label="Primary-Impactor", lw=3, alpha=0.7)
-plt.plot(times/year, boundsimp, label="Secondary-Impactor", lw=3, alpha=0.7)
-plt.axhline(y=0, ls="--", color="black", lw=1.5)
-plt.xlabel("Time (years)")
-plt.ylabel("Energy (J/kg)")
-plt.xlim(0, np.amax(times)/year)
-# plt.ylim(-0.02, 0.02)
-plt.grid('both')
-plt.legend()
-# plt.savefig(f"energy_{str(sim.integrator)}", bbox_inches='tight')
-# %%
-plt.figure(figsize=(15,8))
-# plt.title(f"Impactor radius={simp} km -- b={b} hill radii")
 plt.plot(times/year, energy1, label="Primary-Secondary", lw=1.5)
 plt.plot(times/year, energy2, label="Primary-Impactor", lw=1.5)
 plt.plot(times/year, energy3, label="Secondary-Impactor", lw=1.5)
@@ -101,7 +90,7 @@ plt.xlim(0, np.amax(times)/year)
 # plt.ylim(-0.02, 0.02)
 plt.grid('both')
 plt.legend()
-# plt.savefig(f"energy_{str(sim.integrator)}", bbox_inches='tight')
+plt.savefig(f"{path}/img/energy_{}_{}", bbox_inches='tight')
 # %%
 plt.figure(figsize=(15,8))
 # plt.title(f"Impactor radius={simp} km -- b={b} hill radii")
@@ -153,7 +142,7 @@ def animate(i):
     return primarydot, secondarydot, impactordot, primaryline, secondaryline, impactorline, text
 
 anim = animation.FuncAnimation(fig, animate, blit=True, frames=len(data), interval=1)
-# anim.save('test.mp4')
+anim.save(f'{path}test.mp4')
 # %%
 lim = 2
 fig = plt.figure(figsize=(12,12))
@@ -199,22 +188,43 @@ anim = animation.FuncAnimation(fig, animate, blit=True, frames=len(data), interv
 # %%
 anim.save('3D.mp4')
 # %%
-filenames = glob.glob(f"{path}/particles*.csv")
-data = pd.read_csv(f'{path}/particles__b-{b}__r-{simp}.csv')
-results = [pd.read_csv(i, delimiter=',') for i in filenames]
+
+mydb = mysql.connector.connect(
+  host="localhost",
+  user="john",
+  passwd="321654",
+  database="mydatabase"
+)
+
+mycursor = mydb.cursor()
+
+mycursor.execute("SHOW TABLES")
+
+myresult = mycursor.fetchall()
+
+for x in myresult:
+  print(x)
+filenames = glob.glob(f"{path}/results/particles*.csv")
+# data = pd.read_csv(f'{path}/particles__b-{b}__r-{simp}.csv')
+# results = [pd.read_csv(i, delimiter=',') for i in filenames]
+filenames = pd.read_sql('SHOW TABLES', con=db_connection)
+results = [pd.read_sql_table(i, con=db_connection) for i in myresult]
+results = pd.read_sql_table('1', con=db_connection)
 data = pd.concat(results)
+for i in myresult:
+    print(i)
 
 times = data['time'].to_numpy()
 m1 = data['mass prim'].to_numpy()[0]
 m2 = data['mass sec'].to_numpy()[0]
 mimp = data['mass imp'].to_numpy()[0]
-p = data[['x prim','y prim', 'z prim']].to_numpy()
-s = data[['x sec','y sec', 'z sec']].to_numpy()
-imp = data[['x imp','y imp', 'z imp']].to_numpy()
-sun = data[['x sun','y sun', 'z sun']].to_numpy()
-vp = data[['vx prim','vy prim', 'vz prim']].to_numpy()
-vs = data[['vx sec','vy sec', 'vz sec']].to_numpy()
-vimp = data[['vx imp','vy imp', 'vz imp']].to_numpy()
+p = data[['x prim','y prim', 'z prim']].to_numpy()[999::1000]
+s = data[['x sec','y sec', 'z sec']].to_numpy()[999::1000]
+imp = data[['x imp','y imp', 'z imp']].to_numpy()[999::1000]
+sun = data[['x sun','y sun', 'z sun']].to_numpy()[999::1000]
+vp = data[['vx prim','vy prim', 'vz prim']].to_numpy()[999::1000]
+vs = data[['vx sec','vy sec', 'vz sec']].to_numpy()[999::1000]
+vimp = data[['vx imp','vy imp', 'vz imp']].to_numpy()[999::1000]
 
 r1 = np.linalg.norm(p-s, axis=1)
 r2 = np.linalg.norm(p-imp, axis=1)
@@ -242,36 +252,58 @@ a3 = mu3*r3/(2*mu3 - r3*v3**2)
 energy1 = -mu1/2/a1
 energy2 = -mu2/2/a2
 energy3 = -mu3/2/a3
-U1 = -mu1/r1
-U2 = -mu2/r2
-U3 = -mu3/r3
 
 bound1 = np.logical_and(energy1 < 0, r1 < Rhill1)
 bound2 = np.logical_and(energy2 < 0, r2 < Rhill2)
 bound3 = np.logical_and(energy3 < 0, r3 < Rhill3)
 
-ref = np.zeros((len(data),3))
-OmegaK = np.sqrt(G*(Msun+m1+m2)/r**3)
-angles = -OmegaK*times
-ref[:,0] = -r + r*np.cos(angles)
-ref[:,1] = 0 - r*np.sin(angles)
+# ref = np.zeros((len(data),3))
+# OmegaK = np.sqrt(G*(Msun+m1+m2)/r**3)
+# angles = -OmegaK*times
+# ref[:,0] = -r + r*np.cos(angles)
+# ref[:,1] = 0 - r*np.sin(angles)
 
-sp = (s-p)/Rhill
-ip = (imp-p)/Rhill
-cosspx, cosspy = np.cos(angles)*sp[:,0], np.cos(angles)*sp[:,1]
-sinspx, sinspy = np.sin(angles)*sp[:,0], np.sin(angles)*sp[:,1]
+# sp = (s-p)/Rhill
+# ip = (imp-p)/Rhill
+# cosspx, cosspy = np.cos(angles)*sp[:,0], np.cos(angles)*sp[:,1]
+# sinspx, sinspy = np.sin(angles)*sp[:,0], np.sin(angles)*sp[:,1]
 
-xdot = vs[:,0] - vp[:,0]
-ydot = vs[:,1] - vp[:,1]
-cosspxdot, cosspydot = np.cos(angles)*xdot, np.cos(angles)*ydot
-sinspxdot, sinspydot = np.sin(angles)*xdot, np.sin(angles)*ydot
+# xdot = vs[:,0] - vp[:,0]
+# ydot = vs[:,1] - vp[:,1]
+# cosspxdot, cosspydot = np.cos(angles)*xdot, np.cos(angles)*ydot
+# sinspxdot, sinspydot = np.sin(angles)*xdot, np.sin(angles)*ydot
 
-x, y = cosspx-sinspy+r, sinspx+cosspy
-vx, vy = cosspxdot-sinspydot, sinspxdot+cosspydot
+# x, y = cosspx-sinspy+r, sinspx+cosspy
+# vx, vy = cosspxdot-sinspydot, sinspxdot+cosspydot
 
-Cj = n**2*(x**2 + y**2) + 2*(mu1/r1 + mu2/r2) - vx**2 - vy**2
+# Cj = n**2*(x**2 + y**2) + 2*(mu1/r1 + mu2/r2) - vx**2 - vy**2
 
 
 # %%
-bound = bound1.reshape(-1,1000)
+bound = bound1[999::1000]
 
+# %%
+import mysql.connector
+import pymysql
+from sqlalchemy import create_engine
+
+db_connection_str = 'mysql+pymysql://john:321654@localhost/mydatabase'
+db_connection = create_engine(db_connection_str)
+
+data.to_sql('test', con=db_connection)
+
+# mydb = mysql.connector.connect(
+#   host="localhost",
+#   user="john",
+#   passwd="321654",
+#   database='mydatabase'
+# )
+
+# mycursor = mydb.cursor()
+
+# # mycursor.execute('CREATE DATABASE mydatabase')
+
+# mycursor.execute('SHOW DATABASES')
+
+# for x in mycursor:
+#   print(x) 
