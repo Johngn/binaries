@@ -1,12 +1,11 @@
 # %%
-import rebound
+import csv, rebound
 import numpy as np
 import matplotlib.pyplot as plt
 import mpl_toolkits.mplot3d.axes3d as p3
 from matplotlib import animation
 from scipy.spatial.distance import pdist
 from timeit import default_timer as timed
-import csv
 
 G = 6.67428e-11
 au = 1.496e11
@@ -29,8 +28,8 @@ mu1 = G*Msun
 mu2 = G*m1
 path = '/home/john/Desktop/mastersproject/results'
 
-simp = np.arange(1e3,50e3,10e3)
-b = np.arange(3.0,5.0,0.25)*Rhill
+simp = np.arange(10e3,50e3,10e3)
+b = np.arange(5.0,5.5,0.25)*Rhill
 
 binaryi = np.deg2rad(0)
 impi = np.deg2rad(0)
@@ -43,6 +42,10 @@ times = np.reshape(np.linspace(0.,totaltime, Noutputs), (Noutputs,1))
 m1s = np.reshape(np.ones(Noutputs)*m1, (Noutputs,1))
 m2s = np.reshape(np.ones(Noutputs)*m2, (Noutputs,1))
 Msuns = np.reshape(np.ones(Noutputs)*Msun, (Noutputs,1))
+headers = ['time','mass prim','x prim','y prim','z prim','vx prim','vy prim','vz prim',
+           'mass sec','x sec','y sec','z sec','vx sec','vy sec','vz sec',
+           'mass imp','x imp','y imp','z imp','vx imp','vy imp','vz imp',
+           'mass sun','x sun','y sun','z sun','vx sun','vy sun','vz sun',]
 
 # %%
 timer = timed()
@@ -103,6 +106,7 @@ for j in range(len(b)):
         file = open(f'{path}/particles__b-{b[j]/Rhill}__r-{simp[i]/1e3}.csv', 'w')
         with file:
             writer = csv.writer(file)
+            writer.writerow(headers)
             writer.writerows(particles)
             
 print(timed()-timer)

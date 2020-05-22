@@ -1,6 +1,5 @@
 # %%
-import rebound
-import reboundx
+import rebound, reboundx
 import numpy as np
 import matplotlib.pyplot as plt
 import mpl_toolkits.mplot3d.axes3d as p3
@@ -37,14 +36,13 @@ binaryi = np.deg2rad(0)
 impi = np.deg2rad(0)
 
 sim = rebound.Simulation()
-rebx = reboundx.Extras(sim)
-# sim.testparticle_type = 0
 sim.G = G
 sim.dt = 1e-4*Pbin 
 sim.softening = 0.1*s1
 sim.integrator = "ias15"
 sim.gravity    = "basic"
 sim.collision  = "none"
+sim.ri_ias15.epsilon=0
 
 xb1 = -m2/(m1+m2)*rbin
 xb2 = m1/(m1+m2)*rbin
@@ -63,7 +61,6 @@ cosbin = np.cos(binaryi)
 
 sim.add(m=Msun, x=-r, hash="sun")
 sim.add(m=m1, r=s1, x=xb1*np.sin(np.pi/2-binaryi), z=xb1*np.sin(binaryi), vy=vK1+vorb1*cosbin, vz=-vorb1*sinbin, hash="primary")
-# sim.N_active = sim.N
 sim.add(m=m2, r=s2, x=xb2*np.sin(np.pi/2-binaryi), z=xb2*np.sin(binaryi), vy=vK2+vorb2*cosbin, vz=-vorb2*sinbin, hash="secondary")
 
 vorbi = np.sqrt(G*Msun/(r+B))
@@ -73,6 +70,9 @@ ctheta0 = np.cos(theta0)
 
 sim.add(m=mimp, r=simp, x=(r+B)*ctheta0-r*np.cos(impi), y=(r+B)*stheta0*np.cos(impi), z=(r+B)*np.sin(impi), vx=-vorbi*stheta0, vy=vorbi*ctheta0, hash="impactor")
 
+rebx = reboundx.Extras(sim)
+mod = rebx.load_operator("modify_orbits_direct")
+rebx.add_operator(mod)
 
 Noutputs = 1000
 totaltime = T
