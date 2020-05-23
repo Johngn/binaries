@@ -1,10 +1,10 @@
 # %%
-import csv, rebound, mysql.connector, pymysql
+import glob, os, csv, rebound, mysql.connector, pymysql
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 import mpl_toolkits.mplot3d.axes3d as p3
 from matplotlib import animation
-from scipy.spatial.distance import pdist
 from timeit import default_timer as timed
 from sqlalchemy import create_engine
 
@@ -22,44 +22,40 @@ rbin = 0.5*Rhill
 vorb = np.sqrt(G*(m1+m2)/rbin)
 vshear = -1.5*OmegaK*rbin
 Pbin = 2.*np.pi/np.sqrt(G*(m1+m2)/rbin**3)
+y0 = 20*Rhill
 T = 2.*np.pi/np.sqrt(G*(Msun)/r**3)
 n = 2*np.pi/T
-y0 = 10*Rhill
-mu1 = G*Msun
-mu2 = G*m1
-path = '/home/john/Desktop/mastersproject/results'
-
-simp = np.arange(10e3,50e3,10e3)
-b = np.arange(4.0,5.5,0.5)*Rhill
+totaltime = T*1.5
 
 binaryi = np.deg2rad(0)
 impi = np.deg2rad(0)
 
 Noutputs = 1000
-totaltime = T
 p, s, imp, sun = np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3))
 vp, vs, vimp, vsun = np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3))
 times = np.reshape(np.linspace(0.,totaltime, Noutputs), (Noutputs,1))
 m1s = np.reshape(np.ones(Noutputs)*m1, (Noutputs,1))
 m2s = np.reshape(np.ones(Noutputs)*m2, (Noutputs,1))
 Msuns = np.reshape(np.ones(Noutputs)*Msun, (Noutputs,1))
-headers = ['time','mass prim','x prim','y prim','z prim','vx prim','vy prim','vz prim',
+
+path = '/home/john/Desktop/mastersproject'
+headers = ['time','b','imp radius','mass prim','x prim','y prim','z prim','vx prim','vy prim','vz prim',
            'mass sec','x sec','y sec','z sec','vx sec','vy sec','vz sec',
            'mass imp','x imp','y imp','z imp','vx imp','vy imp','vz imp',
            'mass sun','x sun','y sun','z sun','vx sun','vy sun','vz sun',]
-db_connection_str = 'mysql+pymysql://john:321654@localhost/mydatabase'
-db_connection = create_engine(db_connection_str)
+
+# db_connection_str = 'mysql+pymysql://john:321654@localhost/mydatabase'
+# db_connection = create_engine(db_connection_str)
+
+simp = np.arange(10e3,50e3,15e3)
+b = np.arange(2.5,5.5,1.5)*Rhill
 
 # %%
-k = 1
+# k = 1
+final = []
 timer = timed()
 for j in range(len(b)):
     for i in range(len(simp)):
-        k += 1
-        table_name = f'{str(int(simp[i]))}_{str(int(b[j]/Rhill))}'
-        # table_name = f'{str(k)}'
-        
-        print(table_name)
         mimp = 4./3.*np.pi*densimp*simp[i]**3
         sim = rebound.Simulation()
         sim.G = G
@@ -109,15 +105,20 @@ for j in range(len(b)):
             vimp[k] = [ps["impactor"].vx, ps["impactor"].vy, ps["impactor"].vz]
             vsun[k] = [ps["sun"].vx, ps["sun"].vy, ps["sun"].vz]
             
-        particles = np.hstack((times, m1s, p, vp, m2s, s, vs, np.reshape(np.ones(Noutputs)*mimp, (Noutputs,1)), imp, vimp, Msuns, sun, vsun))
+        particles = np.hstack((times,np.reshape(np.ones(Noutputs)*b[j]/Rhill, (Noutputs,1)),np.reshape(np.ones(Noutputs)*simp[i]/1e3, (Noutputs,1)),
+                               m1s,p,vp,m2s,s,vs,np.reshape(np.ones(Noutputs)*mimp,(Noutputs,1)),imp,vimp,Msuns,sun,vsun))        
+        
         df = pd.DataFrame(particles)
-        df.columns = headers
-        # file = open(f'{path}/particles__b-{b[j]/Rhill}__r-{simp[i]/1e3}.csv', 'w')
-        # with file:
-        #     writer = csv.writer(file)
-        #     writer.writerow(headers)
-        #     writer.writerows(particles)
+        df.to_csv(f'{path}/results/particles__b-{b[j]/Rhill}__r-{simp[i]/1e3}.csv', header=headers)
+        
+        final.append(particles[-1])
+            
+        # k += 1
+        # table_name = f'{str(int(simp[i]))}_{str(int(b[j]/Rhill))}'
         # mycursor.execute(f"CREATE TABLE {table_name}")
-        df.to_sql(f'{table_name}', con=db_connection, if_exists='replace')
+        # df.to_sql(f'{table_name}', con=db_connection, if_exists='replace')
             
 print(timed()-timer)
+
+df = pd.DataFrame(final)
+df.to_csv(f'{path}/results/final.csv', header=headers)

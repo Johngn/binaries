@@ -5,66 +5,73 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import mpl_toolkits.mplot3d.axes3d as p3
 from matplotlib import animation
-from scipy.spatial.distance import pdist
 from timeit import default_timer as timed
 from sqlalchemy import create_engine
-# %%
-b = 5.0
-simp = 40.0
-path = '/home/john/Desktop/mastersproject'
 
+path = '/home/john/Desktop/mastersproject'
 G = 6.67428e-11
 au = 1.496e11
-r = 44.*au
+rsun = 44.*au
 Msun = 1.9891e30
-T = 2.*np.pi/np.sqrt(G*(Msun)/r**3)
+T = 2.*np.pi/np.sqrt(G*(Msun)/rsun**3)
 n = 2*np.pi/T
 year = 365.25*24.*60.*60.
+Noutputs = 1000
 
-data = pd.read_csv(f'{path}/results/particles__b-{b}__r-{simp}.csv')
+# db_connection_str = 'mysql+pymysql://john:321654@localhost/mydatabase'
+# db_connection = create_engine(db_connection_str)
+# mydb = mysql.connector.connect(
+#   host="localhost",
+#   user="john",
+#   passwd="321654",
+#   database="mydatabase"
+# )
+# mycursor = mydb.cursor()
+# mycursor.execute("SHOW TABLES")
+# tablenames = np.array(mycursor.fetchall())[:,0]
+# results = [pd.read_sql_table(i, con=db_connection) for i in tablenames]
+
+# filenames = glob.glob(f"{path}/results/particles*.csv")
+# results = [pd.read_csv(i, delimiter=',') for i in filenames]
+
+data = pd.read_csv(f'{path}/results/particles__b-{2.5}__r-{20.0}.csv')
 
 times = data['time'].to_numpy()
-m1 = data['mass prim'].to_numpy()[0]
-m2 = data['mass sec'].to_numpy()[0]
-mimp = data['mass imp'].to_numpy()[0]
+b = data['b'].to_numpy()
+simp = data['imp radius'].to_numpy()
+m1 = data['mass prim'].to_numpy()
+m2 = data['mass sec'].to_numpy()
+mimp = data['mass imp'].to_numpy()
 p = data[['x prim','y prim', 'z prim']].to_numpy()
 s = data[['x sec','y sec', 'z sec']].to_numpy()
 imp = data[['x imp','y imp', 'z imp']].to_numpy()
-sun = data[['x sun','y sun', 'z sun']].to_numpy()
 vp = data[['vx prim','vy prim', 'vz prim']].to_numpy()
 vs = data[['vx sec','vy sec', 'vz sec']].to_numpy()
 vimp = data[['vx imp','vy imp', 'vz imp']].to_numpy()
 
-r1 = np.linalg.norm(p-s, axis=1)
-r2 = np.linalg.norm(p-imp, axis=1)
-r3 = np.linalg.norm(s-imp, axis=1)
-v1 = np.linalg.norm(vp-vs, axis=1)
-v2 = np.linalg.norm(vp-vimp, axis=1)
-v3 = np.linalg.norm(vs-vimp, axis=1)
+r, v, Rhill, mu = np.zeros((len(data),3)), np.zeros((len(data),3)), np.zeros((len(data),3)), np.zeros((len(data),3))
+r[:,0] = np.linalg.norm(p-s, axis=1)
+r[:,1] = np.linalg.norm(p-imp, axis=1)
+r[:,2] = np.linalg.norm(s-imp, axis=1)
+v[:,0] = np.linalg.norm(vp-vs, axis=1)
+v[:,1] = np.linalg.norm(vp-vimp, axis=1)
+v[:,2] = np.linalg.norm(vs-vimp, axis=1)
+Rhill[:,0] = rsun*((m1+m2)/Msun/3.)**(1./3.)
+Rhill[:,1] = rsun*((m1+mimp)/Msun/3.)**(1./3.)
+Rhill[:,2] = rsun*((m2+mimp)/Msun/3.)**(1./3.)
+mu[:,0] = G*(m1+m2)
+mu[:,1] = G*(m1+mimp)
+mu[:,2] = G*(m2+mimp)
 
-Rhill = r*((m1+m2)/Msun/3.)**(1./3.)
-mu1 = G*(m1+m2)
-mu2 = G*(m1+mimp)
-mu3 = G*(m2+mimp)
-a1 = mu1*r1/(2*mu1 - r1*v1**2)
-a2 = mu2*r2/(2*mu2 - r2*v2**2)
-a3 = mu3*r3/(2*mu3 - r3*v3**2)
-energy1 = -mu1/2/a1
-energy2 = -mu2/2/a2
-energy3 = -mu3/2/a3
+a = mu*r/(2*mu - r*v**2)
+energy = -mu/2/a
+bound = np.logical_and(energy < 0, r < Rhill)
 
-boundps = np.logical_and(energy1 < 0, r1 < Rhill)
-boundpimp = np.logical_and(energy2 < 0, r2 < Rhill)
-boundsimp = np.logical_and(energy3 < 0, r3 < Rhill)
-
-ref = np.zeros((len(data),3))
-OmegaK = np.sqrt(G*(Msun+m1+m2)/r**3)
+OmegaK = np.sqrt(G*(Msun+m1[0]+m2[0])/rsun**3)
 angles = -OmegaK*times
-ref[:,0] = -r + r*np.cos(angles)
-ref[:,1] = 0 - r*np.sin(angles)
 
-sp = s-p
-ip = imp-p
+sp = (s-p)/Rhill[0,0]
+ip = (imp-p)/Rhill[0,1]
 cosspx, cosspy = np.cos(angles)*sp[:,0], np.cos(angles)*sp[:,1]
 sinspx, sinspy = np.sin(angles)*sp[:,0], np.sin(angles)*sp[:,1]
 
@@ -73,37 +80,10 @@ ydot = vs[:,1] - vp[:,1]
 cosspxdot, cosspydot = np.cos(angles)*xdot, np.cos(angles)*ydot
 sinspxdot, sinspydot = np.sin(angles)*xdot, np.sin(angles)*ydot
 
-x, y = cosspx-sinspy+r, sinspx+cosspy
+x, y = cosspx-sinspy+rsun, sinspx+cosspy
 vx, vy = cosspxdot-sinspydot, sinspxdot+cosspydot
 
-Cj = n**2*(x**2 + y**2) + 2*(mu1/r1 + mu2/r2) - vx**2 - vy**2
-# %%
-plt.figure(figsize=(15,8))
-# plt.title(f"Impactor radius={simp} km -- b={b} hill radii")
-plt.plot(times/year, energy1, label="Primary-Secondary", lw=1.5)
-plt.plot(times/year, energy2, label="Primary-Impactor", lw=1.5)
-plt.plot(times/year, energy3, label="Secondary-Impactor", lw=1.5)
-plt.axhline(y=0, ls="--", color="black", lw=1.5)
-plt.xlabel("Time (years)")
-plt.ylabel("Energy (J/kg)")
-plt.xlim(0, np.amax(times)/year)
-# plt.ylim(-0.02, 0.02)
-plt.grid('both')
-plt.legend()
-plt.savefig(f"{path}/img/energy_{}_{}", bbox_inches='tight')
-# %%
-plt.figure(figsize=(15,8))
-# plt.title(f"Impactor radius={simp} km -- b={b} hill radii")
-plt.plot(times/year, r1/Rhill, label="Primary-Secondary", lw=1.5)
-plt.plot(times/year, r2/Rhill, label="Primary-Impactor", lw=1.5)
-plt.plot(times/year, r3/Rhill, label="Secondary-Impactor", lw=1.5)
-plt.xlabel("Time (years)")
-plt.ylabel("Distance (Hill Radii)")
-plt.xlim(0, np.amax(times)/year)
-plt.ylim(0)
-plt.grid('both')
-plt.legend()
-# plt.savefig(f"distance_{str(sim.integrator)}", bbox_inches='tight')
+Cj = n**2*(x**2 + y**2) + 2*(mu[:,0]/r[:,0] + mu[:,1]/r[:,1]) - vx**2 - vy**2
 # %%
 lim = 10
 fig, axes = plt.subplots(1, figsize=(9, 9))
@@ -111,19 +91,23 @@ axes.set_xlabel("$x/R_\mathrm{h}$")
 axes.set_ylabel("$y/R_\mathrm{h}$")
 axes.set_ylim(-lim,lim)
 axes.set_xlim(-lim,lim)
-primaryline, = axes.plot([], [], label="primary", c="tab:orange", lw=1.5)
-secondaryline, = axes.plot([], [], label="secondary", c="tab:blue", lw=1.5)
-impactorline, = axes.plot([], [], label="impactor", c="tab:green", lw=1.5)
-primarydot, = axes.plot([], [], marker="o", ms=8, c="tab:orange")
-secondarydot, = axes.plot([], [], marker="o", ms=8, c="tab:blue")
-impactordot, = axes.plot([], [], marker="o", ms=8, c="tab:green")
+primaryline, = axes.plot([], [], label="primary", c="tab:orange", lw=1.2)
+secondaryline, = axes.plot([], [], label="secondary", c="tab:blue", lw=1.2)
+impactorline, = axes.plot([], [], label="impactor", c="tab:green", lw=1.2)
+primarydot, = axes.plot([], [], marker="o", ms=7, c="tab:orange")
+secondarydot, = axes.plot([], [], marker="o", ms=7, c="tab:blue")
+impactordot, = axes.plot([], [], marker="o", ms=7, c="tab:green")
 text = axes.text(-lim+(lim/10), lim-(lim/10), '', fontsize=15)
 axes.grid()
 axes.legend()
 
-pref = (p-ref)/Rhill
-sref = (s-ref)/Rhill
-impref = (imp-ref)/Rhill
+ref = np.zeros((Noutputs,3))
+ref[:,0] = -rsun + rsun*np.cos(angles)
+ref[:,1] = 0 - rsun*np.sin(angles)
+
+pref = (p-ref)/Rhill[0,0]
+sref = (s-ref)/Rhill[0,0]
+impref = (imp-ref)/Rhill[0,0]
 cospx, cospy = np.cos(angles)*pref[:,0], np.cos(angles)*pref[:,1]
 cossx, cossy = np.cos(angles)*sref[:,0], np.cos(angles)*sref[:,1]
 cosix, cosiy = np.cos(angles)*impref[:,0], np.cos(angles)*impref[:,1]
@@ -131,18 +115,34 @@ sinpx, sinpy = np.sin(angles)*pref[:,0], np.sin(angles)*pref[:,1]
 sinsx, sinsy = np.sin(angles)*sref[:,0], np.sin(angles)*sref[:,1]
 sinix, siniy = np.sin(angles)*impref[:,0], np.sin(angles)*impref[:,1]
 
+Rhillprim = rsun*(m1/Msun/3.)**(1./3.)/Rhill[0,0]
+Rhillsec = rsun*(m2/Msun/3.)**(1./3.)/Rhill[0,0]
+Rhillimp = rsun*(mimp/Msun/3.)**(1./3.)/Rhill[0,0]
+primaryhill = plt.Circle((0,0), Rhillprim[0], fc="none", ec="tab:orange")
+secondaryhill = plt.Circle((0,0), Rhillsec[0], fc="none", ec="tab:blue")
+impactorhill = plt.Circle((0,0), Rhillimp[0], fc="none", ec="tab:green")
+
+def init():
+    axes.add_patch(primaryhill)
+    axes.add_patch(secondaryhill)
+    axes.add_patch(impactorhill)
+    return primaryhill, secondaryhill, impactorhill,
+
 def animate(i):
     primaryline.set_data(cospx[0:i]-sinpy[0:i], sinpx[0:i]+cospy[0:i])
     secondaryline.set_data(cossx[0:i]-sinsy[0:i], sinsx[0:i]+cossy[0:i])
     impactorline.set_data(cosix[0:i]-siniy[0:i], sinix[0:i]+cosiy[0:i])
     primarydot.set_data(cospx[i]-sinpy[i], sinpx[i]+cospy[i])
     secondarydot.set_data(cossx[i]-sinsy[i], sinsx[i]+cossy[i])
-    impactordot.set_data(cosix[i]-siniy[i], sinix[i]+cosiy[i])
+    impactordot.set_data(cosix[i]-siniy[i], sinix[i]+cosiy[i])    
+    primaryhill.center = (cospx[i]-sinpy[i], sinpx[i]+cospy[i])
+    secondaryhill.center = (cossx[i]-sinsy[i], sinsx[i]+cossy[i])
+    impactorhill.center = (cosix[i]-siniy[i], sinix[i]+cosiy[i])
     text.set_text('{} Years'.format(np.round(times[i]/(year), 1)))
-    return primarydot, secondarydot, impactordot, primaryline, secondaryline, impactorline, text
+    return primarydot, secondarydot, impactordot, primaryline, secondaryline, impactorline, text, primaryhill, secondaryhill, impactorhill
 
-anim = animation.FuncAnimation(fig, animate, blit=True, frames=len(data), interval=1)
-anim.save(f'{path}test.mp4')
+anim = animation.FuncAnimation(fig, animate, init_func=init,  frames=Noutputs, interval=1,blit=True)
+# anim.save(f'{path}/videos/2D.mp4')
 # %%
 lim = 2
 fig = plt.figure(figsize=(12,12))
@@ -185,125 +185,5 @@ def animate(i):
     return primarydot, secondarydot, impactordot, primaryline, secondaryline, impactorline, text
 
 anim = animation.FuncAnimation(fig, animate, blit=True, frames=len(data), interval=1)
+# anim.save(f'{path}/videos/3D.mp4')
 # %%
-anim.save('3D.mp4')
-# %%
-
-mydb = mysql.connector.connect(
-  host="localhost",
-  user="john",
-  passwd="321654",
-  database="mydatabase"
-)
-
-mycursor = mydb.cursor()
-
-mycursor.execute("SHOW TABLES")
-
-myresult = mycursor.fetchall()
-
-for x in myresult:
-  print(x)
-filenames = glob.glob(f"{path}/results/particles*.csv")
-# data = pd.read_csv(f'{path}/particles__b-{b}__r-{simp}.csv')
-# results = [pd.read_csv(i, delimiter=',') for i in filenames]
-filenames = pd.read_sql('SHOW TABLES', con=db_connection)
-results = [pd.read_sql_table(i, con=db_connection) for i in myresult]
-results = pd.read_sql_table('1', con=db_connection)
-data = pd.concat(results)
-for i in myresult:
-    print(i)
-
-times = data['time'].to_numpy()
-m1 = data['mass prim'].to_numpy()[0]
-m2 = data['mass sec'].to_numpy()[0]
-mimp = data['mass imp'].to_numpy()[0]
-p = data[['x prim','y prim', 'z prim']].to_numpy()[999::1000]
-s = data[['x sec','y sec', 'z sec']].to_numpy()[999::1000]
-imp = data[['x imp','y imp', 'z imp']].to_numpy()[999::1000]
-sun = data[['x sun','y sun', 'z sun']].to_numpy()[999::1000]
-vp = data[['vx prim','vy prim', 'vz prim']].to_numpy()[999::1000]
-vs = data[['vx sec','vy sec', 'vz sec']].to_numpy()[999::1000]
-vimp = data[['vx imp','vy imp', 'vz imp']].to_numpy()[999::1000]
-
-r1 = np.linalg.norm(p-s, axis=1)
-r2 = np.linalg.norm(p-imp, axis=1)
-r3 = np.linalg.norm(s-imp, axis=1)
-v1 = np.linalg.norm(vp-vs, axis=1)
-v2 = np.linalg.norm(vp-vimp, axis=1)
-v3 = np.linalg.norm(vs-vimp, axis=1)
-
-G = 6.67428e-11
-au = 1.496e11
-r = 44.*au
-T = 2.*np.pi/np.sqrt(G*(Msun)/r**3)
-n = 2*np.pi/T
-year = 365.25*24.*60.*60.
-
-Rhill1 = r*((m1+m2)/Msun/3.)**(1./3.)
-Rhill2 = r*((m1+mimp)/Msun/3.)**(1./3.)
-Rhill3 = r*((m2+mimp)/Msun/3.)**(1./3.)
-mu1 = G*(m1+m2)
-mu2 = G*(m1+mimp)
-mu3 = G*(m2+mimp)
-a1 = mu1*r1/(2*mu1 - r1*v1**2)
-a2 = mu2*r2/(2*mu2 - r2*v2**2)
-a3 = mu3*r3/(2*mu3 - r3*v3**2)
-energy1 = -mu1/2/a1
-energy2 = -mu2/2/a2
-energy3 = -mu3/2/a3
-
-bound1 = np.logical_and(energy1 < 0, r1 < Rhill1)
-bound2 = np.logical_and(energy2 < 0, r2 < Rhill2)
-bound3 = np.logical_and(energy3 < 0, r3 < Rhill3)
-
-# ref = np.zeros((len(data),3))
-# OmegaK = np.sqrt(G*(Msun+m1+m2)/r**3)
-# angles = -OmegaK*times
-# ref[:,0] = -r + r*np.cos(angles)
-# ref[:,1] = 0 - r*np.sin(angles)
-
-# sp = (s-p)/Rhill
-# ip = (imp-p)/Rhill
-# cosspx, cosspy = np.cos(angles)*sp[:,0], np.cos(angles)*sp[:,1]
-# sinspx, sinspy = np.sin(angles)*sp[:,0], np.sin(angles)*sp[:,1]
-
-# xdot = vs[:,0] - vp[:,0]
-# ydot = vs[:,1] - vp[:,1]
-# cosspxdot, cosspydot = np.cos(angles)*xdot, np.cos(angles)*ydot
-# sinspxdot, sinspydot = np.sin(angles)*xdot, np.sin(angles)*ydot
-
-# x, y = cosspx-sinspy+r, sinspx+cosspy
-# vx, vy = cosspxdot-sinspydot, sinspxdot+cosspydot
-
-# Cj = n**2*(x**2 + y**2) + 2*(mu1/r1 + mu2/r2) - vx**2 - vy**2
-
-
-# %%
-bound = bound1[999::1000]
-
-# %%
-import mysql.connector
-import pymysql
-from sqlalchemy import create_engine
-
-db_connection_str = 'mysql+pymysql://john:321654@localhost/mydatabase'
-db_connection = create_engine(db_connection_str)
-
-data.to_sql('test', con=db_connection)
-
-# mydb = mysql.connector.connect(
-#   host="localhost",
-#   user="john",
-#   passwd="321654",
-#   database='mydatabase'
-# )
-
-# mycursor = mydb.cursor()
-
-# # mycursor.execute('CREATE DATABASE mydatabase')
-
-# mycursor.execute('SHOW DATABASES')
-
-# for x in mycursor:
-#   print(x) 
