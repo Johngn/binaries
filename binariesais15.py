@@ -23,14 +23,15 @@ vshear = -1.5*OmegaK*rbin
 Pbin = 2.*np.pi/np.sqrt(G*(m1+m2)/rbin**3)
 T = 2.*np.pi/np.sqrt(G*(Msun)/r**3)
 n = 2*np.pi/T
-y0 = 10*Rhill
+# y0 = 10*Rhill
 mu1 = G*Msun
 mu2 = G*m1
 
-simp = 10e3
+simp = 50e3
+y0 = 2*Rhill*(simp/10e3)**(3/2)
 mimp = 4./3.*np.pi*densimp*simp**3
 
-B = 5.0*Rhill
+B = 3.5*Rhill
 
 binaryi = np.deg2rad(0)
 impi = np.deg2rad(0)
@@ -85,20 +86,20 @@ ps = sim.particles
 # rho_g = 0.00001
 # **2*0.5*Cd*np.pi*s1**2*rho_g
 
-tau = 1
-def dragForce(reb_sim):
-    ps["primary"].ax -= (ps["primary"].vx)/tau
-    ps["primary"].ay -= (ps["primary"].vy)/tau
-    ps["primary"].az -= (ps["primary"].vz)/tau
-    ps["secondary"].ax -= (ps["secondary"].vx)/tau
-    ps["secondary"].ay -= (ps["secondary"].vy)/tau
-    ps["secondary"].az -= (ps["secondary"].vz)/tau
-    ps["impactor"].ax -= (ps["impactor"].vx)/tau
-    ps["impactor"].ay -= (ps["impactor"].vy)/tau
-    ps["impactor"].az -= (ps["impactor"].vz)/tau
+# tau = 1
+# def dragForce(reb_sim):
+#     ps["primary"].ax -= (ps["primary"].vx)/tau
+#     ps["primary"].ay -= (ps["primary"].vy)/tau
+#     ps["primary"].az -= (ps["primary"].vz)/tau
+#     ps["secondary"].ax -= (ps["secondary"].vx)/tau
+#     ps["secondary"].ay -= (ps["secondary"].vy)/tau
+#     ps["secondary"].az -= (ps["secondary"].vz)/tau
+#     ps["impactor"].ax -= (ps["impactor"].vx)/tau
+#     ps["impactor"].ay -= (ps["impactor"].vy)/tau
+#     ps["impactor"].az -= (ps["impactor"].vz)/tau
     
-sim.additional_forces = dragForce
-sim.force_is_velocity_dependent = 1
+# sim.additional_forces = dragForce
+# sim.force_is_velocity_dependent = 1
 
 distances = np.zeros((Noutputs, 6))
 energy = np.zeros((Noutputs, 3))
@@ -183,7 +184,7 @@ plt.grid('both')
 plt.legend()
 # plt.savefig(f"distance_{str(sim.integrator)}", bbox_inches='tight')
 # %%
-lim = 10
+lim = 20
 fig, axes = plt.subplots(1, figsize=(9, 9))
 axes.set_xlabel("$x/R_\mathrm{h}$")
 axes.set_ylabel("$y/R_\mathrm{h}$")

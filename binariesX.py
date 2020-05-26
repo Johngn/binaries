@@ -22,7 +22,7 @@ rbin = 0.5*Rhill
 vorb = np.sqrt(G*(m1+m2)/rbin)
 vshear = -1.5*OmegaK*rbin
 Pbin = 2.*np.pi/np.sqrt(G*(m1+m2)/rbin**3)
-y0 = 20*Rhill
+
 T = 2.*np.pi/np.sqrt(G*(Msun)/r**3)
 n = 2*np.pi/T
 totaltime = T*1.5
@@ -34,9 +34,6 @@ Noutputs = 1000
 p, s, imp, sun = np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3))
 vp, vs, vimp, vsun = np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3))
 times = np.reshape(np.linspace(0.,totaltime, Noutputs), (Noutputs,1))
-m1s = np.reshape(np.ones(Noutputs)*m1, (Noutputs,1))
-m2s = np.reshape(np.ones(Noutputs)*m2, (Noutputs,1))
-Msuns = np.reshape(np.ones(Noutputs)*Msun, (Noutputs,1))
 
 path = '/home/john/Desktop/mastersproject'
 headers = ['time','b','imp radius','mass prim','x prim','y prim','z prim','vx prim','vy prim','vz prim',
@@ -47,15 +44,16 @@ headers = ['time','b','imp radius','mass prim','x prim','y prim','z prim','vx pr
 # db_connection_str = 'mysql+pymysql://john:321654@localhost/mydatabase'
 # db_connection = create_engine(db_connection_str)
 
-simp = np.arange(10e3,50e3,15e3)
-b = np.arange(2.5,5.5,1.5)*Rhill
+simp = np.arange(10e3,50e3,5e3)
+b = np.arange(3.5,5.5,3.5)*Rhill
 
 # %%
-# k = 1
-final = []
+initial, final = [], []
 timer = timed()
 for j in range(len(b)):
     for i in range(len(simp)):
+        y0 = 10*Rhill
+        # y0 = 10*Rhill*(simp/10e3)**(3/2)
         mimp = 4./3.*np.pi*densimp*simp[i]**3
         sim = rebound.Simulation()
         sim.G = G
@@ -105,20 +103,35 @@ for j in range(len(b)):
             vimp[k] = [ps["impactor"].vx, ps["impactor"].vy, ps["impactor"].vz]
             vsun[k] = [ps["sun"].vx, ps["sun"].vy, ps["sun"].vz]
             
-        particles = np.hstack((times,np.reshape(np.ones(Noutputs)*b[j]/Rhill, (Noutputs,1)),np.reshape(np.ones(Noutputs)*simp[i]/1e3, (Noutputs,1)),
-                               m1s,p,vp,m2s,s,vs,np.reshape(np.ones(Noutputs)*mimp,(Noutputs,1)),imp,vimp,Msuns,sun,vsun))        
+        particles = np.hstack((times,
+                               np.reshape(np.ones(Noutputs)*b[j]/Rhill,(Noutputs,1)),
+                               np.reshape(np.ones(Noutputs)*simp[i]/1e3,(Noutputs,1)),
+                               np.reshape(np.ones(Noutputs)*m1, (Noutputs,1)),
+                               p,
+                               vp,
+                               np.reshape(np.ones(Noutputs)*m2, (Noutputs,1)),
+                               s,
+                               vs,
+                               np.reshape(np.ones(Noutputs)*mimp,(Noutputs,1)),
+                               imp,
+                               vimp,
+                               np.reshape(np.ones(Noutputs)*Msun, (Noutputs,1)),
+                               sun,
+                               vsun))        
         
         df = pd.DataFrame(particles)
         df.to_csv(f'{path}/results/particles__b-{b[j]/Rhill}__r-{simp[i]/1e3}.csv', header=headers)
         
         final.append(particles[-1])
+        initial.append(particles[0])
             
-        # k += 1
         # table_name = f'{str(int(simp[i]))}_{str(int(b[j]/Rhill))}'
         # mycursor.execute(f"CREATE TABLE {table_name}")
         # df.to_sql(f'{table_name}', con=db_connection, if_exists='replace')
             
 print(timed()-timer)
 
+df = pd.DataFrame(initial)
+df.to_csv(f'{path}/results/initial.csv', header=headers)
 df = pd.DataFrame(final)
 df.to_csv(f'{path}/results/final.csv', header=headers)
