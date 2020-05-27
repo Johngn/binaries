@@ -14,31 +14,30 @@ year = 365.25*24.*60.*60.
 s1, s2 = 10e3, 10e3
 dens1, dens2, densimp = 1000., 1000., 1000.
 m1, m2  = 4./3.*np.pi*dens1*s1**3,  4./3.*np.pi*dens2*s2**3
-r = 44.*au
-OmegaK = np.sqrt(G*(Msun+m1+m2)/r**3)
-Rhill = r*((m1+m2)/Msun/3.)**(1./3.)
+rsun = 44.*au
+OmegaK = np.sqrt(G*(Msun+m1+m2)/rsun**3)
+Rhill = rsun*((m1+m2)/Msun/3.)**(1./3.)
 rbin = 0.5*Rhill
 vorb = np.sqrt(G*(m1+m2)/rbin)
 vshear = -1.5*OmegaK*rbin
 Pbin = 2.*np.pi/np.sqrt(G*(m1+m2)/rbin**3)
-T = 2.*np.pi/np.sqrt(G*(Msun)/r**3)
+T = 2.*np.pi/np.sqrt(G*(Msun)/rsun**3)
 n = 2*np.pi/T
-# y0 = 10*Rhill
 mu1 = G*Msun
 mu2 = G*m1
 
-simp = 50e3
-y0 = 2*Rhill*(simp/10e3)**(3/2)
+simp = 10e3
+y0 = 6*Rhill*(simp/10e3)**(3/2)
 mimp = 4./3.*np.pi*densimp*simp**3
 
-B = 3.5*Rhill
+B = 5*Rhill
 
 binaryi = np.deg2rad(0)
 impi = np.deg2rad(0)
 
 sim = rebound.Simulation()
 sim.G = G
-sim.dt = 1e-4*Pbin 
+sim.dt = 1e-5*Pbin 
 sim.softening = 0.1*s1
 sim.integrator = "ias15"
 sim.gravity    = "basic"
@@ -50,31 +49,28 @@ xb2 = m1/(m1+m2)*rbin
 vshear1 = -1.5*OmegaK*xb1
 vshear2 = -1.5*OmegaK*xb2
 
-vK1 = np.sqrt(G*(Msun+m1)/(r+xb1))
-vK2 = np.sqrt(G*(Msun+m2)/(r+xb2))
+vK1 = np.sqrt(G*(Msun+m1)/(rsun+xb1))
+vK2 = np.sqrt(G*(Msun+m2)/(rsun+xb2))
 
 vorb1 = -m2/(m1+m2)*vorb
 vorb2 = m1/(m1+m2)*vorb
 sinbin = np.sin(binaryi)
 cosbin = np.cos(binaryi)
 
-sim.add(m=Msun, x=-r, hash="sun")
+sim.add(m=Msun, x=-rsun, hash="sun")
 sim.add(m=m1, r=s1, x=xb1*np.sin(np.pi/2-binaryi), z=xb1*np.sin(binaryi), vy=vK1+vorb1*cosbin, vz=-vorb1*sinbin, hash="primary")
 sim.add(m=m2, r=s2, x=xb2*np.sin(np.pi/2-binaryi), z=xb2*np.sin(binaryi), vy=vK2+vorb2*cosbin, vz=-vorb2*sinbin, hash="secondary")
 
-vorbi = np.sqrt(G*Msun/(r+B))
-theta0 = y0/(r+B)
+vorbi = np.sqrt(G*Msun/(rsun+B))
+theta0 = y0/(rsun+B)
 stheta0 = np.sin(theta0)
 ctheta0 = np.cos(theta0)
 
-sim.add(m=mimp, r=simp, x=(r+B)*ctheta0-r*np.cos(impi), y=(r+B)*stheta0*np.cos(impi), z=(r+B)*np.sin(impi), vx=-vorbi*stheta0, vy=vorbi*ctheta0, hash="impactor")
-
-# rebx = reboundx.Extras(sim)
-# mod = rebx.load_operator("modify_orbits_direct")
-# rebx.add_operator(mod)
+sim.add(m=mimp, r=simp, x=(rsun+B)*ctheta0-rsun*np.cos(impi), y=(rsun+B)*stheta0*np.cos(impi), z=(rsun+B)*np.sin(impi), vx=-vorbi*stheta0, vy=vorbi*ctheta0, hash="impactor")
 
 Noutputs = 1000
-totaltime = T
+totaltime = T*0.5*(simp/10e3)**(3/2)
+totaltime = T*0.5
 times = np.linspace(0.,totaltime, Noutputs)
 
 p, s, imp, sun = np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3))
@@ -82,31 +78,31 @@ vp, vs, vimp, vsun = np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3)), np.zeros(
 
 ps = sim.particles
 
-# Cd = 0.000001
-# rho_g = 0.00001
-# **2*0.5*Cd*np.pi*s1**2*rho_g
+Cd = 0.47
+rho_g = 1e-27
+drag = 0.5*Cd*np.pi*s1**2*rho_g
 
-# tau = 1
-# def dragForce(reb_sim):
-#     ps["primary"].ax -= (ps["primary"].vx)/tau
-#     ps["primary"].ay -= (ps["primary"].vy)/tau
-#     ps["primary"].az -= (ps["primary"].vz)/tau
-#     ps["secondary"].ax -= (ps["secondary"].vx)/tau
-#     ps["secondary"].ay -= (ps["secondary"].vy)/tau
-#     ps["secondary"].az -= (ps["secondary"].vz)/tau
-#     ps["impactor"].ax -= (ps["impactor"].vx)/tau
-#     ps["impactor"].ay -= (ps["impactor"].vy)/tau
-#     ps["impactor"].az -= (ps["impactor"].vz)/tau
+def dragForce(reb_sim):
+    ps["primary"].ax -= (ps["primary"].vx)**2*drag
+    ps["primary"].ay -= (ps["primary"].vy)**2*drag
+    ps["primary"].az -= (ps["primary"].vz)**2*drag
+    ps["secondary"].ax -= (ps["secondary"].vx)**2*drag
+    ps["secondary"].ay -= (ps["secondary"].vy)**2*drag
+    ps["secondary"].az -= (ps["secondary"].vz)**2*drag
+    ps["impactor"].ax -= (ps["impactor"].vx)**2*drag
+    ps["impactor"].ay -= (ps["impactor"].vy)**2*drag
+    ps["impactor"].az -= (ps["impactor"].vz)**2*drag
     
-# sim.additional_forces = dragForce
-# sim.force_is_velocity_dependent = 1
+sim.additional_forces = dragForce
+sim.force_is_velocity_dependent = 1
 
 distances = np.zeros((Noutputs, 6))
 energy = np.zeros((Noutputs, 3))
 Cj = np.zeros((Noutputs))
 
+timer = timed()
 for i, time in enumerate(times):
-    sim.integrate(time)
+    sim.integrate(time, exact_finish_time=0)
     p[i] = [ps["primary"].x, ps["primary"].y, ps["primary"].z]
     s[i] = [ps["secondary"].x, ps["secondary"].y, ps["secondary"].z]
     imp[i] = [ps["impactor"].x, ps["impactor"].y, ps["impactor"].z]
@@ -120,6 +116,7 @@ for i, time in enumerate(times):
     energy[i,0] = -G*(m1+m2)/2/ps["primary"].calculate_orbit(primary=ps["secondary"]).a
     energy[i,1] = -G*(m1+mimp)/2/ps["primary"].calculate_orbit(primary=ps["impactor"]).a
     energy[i,2] = -G*(m2+mimp)/2/ps["secondary"].calculate_orbit(primary=ps["impactor"]).a
+print(timed()-timer)
     
 sp = s-p
 ip = imp-p
@@ -133,7 +130,7 @@ ydot = vs[:,1] - vp[:,1]
 cosspxdot, cosspydot = np.cos(angles)*xdot, np.cos(angles)*ydot
 sinspxdot, sinspydot = np.sin(angles)*xdot, np.sin(angles)*ydot
 
-x, y = cosspx-sinspy+r, sinspx+cosspy
+x, y = cosspx-sinspy+rsun, sinspx+cosspy
 vx, vy = cosspxdot-sinspydot, sinspxdot+cosspydot
 mu1 = G*Msun
 mu2 = G*m1
@@ -184,48 +181,74 @@ plt.grid('both')
 plt.legend()
 # plt.savefig(f"distance_{str(sim.integrator)}", bbox_inches='tight')
 # %%
-lim = 20
+lim = 5
 fig, axes = plt.subplots(1, figsize=(9, 9))
 axes.set_xlabel("$x/R_\mathrm{h}$")
 axes.set_ylabel("$y/R_\mathrm{h}$")
 axes.set_ylim(-lim,lim)
 axes.set_xlim(-lim,lim)
-primaryline, = axes.plot([], [], label="primary", c="tab:orange", lw=1.5)
-secondaryline, = axes.plot([], [], label="secondary", c="tab:blue", lw=1.5)
-impactorline, = axes.plot([], [], label="impactor", c="tab:green", lw=1.5)
-primarydot, = axes.plot([], [], marker="o", ms=8, c="tab:orange")
-secondarydot, = axes.plot([], [], marker="o", ms=8, c="tab:blue")
-impactordot, = axes.plot([], [], marker="o", ms=8, c="tab:green")
+primaryline, = axes.plot([], [], label="primary", c="tab:orange", lw=1.2)
+secondaryline, = axes.plot([], [], label="secondary", c="tab:blue", lw=1.2)
+impactorline, = axes.plot([], [], label="impactor", c="tab:green", lw=1.2)
+primarydot, = axes.plot([], [], marker="o", ms=7, c="tab:orange")
+secondarydot, = axes.plot([], [], marker="o", ms=7, c="tab:blue")
+impactordot, = axes.plot([], [], marker="o", ms=7, c="tab:green")
 text = axes.text(-lim+(lim/10), lim-(lim/10), '', fontsize=15)
 axes.grid()
 axes.legend()
 
-ref = np.zeros((Noutputs,3))
-ref[:,0] = -r + r*np.cos(angles)
-ref[:,1] = 0 - r*np.sin(angles)
+# ref = np.zeros((Noutputs,3))
+# ref[:,0] = -rsun + rsun*np.cos(angles)
+# ref[:,1] = 0 - rsun*np.sin(angles)
 
-pref = (p-ref)/Rhill
-sref = (s-ref)/Rhill
-impref = (imp-ref)/Rhill
-cospx, cospy = np.cos(angles)*pref[:,0], np.cos(angles)*pref[:,1]
+# pref = (p-ref)/Rhill
+# sref = (s-ref)/Rhill
+# impref = (imp-ref)/Rhill
+# cospx, cospy = np.cos(angles)*pref[:,0], np.cos(angles)*pref[:,1]
+# cossx, cossy = np.cos(angles)*sref[:,0], np.cos(angles)*sref[:,1]
+# cosix, cosiy = np.cos(angles)*impref[:,0], np.cos(angles)*impref[:,1]
+# sinpx, sinpy = np.sin(angles)*pref[:,0], np.sin(angles)*pref[:,1]
+# sinsx, sinsy = np.sin(angles)*sref[:,0], np.sin(angles)*sref[:,1]
+# sinix, siniy = np.sin(angles)*impref[:,0], np.sin(angles)*impref[:,1]
+
+
+sref = (s-p)/Rhill
+impref = (imp-p)/Rhill
+
 cossx, cossy = np.cos(angles)*sref[:,0], np.cos(angles)*sref[:,1]
 cosix, cosiy = np.cos(angles)*impref[:,0], np.cos(angles)*impref[:,1]
-sinpx, sinpy = np.sin(angles)*pref[:,0], np.sin(angles)*pref[:,1]
+
 sinsx, sinsy = np.sin(angles)*sref[:,0], np.sin(angles)*sref[:,1]
 sinix, siniy = np.sin(angles)*impref[:,0], np.sin(angles)*impref[:,1]
 
-def animate(i):    
+Rhillprim = rsun*(m1/Msun/3.)**(1./3.)/Rhill
+Rhillsec = rsun*(m2/Msun/3.)**(1./3.)/Rhill
+Rhillimp = rsun*(mimp/Msun/3.)**(1./3.)/Rhill
+primaryhill = plt.Circle((0,0), Rhillprim, fc="none", ec="tab:orange")
+secondaryhill = plt.Circle((0,0), Rhillsec, fc="none", ec="tab:blue")
+impactorhill = plt.Circle((0,0), Rhillimp, fc="none", ec="tab:green")
+
+def init():
+    axes.add_patch(primaryhill)
+    axes.add_patch(secondaryhill)
+    axes.add_patch(impactorhill)
+    return primaryhill, secondaryhill, impactorhill,
+
+def animate(i):
     primaryline.set_data(cospx[0:i]-sinpy[0:i], sinpx[0:i]+cospy[0:i])
     secondaryline.set_data(cossx[0:i]-sinsy[0:i], sinsx[0:i]+cossy[0:i])
     impactorline.set_data(cosix[0:i]-siniy[0:i], sinix[0:i]+cosiy[0:i])
     primarydot.set_data(cospx[i]-sinpy[i], sinpx[i]+cospy[i])
     secondarydot.set_data(cossx[i]-sinsy[i], sinsx[i]+cossy[i])
-    impactordot.set_data(cosix[i]-siniy[i], sinix[i]+cosiy[i])
+    impactordot.set_data(cosix[i]-siniy[i], sinix[i]+cosiy[i])    
+    primaryhill.center = (cospx[i]-sinpy[i], sinpx[i]+cospy[i])
+    secondaryhill.center = (cossx[i]-sinsy[i], sinsx[i]+cossy[i])
+    impactorhill.center = (cosix[i]-siniy[i], sinix[i]+cosiy[i])
     text.set_text('{} Years'.format(np.round(times[i]/(year), 1)))
-    return primarydot, secondarydot, impactordot, primaryline, secondaryline, impactorline, text
+    return primarydot, secondarydot, impactordot, primaryline, secondaryline, impactorline, text, primaryhill, secondaryhill, impactorhill
 
-anim = animation.FuncAnimation(fig, animate, frames=Noutputs, blit=True, interval=1)
-# anim.save('test.mp4')
+anim = animation.FuncAnimation(fig, animate, init_func=init,  frames=Noutputs, interval=1,blit=True)
+# anim.save(f'{path}/videos/2D.mp4')
 # %%
 lim = 2
 fig = plt.figure(figsize=(12,12))

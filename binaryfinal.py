@@ -18,7 +18,7 @@ n = 2*np.pi/T
 year = 365.25*24.*60.*60.
 Noutputs = 1000
 
-filenames = glob.glob(f"{path}/results/final.csv")
+filenames = glob.glob(f"{path}/results/initial.csv")
 results = [pd.read_csv(i, delimiter=',') for i in filenames]
 data = pd.concat(results)
 
@@ -54,20 +54,20 @@ energy = -mu/2/a
 bound = np.logical_and(energy < 0, r < Rhill)
 # %%
 plt.figure(figsize=(8,8))
-plt.scatter(b[bound[:,0]],simp[bound[:,0]], label='primary-secondary', s=100)
-plt.scatter(b[bound[:,1]],simp[bound[:,1]], label='primary-impactor', s=100)
-plt.scatter(b[bound[:,2]],simp[bound[:,2]], label='secondary-impactor', s=100)
+plt.scatter(b[bound[:,0]],simp[bound[:,0]], label='primary-secondary', s=50)
+plt.scatter(b[bound[:,1]],simp[bound[:,1]], label='primary-impactor', s=50)
+plt.scatter(b[bound[:,2]],simp[bound[:,2]], label='secondary-impactor', s=50)
 plt.legend()
 plt.grid()
 # %%
-y = energy
+y = a
 plt.figure(figsize=(15,8))
 # plt.title(f"Integrator={sim.integrator} -- Impactor radius={simp/1e3} km -- b={B/Rhill} hill radii")
-plt.plot(times/year, y[:,0], label="Primary-Secondary", lw=1.5)
-plt.plot(times/year, y[:,1], label="Primary-Impactor", lw=1.5)
-plt.plot(times/year, y[:,2], label="Secondary-Impactor", lw=1.5)
+plt.plot(y[:,0], label="Primary-Secondary", lw=1.5)
+plt.plot(y[:,1], label="Primary-Impactor", lw=1.5)
+plt.plot(y[:,2], label="Secondary-Impactor", lw=1.5)
 plt.axhline(y=0, ls="--", color="black", lw=1.5)
-plt.xlabel("Time (years)")
+plt.xlabel("Impactor mass (years)")
 plt.ylabel("Energy (J/kg)")
 # plt.xlim(0, np.amax(times)/year)
 # plt.ylim(-0.02, 0.02)
