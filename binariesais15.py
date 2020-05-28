@@ -78,20 +78,22 @@ vp, vs, vimp, vsun = np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3)), np.zeros(
 
 ps = sim.particles
 
-Cd = 0.47
-rho_g = 1e-27
-drag = 0.5*Cd*np.pi*s1**2*rho_g
+Cd = 2.
+rho_g = 1e-20
+drag1 = 0.5*Cd*np.pi*s1**2*rho_g
+drag2 = 0.5*Cd*np.pi*s2**2*rho_g
+drag3 = 0.5*Cd*np.pi*simp**2*rho_g
 
 def dragForce(reb_sim):
-    ps["primary"].ax -= (ps["primary"].vx)**2*drag
-    ps["primary"].ay -= (ps["primary"].vy)**2*drag
-    ps["primary"].az -= (ps["primary"].vz)**2*drag
-    ps["secondary"].ax -= (ps["secondary"].vx)**2*drag
-    ps["secondary"].ay -= (ps["secondary"].vy)**2*drag
-    ps["secondary"].az -= (ps["secondary"].vz)**2*drag
-    ps["impactor"].ax -= (ps["impactor"].vx)**2*drag
-    ps["impactor"].ay -= (ps["impactor"].vy)**2*drag
-    ps["impactor"].az -= (ps["impactor"].vz)**2*drag
+    ps["primary"].ax -= (ps["primary"].vx)**2*drag1
+    ps["primary"].ay -= (ps["primary"].vy)**2*drag1
+    ps["primary"].az -= (ps["primary"].vz)**2*drag1
+    ps["secondary"].ax -= (ps["secondary"].vx)**2*drag2
+    ps["secondary"].ay -= (ps["secondary"].vy)**2*drag2
+    ps["secondary"].az -= (ps["secondary"].vz)**2*drag2
+    ps["impactor"].ax -= (ps["impactor"].vx)**2*drag3
+    ps["impactor"].ay -= (ps["impactor"].vy)**2*drag3
+    ps["impactor"].az -= (ps["impactor"].vz)**2*drag3
     
 sim.additional_forces = dragForce
 sim.force_is_velocity_dependent = 1

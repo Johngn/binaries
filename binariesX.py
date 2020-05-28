@@ -25,7 +25,7 @@ Pbin = 2.*np.pi/np.sqrt(G*(m1+m2)/rbin**3)
 
 T = 2.*np.pi/np.sqrt(G*(Msun)/r**3)
 n = 2*np.pi/T
-totaltime = T*0.1
+totaltime = T
 
 binaryi = np.deg2rad(0)
 impi = np.deg2rad(0)
@@ -44,16 +44,16 @@ headers = ['time','b','imp radius','mass prim','x prim','y prim','z prim','vx pr
 # db_connection_str = 'mysql+pymysql://john:321654@localhost/mydatabase'
 # db_connection = create_engine(db_connection_str)
 
-simp = np.arange(10e3,100e3,1e3)
-b = np.arange(3.5,5.5,3.5)*Rhill
+simp = np.arange(10e3,51e3,5e3)
+b = np.arange(1.0,6.5,0.5)*Rhill
 
 # %%
 initial, final = [], []
 timer = timed()
 for j in range(len(b)):
     for i in range(len(simp)):
-        # y0 = 10*Rhill
-        y0 = 5*Rhill*(simp[i]/10e3)**(3/2)
+        y0 = 10*Rhill
+        y0 = Rhill*simp[i]/1e3
         mimp = 4./3.*np.pi*densimp*simp[i]**3
         sim = rebound.Simulation()
         sim.G = G

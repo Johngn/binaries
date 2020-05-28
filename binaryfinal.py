@@ -18,7 +18,7 @@ n = 2*np.pi/T
 year = 365.25*24.*60.*60.
 Noutputs = 1000
 
-filenames = glob.glob(f"{path}/results/initial.csv")
+filenames = glob.glob(f"{path}/results/final.csv")
 results = [pd.read_csv(i, delimiter=',') for i in filenames]
 data = pd.concat(results)
 
@@ -54,13 +54,20 @@ energy = -mu/2/a
 bound = np.logical_and(energy < 0, r < Rhill)
 # %%
 plt.figure(figsize=(8,8))
-plt.scatter(b[bound[:,0]],simp[bound[:,0]], label='primary-secondary', s=50)
-plt.scatter(b[bound[:,1]],simp[bound[:,1]], label='primary-impactor', s=50)
-plt.scatter(b[bound[:,2]],simp[bound[:,2]], label='secondary-impactor', s=50)
-plt.legend()
-plt.grid()
+plt.scatter(b,simp, s=1, marker="x", c="black")
+plt.scatter(b[bound[:,0]],simp[bound[:,0]], label='primary-secondary', s=100)
+plt.scatter(b[bound[:,1]],simp[bound[:,1]], label='primary-impactor', s=100)
+plt.scatter(b[bound[:,2]],simp[bound[:,2]], label='secondary-impactor', s=100)
+plt.xlabel("Impact parameter (Hill radii)")
+plt.ylabel("Impactor radius (km)")
+# plt.legend()
+plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.07),
+          ncol=3, fancybox=True, shadow=True)
+# plt.grid()
+plt.savefig(f"{path}/img/final_bound", bbox_inches='tight')
+# anim.save(f'{path}/videos/2D.mp4')
 # %%
-y = a
+y = energy
 plt.figure(figsize=(15,8))
 # plt.title(f"Integrator={sim.integrator} -- Impactor radius={simp/1e3} km -- b={B/Rhill} hill radii")
 plt.plot(y[:,0], label="Primary-Secondary", lw=1.5)

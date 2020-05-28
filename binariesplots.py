@@ -34,7 +34,7 @@ Noutputs = 1000
 # filenames = glob.glob(f"{path}/results/particles*.csv")
 # results = [pd.read_csv(i, delimiter=',') for i in filenames]
 
-data = pd.read_csv(f'{path}/results/particles__b-{2.5}__r-{20.0}.csv')
+data = pd.read_csv(f'{path}/results/particles__b-{2.0}__r-{50.0}.csv')
 
 times = data['time'].to_numpy()
 b = data['b'].to_numpy()
