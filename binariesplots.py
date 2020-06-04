@@ -34,7 +34,7 @@ Noutputs = 1000
 # filenames = glob.glob(f"{path}/results/particles*.csv")
 # results = [pd.read_csv(i, delimiter=',') for i in filenames]
 
-data = pd.read_csv(f'{path}/results/particles__b-{2.0}__r-{50.0}.csv')
+data = pd.read_csv(f'{path}/results/particles__b-{1.0}__r-{50.0}.csv')
 
 times = data['time'].to_numpy()
 b = data['b'].to_numpy()
@@ -85,7 +85,7 @@ vx, vy = cosspxdot-sinspydot, sinspxdot+cosspydot
 
 Cj = n**2*(x**2 + y**2) + 2*(mu[:,0]/r[:,0] + mu[:,1]/r[:,1]) - vx**2 - vy**2
 # %%
-lim = 10
+lim = 20
 fig, axes = plt.subplots(1, figsize=(9, 9))
 axes.set_xlabel("$x/R_\mathrm{h}$")
 axes.set_ylabel("$y/R_\mathrm{h}$")

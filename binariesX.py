@@ -25,7 +25,6 @@ Pbin = 2.*np.pi/np.sqrt(G*(m1+m2)/rbin**3)
 
 T = 2.*np.pi/np.sqrt(G*(Msun)/r**3)
 n = 2*np.pi/T
-totaltime = T
 
 binaryi = np.deg2rad(0)
 impi = np.deg2rad(0)
@@ -33,7 +32,6 @@ impi = np.deg2rad(0)
 Noutputs = 1000
 p, s, imp, sun = np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3))
 vp, vs, vimp, vsun = np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3))
-times = np.reshape(np.linspace(0.,totaltime, Noutputs), (Noutputs,1))
 
 path = '/home/john/Desktop/mastersproject'
 headers = ['time','b','imp radius','mass prim','x prim','y prim','z prim','vx prim','vy prim','vz prim',
@@ -45,14 +43,15 @@ headers = ['time','b','imp radius','mass prim','x prim','y prim','z prim','vx pr
 # db_connection = create_engine(db_connection_str)
 
 simp = np.arange(10e3,51e3,5e3)
-b = np.arange(1.0,6.5,0.5)*Rhill
+b = np.arange(1.0,6.5,0.2)*Rhill
 
 # %%
 initial, final = [], []
 timer = timed()
 for j in range(len(b)):
     for i in range(len(simp)):
-        y0 = 10*Rhill
+        totaltime = T*simp[i]/10e3*(1/b[j]*Rhill)*3.
+        times = np.reshape(np.linspace(0.,totaltime, Noutputs), (Noutputs,1))
         y0 = Rhill*simp[i]/1e3
         mimp = 4./3.*np.pi*densimp*simp[i]**3
         sim = rebound.Simulation()
