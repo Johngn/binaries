@@ -35,7 +35,7 @@ vp = data[['vx prim','vy prim', 'vz prim']].to_numpy()
 vs = data[['vx sec','vy sec', 'vz sec']].to_numpy()
 vimp = data[['vx imp','vy imp', 'vz imp']].to_numpy()
 
-r, v, Rhill, mu = np.zeros((len(data),3)), np.zeros((len(data),3)), np.zeros((len(data),3)), np.zeros((len(data),3))
+r, v, Rhill, mu, h, e = np.zeros((len(data),3)), np.zeros((len(data),3)), np.zeros((len(data),3)), np.zeros((len(data),3)), np.zeros((len(data),3)), np.zeros((len(data),3))
 r[:,0] = np.linalg.norm(p-s, axis=1)
 r[:,1] = np.linalg.norm(p-imp, axis=1)
 r[:,2] = np.linalg.norm(s-imp, axis=1)
@@ -52,6 +52,17 @@ mu[:,2] = G*(m2+mimp)
 a = mu*r/(2*mu - r*v**2)
 energy = -mu/2/a
 bound = np.logical_and(energy < 0, r < Rhill)
+
+distance1 = p-s
+distance2 = p-imp
+distance3 = s-imp
+v1 = vp-vs
+v2 = vp-vimp
+v3 = vs-vimp
+h[:,0] = np.cross(distance1,v1)[:,2]
+h[:,1] = np.cross(distance2,v2)[:,2]
+h[:,2] = np.cross(distance3,v3)[:,2]
+e = np.sqrt(1 + (2 * energy * h**2 / mu**2))
 # %%
 plt.figure(figsize=(8,8))
 plt.scatter(b,simp, s=1, marker="x", c="black")

@@ -78,28 +78,29 @@ vp, vs, vimp, vsun = np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3)), np.zeros(
 
 ps = sim.particles
 
-Cd = 2.
-rho_g = 1e-20
-drag1 = 0.5*Cd*np.pi*s1**2*rho_g
-drag2 = 0.5*Cd*np.pi*s2**2*rho_g
-drag3 = 0.5*Cd*np.pi*simp**2*rho_g
+# Cd = 2.
+# rho_g = 1e-20
+# drag1 = 0.5*Cd*np.pi*s1**2*rho_g
+# drag2 = 0.5*Cd*np.pi*s2**2*rho_g
+# drag3 = 0.5*Cd*np.pi*simp**2*rho_g
 
-def dragForce(reb_sim):
-    ps["primary"].ax -= (ps["primary"].vx)**2*drag1
-    ps["primary"].ay -= (ps["primary"].vy)**2*drag1
-    ps["primary"].az -= (ps["primary"].vz)**2*drag1
-    ps["secondary"].ax -= (ps["secondary"].vx)**2*drag2
-    ps["secondary"].ay -= (ps["secondary"].vy)**2*drag2
-    ps["secondary"].az -= (ps["secondary"].vz)**2*drag2
-    ps["impactor"].ax -= (ps["impactor"].vx)**2*drag3
-    ps["impactor"].ay -= (ps["impactor"].vy)**2*drag3
-    ps["impactor"].az -= (ps["impactor"].vz)**2*drag3
+# def dragForce(reb_sim):
+#     ps["primary"].ax -= (ps["primary"].vx)**2*drag1
+#     ps["primary"].ay -= (ps["primary"].vy)**2*drag1
+#     ps["primary"].az -= (ps["primary"].vz)**2*drag1
+#     ps["secondary"].ax -= (ps["secondary"].vx)**2*drag2
+#     ps["secondary"].ay -= (ps["secondary"].vy)**2*drag2
+#     ps["secondary"].az -= (ps["secondary"].vz)**2*drag2
+#     ps["impactor"].ax -= (ps["impactor"].vx)**2*drag3
+#     ps["impactor"].ay -= (ps["impactor"].vy)**2*drag3
+#     ps["impactor"].az -= (ps["impactor"].vz)**2*drag3
     
-sim.additional_forces = dragForce
-sim.force_is_velocity_dependent = 1
+# sim.additional_forces = dragForce
+# sim.force_is_velocity_dependent = 1
 
 distances = np.zeros((Noutputs, 6))
 energy = np.zeros((Noutputs, 3))
+eccentricity = np.zeros((Noutputs, 1))
 Cj = np.zeros((Noutputs))
 
 timer = timed()
@@ -119,6 +120,12 @@ for i, time in enumerate(times):
     energy[i,1] = -G*(m1+mimp)/2/ps["primary"].calculate_orbit(primary=ps["impactor"]).a
     energy[i,2] = -G*(m2+mimp)/2/ps["secondary"].calculate_orbit(primary=ps["impactor"]).a
 print(timed()-timer)
+
+mu = G*(m1+m2)
+r = p-s
+v = vp-vs
+h = np.cross(r,v)[:,2]
+eccentricity = np.sqrt(1 + (2 * energy[:,0] * h**2 / mu**2))
     
 sp = s-p
 ip = imp-p
