@@ -8,15 +8,14 @@ from matplotlib import animation
 from timeit import default_timer as timed
 from sqlalchemy import create_engine
 
-path = '/home/john/Desktop/mastersproject'
-G = 6.67428e-11
-au = 1.496e11
-rsun = 44.*au
-Msun = 1.9891e30
-T = 2.*np.pi/np.sqrt(G*(Msun)/rsun**3)
-n = 2*np.pi/T
-year = 365.25*24.*60.*60.
-Noutputs = 1000
+G = 6.67428e-11                             # gravitational constanct in SI units
+au = 1.496e11                               # astronomical unit    
+Msun = 1.9891e30                            # mass of sun
+rsun = 44.*au                               # distance of centre of mass of binary from the sun 
+T = 2.*np.pi/np.sqrt(G*(Msun)/rsun**3)      # orbital period of binary around the sun
+n = 2*np.pi/T                               # mean motion of binary around the sun
+year = 365.25*24.*60.*60.                   # number of seconds in a year
+Noutputs = 1000                             # number of outputs for plotting
 
 # db_connection_str = 'mysql+pymysql://john:321654@localhost/mydatabase'
 # db_connection = create_engine(db_connection_str)
@@ -34,8 +33,10 @@ Noutputs = 1000
 # filenames = glob.glob(f"{path}/results/particles*.csv")
 # results = [pd.read_csv(i, delimiter=',') for i in filenames]
 
-data = pd.read_csv(f'{path}/results/particles__b-{1.0}__r-{50.0}.csv')
+# read data from csv into dataframe
+data = pd.read_csv(f'./results/particles__b-5.0__r-30.0.csv')
 
+# create numpy arrays from dataframe
 times = data['time'].to_numpy()
 b = data['b'].to_numpy()
 simp = data['imp radius'].to_numpy()
@@ -49,26 +50,31 @@ vp = data[['vx prim','vy prim', 'vz prim']].to_numpy()
 vs = data[['vx sec','vy sec', 'vz sec']].to_numpy()
 vimp = data[['vx imp','vy imp', 'vz imp']].to_numpy()
 
+# empty arrays for values
 r, v, Rhill, mu, h, e = np.zeros((len(data),3)), np.zeros((len(data),3)), np.zeros((len(data),3)), np.zeros((len(data),3)),np.zeros((len(data),3)),np.zeros((len(data),3))
-r[:,0] = np.linalg.norm(p-s, axis=1)
-r[:,1] = np.linalg.norm(p-imp, axis=1)
-r[:,2] = np.linalg.norm(s-imp, axis=1)
-v[:,0] = np.linalg.norm(vp-vs, axis=1)
-v[:,1] = np.linalg.norm(vp-vimp, axis=1)
-v[:,2] = np.linalg.norm(vs-vimp, axis=1)
-Rhill[:,0] = rsun*((m1+m2)/Msun/3.)**(1./3.)
-Rhill[:,1] = rsun*((m1+mimp)/Msun/3.)**(1./3.)
-Rhill[:,2] = rsun*((m2+mimp)/Msun/3.)**(1./3.)
-mu[:,0] = G*(m1+m2)
-mu[:,1] = G*(m1+mimp)
-mu[:,2] = G*(m2+mimp)
 
-a = mu*r/(2*mu - r*v**2)
-energy = -mu/2/a
-bound = np.logical_and(energy < 0, r < Rhill)
+r[:,0] = np.linalg.norm(p-s, axis=1)                # distance between primary and secondary
+r[:,1] = np.linalg.norm(p-imp, axis=1)              # distance between primary and impactor
+r[:,2] = np.linalg.norm(s-imp, axis=1)              # distance between secondary and impactor
 
-distance1 = p-s
-distance2 = p-imp
+v[:,0] = np.linalg.norm(vp-vs, axis=1)              # relative velocity between primary and secondary
+v[:,1] = np.linalg.norm(vp-vimp, axis=1)            # relative velocity between primary and impactor
+v[:,2] = np.linalg.norm(vs-vimp, axis=1)            # relative velocity between secondary and impactor
+
+Rhill[:,0] = rsun*((m1+m2)/Msun/3.)**(1./3.)        # combined Hill radius of primary and secondary
+Rhill[:,1] = rsun*((m1+mimp)/Msun/3.)**(1./3.)      # combined Hill radius of primary and impactor
+Rhill[:,2] = rsun*((m2+mimp)/Msun/3.)**(1./3.)      # combined Hill radius of secondary and impactor
+
+mu[:,0] = G*(m1+m2)                                 # G times combined mass of primary and secondary
+mu[:,1] = G*(m1+mimp)                               # G times combined mass of primary and impactor
+mu[:,2] = G*(m2+mimp)                               # G times combined mass of secondary and impactor
+
+a = mu*r/(2*mu - r*v**2)                            # semi-major axis between each pair of bodies
+energy = -mu/2/a                                    # total energy between each pair of bodies
+bound = np.logical_and(energy < 0, r < Rhill)       # bodies are bound if their energy is less than zero and they are closer together than the Hill radius
+
+distance1 = p-s                                     # difference between x, y and z values of primary and secondary
+distance2 = p-imp                                # difference between x, y and z values of primary and secondary
 distance3 = s-imp
 v1 = vp-vs
 v2 = vp-vimp

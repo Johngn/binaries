@@ -7,27 +7,31 @@ from matplotlib import animation
 from scipy.spatial.distance import pdist
 from timeit import default_timer as timed
 
-G = 6.67428e-11
-au = 1.496e11
-Msun = 1.9891e30
-year = 365.25*24.*60.*60.
-s1, s2 = 10e3, 10e3
-dens1, dens2, densimp = 1000., 1000., 1000.
-m1, m2  = 4./3.*np.pi*dens1*s1**3,  4./3.*np.pi*dens2*s2**3
-rsun = 44.*au
-OmegaK = np.sqrt(G*(Msun+m1+m2)/rsun**3)
-Rhill = rsun*((m1+m2)/Msun/3.)**(1./3.)
-rbin = 0.5*Rhill
-vorb = np.sqrt(G*(m1+m2)/rbin)
-vshear = -1.5*OmegaK*rbin
-Pbin = 2.*np.pi/np.sqrt(G*(m1+m2)/rbin**3)
-T = 2.*np.pi/np.sqrt(G*(Msun)/rsun**3)
-n = 2*np.pi/T
-mu1 = G*Msun
+
+# constants
+G = 6.67428e-11                     # gravitational constanct in SI units
+au = 1.496e11                       # astronomical unit    
+Msun = 1.9891e30                    # mass of sun
+year = 365.25*24.*60.*60.           # number of seconds in a year
+s1, s2 = 10e3, 10e3                 # radius of primary and of secondary
+dens1, dens2, densimp = 1000., 1000., 1000.     # density of primary, secondary, and impactor 
+m1, m2  = 4./3.*np.pi*dens1*s1**3,  4./3.*np.pi*dens2*s2**3 # mass of primary and secondary calculated from density and radius
+rsun = 44.*au                       # distance of centre of mass of binary from the sun 
+OmegaK = np.sqrt(G*(Msun+m1+m2)/rsun**3) # keplerian frequency at this distance
+Rhill = rsun*((m1+m2)/Msun/3.)**(1./3.) # Hill radius of binary
+rbin = 0.5*Rhill                    # separation of binary is 0.5 of the Hill radius
+vorb = np.sqrt(G*(m1+m2)/rbin)      # orbital speed of primary and secondary around each other
+vshear = -1.5*OmegaK*rbin           # calculates the change in velocity required to keep a body in a circular orbit
+Pbin = 2.*np.pi/np.sqrt(G*(m1+m2)/rbin**3)  # orbital period of primary and secondary around each other
+T = 2.*np.pi/np.sqrt(G*(Msun)/rsun**3) # orbital period of binary around the sun
+n = 2*np.pi/T                       # mean motion of binary around the sun
+# mu of a body is G times its mass
+mu1 = G*Msun                        
 mu2 = G*m1
 
-simp = 10e3
-y0 = 6*Rhill*(simp/10e3)**(3/2)
+# impactor
+simp = 10e3                         # radius of impactor
+y0 = 6*Rhill*(simp/10e3)**(3/2)     # y distance of impactor from binary
 mimp = 4./3.*np.pi*densimp*simp**3
 
 B = 5*Rhill
@@ -304,4 +308,4 @@ def animate(i):
 
 anim = animation.FuncAnimation(fig, animate, frames=Noutputs, interval=10)
 # %%
-anim.save('3D.mp4')
+# anim.save('3D.mp4')
