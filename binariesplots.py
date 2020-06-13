@@ -74,17 +74,17 @@ energy = -mu/2/a                                    # total energy between each 
 bound = np.logical_and(energy < 0, r < Rhill)       # bodies are bound if their energy is less than zero and they are closer together than the Hill radius
 
 distance1 = p-s                                     # difference between x, y and z values of primary and secondary
-distance2 = p-imp                                # difference between x, y and z values of primary and secondary
-distance3 = s-imp
-v1 = vp-vs
-v2 = vp-vimp
-v3 = vs-vimp
+distance2 = p-imp                                   # difference between x, y and z values of primary and impactor
+distance3 = s-imp                                   # difference between x, y and z values of secondary and impactor
+v1 = vp-vs                                          # difference between vx, vy and vz values of primary and secondary
+v2 = vp-vimp                                        # difference between vx, vy and vz values of primary and impactor
+v3 = vs-vimp                                        # difference between vx, vy and vz values of secondary and impactor
 h[:,0] = np.cross(distance1,v1)[:,2]
 h[:,1] = np.cross(distance2,v2)[:,2]
 h[:,2] = np.cross(distance3,v3)[:,2]
 e = np.sqrt(1 + (2 * energy * h**2 / mu**2))
 
-OmegaK = np.sqrt(G*(Msun+m1[0]+m2[0])/rsun**3)
+OmegaK = np.sqrt(G*(Msun+m1[0]+m2[0])/rsun**3)      # keplerian frequency at this distance
 angles = -OmegaK*times
 
 sp = (s-p)/Rhill[0,0]
