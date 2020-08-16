@@ -1,5 +1,5 @@
 # %%
-import glob, os, csv, rebound, mysql.connector, pymysql
+import glob, os, csv, rebound
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -34,7 +34,7 @@ Noutputs = 1000                             # number of outputs for plotting
 # results = [pd.read_csv(i, delimiter=',') for i in filenames]
 
 # read data from csv into dataframe
-data = pd.read_csv(f'./results/particles__b-5.0__r-30.0.csv')
+data = pd.read_csv(f'./results/particles__b-3.0__r-10.0.csv')
 
 # create numpy arrays from dataframe
 times = data['time'].to_numpy()
@@ -102,7 +102,7 @@ vx, vy = cosspxdot-sinspydot, sinspxdot+cosspydot
 
 Cj = n**2*(x**2 + y**2) + 2*(mu[:,0]/r[:,0] + mu[:,1]/r[:,1]) - vx**2 - vy**2
 # %%
-lim = 20
+lim = 5
 fig, axes = plt.subplots(1, figsize=(9, 9))
 axes.set_xlabel("$x/R_\mathrm{h}$")
 axes.set_ylabel("$y/R_\mathrm{h}$")
@@ -115,7 +115,7 @@ primarydot, = axes.plot([], [], marker="o", ms=7, c="tab:orange")
 secondarydot, = axes.plot([], [], marker="o", ms=7, c="tab:blue")
 impactordot, = axes.plot([], [], marker="o", ms=7, c="tab:green")
 text = axes.text(-lim+(lim/10), lim-(lim/10), '', fontsize=15)
-axes.grid()
+# axes.grid()
 axes.legend()
 
 ref = np.zeros((Noutputs,3))
@@ -161,7 +161,7 @@ def animate(i):
 anim = animation.FuncAnimation(fig, animate, init_func=init,  frames=Noutputs, interval=1,blit=True)
 # anim.save(f'{path}/videos/2D.mp4')
 # %%
-lim = 2
+lim = 1
 fig = plt.figure(figsize=(12,12))
 axes = fig.add_subplot(111, projection='3d')
 axes.set_xlabel("$x/R_\mathrm{h}$")

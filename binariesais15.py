@@ -28,7 +28,7 @@ n = 2*np.pi/T                       # mean motion of binary around the sun
 # mu of a body is G times its mass
 mu1 = G*Msun                        
 mu2 = G*m1
-
+ 
 # impactor
 simp = 10e3                         # radius of impactor
 y0 = 6*Rhill*(simp/10e3)**(3/2)     # y distance of impactor from binary
@@ -72,7 +72,7 @@ ctheta0 = np.cos(theta0)
 
 sim.add(m=mimp, r=simp, x=(rsun+B)*ctheta0-rsun*np.cos(impi), y=(rsun+B)*stheta0*np.cos(impi), z=(rsun+B)*np.sin(impi), vx=-vorbi*stheta0, vy=vorbi*ctheta0, hash="impactor")
 
-Noutputs = 1000
+Noutputs = 100000
 totaltime = T*0.5*(simp/10e3)**(3/2)
 totaltime = T*0.5
 times = np.linspace(0.,totaltime, Noutputs)
