@@ -1,9 +1,8 @@
 # %%
-import glob, os, csv, rebound, mysql.connector, pymysql
+import glob, os, csv, rebound
 import numpy as np
 import pandas as pd
 from timeit import default_timer as timed
-from sqlalchemy import create_engine
 
 # constants
 G = 6.67428e-11                             # gravitational constanct in SI units
@@ -23,10 +22,8 @@ vshear = -1.5*OmegaK*rbin                   # calculates the change in velocity 
 Pbin = 2.*np.pi/np.sqrt(G*(m1+m2)/rbin**3)  # orbital period of primary and secondary around each other
 T = 2.*np.pi/np.sqrt(G*(Msun)/r**3)         # orbital period of binary around the sun
 n = 2*np.pi/T                               # mean motion of binary around the sun
-# mu of a body is G times its mass
-mu1 = G*Msun                        
+mu1 = G*Msun                                # mu of a body is G times its mass          
 mu2 = G*m1
-
 
 binaryi = np.deg2rad(0)     # inclination of binary
 impi = np.deg2rad(0)        # inclination of impactor
@@ -42,24 +39,22 @@ headers = ['time','b','imp radius','mass prim','x prim','y prim','z prim','vx pr
            'mass imp','x imp','y imp','z imp','vx imp','vy imp','vz imp',
            'mass sun','x sun','y sun','z sun','vx sun','vy sun','vz sun',]
 
-# db_connection_str = 'mysql+pymysql://john:321654@localhost/mydatabase'
-# db_connection = create_engine(db_connection_str)
-
 # create range of impactor sizes to loop through
-simp = np.arange(10e3,51e3,10e3)
+simp = np.arange(10e3,41e3,10e3)
 # create range of impact parameters to loop throught
-b = np.arange(1.0,6.5,2)*Rhill
+b = np.arange(1.5,5.5,1)*Rhill
 
-# %%
+
 initial, final = [], [] # empty arrays for initial and final positions and velocities for each body
 timer = timed() # start timer to time simulations
 
 # loop through each impact parameter
 for j in range(len(b)):
+    print('step ' + str(j + 1))
     # loop throught each impactor radius
     for i in range(len(simp)):
         
-        totaltime = T*simp[i]/10e3*(1/b[j]*Rhill)*3. # total time of simulation - adjusted for different impactor sizes and distances
+        totaltime = T/2.2*simp[i]/10e3*(1/b[j]*Rhill)*3. # total time of simulation - adjusted for different impactor sizes and distances
         times = np.reshape(np.linspace(0.,totaltime, Noutputs), (Noutputs,1)) # create times for integrations - reshape for hstack below
         y0 = Rhill*simp[i]/1e3                  # initial y distance of impactor from binary - larger for larger impactors
         mimp = 4./3.*np.pi*densimp*simp[i]**3   # mass of impactor
@@ -67,14 +62,10 @@ for j in range(len(b)):
         sim.G = G                               # get G which sets units of integrator - SI in this case
         sim.dt = 1e-4*Pbin                      # set initial timestep of integrator - IAS15 is adaptive so this will change
         sim.softening = 0.1*s1                  # softening parameter which modifies potential of each particle to prevent divergences
-        sim.integrator = "ias15"                # set rebound integrator to IAS15 - fast and accurate, with adaptive timestep
-        sim.collision  = "none"                 # disable collisions because they stop integration and so cause error when writing to csv
-        
         
         xb1 = -m2/(m1+m2)*rbin                  # slightly adjust initial x position of primary to keep centre of mass of binary at r
         xb2 = m1/(m1+m2)*rbin                   # slightly adjust initial x position of secondary to keep centre of mass of binary at r
         
-        vcom = r*OmegaK                         # orbital speed of centre of mass of binary - keplerian shear times r - needed for plotting
         vshear1 = -1.5*OmegaK*xb1               # keplerian shear of primary
         vshear2 = -1.5*OmegaK*xb2               # keplerian shear of secondary
         
@@ -152,20 +143,16 @@ for j in range(len(b)):
         
         # create dataframe from results
         df = pd.DataFrame(particles)
-        # write to csv with impactor size and impact parameter in title
-        df.to_csv(f'./results/particles__b-{b[j]/Rhill}__r-{simp[i]/1e3}.csv', header=headers)
+        # write to csv with impactor size and impact parameter in title - round values to avoid long file names
+        df.to_csv(f'./results/presentation__b-{np.round(b[j]/Rhill, 1)}__r-{np.round(simp[i]/1e3, 1)}.csv', header=headers)
         
         
         initial.append(particles[0])    # initial positions and velocities of bodies
         final.append(particles[-1])     # final positions and velocities of bodies
             
-        # table_name = f'{str(int(simp[i]))}_{str(int(b[j]/Rhill))}'
-        # mycursor.execute(f"CREATE TABLE {table_name}")
-        # df.to_sql(f'{table_name}', con=db_connection, if_exists='replace')
-            
 print(timed()-timer) # finish timer
 
 df = pd.DataFrame(initial)                              # create dataframe of initial values
-df.to_csv(f'./results/initial.csv', header=headers)     # write initial values to csv
+# df.to_csv(f'./results/test_initial.csv', header=headers)     # write initial values to csv
 df = pd.DataFrame(final)                                # create dataframe of final values
-df.to_csv(f'./results/final.csv', header=headers)       # write final values to csv
+# df.to_csv(f'./results/test_final.csv', header=headers)       # write final values to csv

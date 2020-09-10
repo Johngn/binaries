@@ -7,6 +7,7 @@ import mpl_toolkits.mplot3d.axes3d as p3
 from matplotlib import animation
 from timeit import default_timer as timed
 from sqlalchemy import create_engine
+from matplotlib.animation import FuncAnimation, FFMpegWriter
 
 G = 6.67428e-11                             # gravitational constanct in SI units
 au = 1.496e11                               # astronomical unit    
@@ -17,24 +18,9 @@ n = 2*np.pi/T                               # mean motion of binary around the s
 year = 365.25*24.*60.*60.                   # number of seconds in a year
 Noutputs = 1000                             # number of outputs for plotting
 
-# db_connection_str = 'mysql+pymysql://john:321654@localhost/mydatabase'
-# db_connection = create_engine(db_connection_str)
-# mydb = mysql.connector.connect(
-#   host="localhost",
-#   user="john",
-#   passwd="321654",
-#   database="mydatabase"
-# )
-# mycursor = mydb.cursor()
-# mycursor.execute("SHOW TABLES")
-# tablenames = np.array(mycursor.fetchall())[:,0]
-# results = [pd.read_sql_table(i, con=db_connection) for i in tablenames]
-
-# filenames = glob.glob(f"{path}/results/particles*.csv")
-# results = [pd.read_csv(i, delimiter=',') for i in filenames]
-
 # read data from csv into dataframe
-data = pd.read_csv(f'./results/particles__b-3.0__r-10.0.csv')
+# data = pd.read_csv(f'./results/particles__b-2.4999999999999998__r-5.0.csv')
+data = pd.read_csv(f'./results/presentation__b-4.5__r-30.0.csv')
 
 # create numpy arrays from dataframe
 times = data['time'].to_numpy()
@@ -100,7 +86,7 @@ sinspxdot, sinspydot = np.sin(angles)*xdot, np.sin(angles)*ydot
 x, y = cosspx-sinspy+rsun, sinspx+cosspy
 vx, vy = cosspxdot-sinspydot, sinspxdot+cosspydot
 
-Cj = n**2*(x**2 + y**2) + 2*(mu[:,0]/r[:,0] + mu[:,1]/r[:,1]) - vx**2 - vy**2
+Cj = n**2*(x**2 + y**2) + 2*(mu[:,0]/r[:,0] + mu[:,1]/r[:,1]) - vx**2 - vy**2 # jacobian constant
 # %%
 lim = 5
 fig, axes = plt.subplots(1, figsize=(9, 9))
@@ -155,13 +141,18 @@ def animate(i):
     primaryhill.center = (cospx[i]-sinpy[i], sinpx[i]+cospy[i])
     secondaryhill.center = (cossx[i]-sinsy[i], sinsx[i]+cossy[i])
     impactorhill.center = (cosix[i]-siniy[i], sinix[i]+cosiy[i])
-    text.set_text('{} Years'.format(np.round(times[i]/(year), 1)))
+    text.set_text('{} Years'.format(int(times[i]/(year))))
     return primarydot, secondarydot, impactordot, primaryline, secondaryline, impactorline, text, primaryhill, secondaryhill, impactorhill
 
-anim = animation.FuncAnimation(fig, animate, init_func=init,  frames=Noutputs, interval=1,blit=True)
-# anim.save(f'{path}/videos/2D.mp4')
+anim = animation.FuncAnimation(fig, animate, init_func=init,  frames=Noutputs, interval=1, blit=True)
 # %%
-lim = 1
+plt.rcParams['animation.ffmpeg_path'] = '/usr/bin/ffmpeg'
+
+f = f'vid/ps_animation.mp4' 
+writervideo = FFMpegWriter(fps=10) # ffmpeg must be installed
+anim.save(f, writer=writervideo)
+# %%
+lim = 10
 fig = plt.figure(figsize=(12,12))
 axes = fig.add_subplot(111, projection='3d')
 axes.set_xlabel("$x/R_\mathrm{h}$")
@@ -198,9 +189,50 @@ def animate(i):
     primarydot.set_3d_properties(pref[i,2])
     secondarydot.set_3d_properties(sref[i,2])
     impactordot.set_3d_properties(impref[i,2])
-    text.set_text('{} Years'.format(np.round(times[i]/(year), 1)))
+    text.set_text('{} Years'.format(int(times[i]/(year))))
     return primarydot, secondarydot, impactordot, primaryline, secondaryline, impactorline, text
 
-anim = animation.FuncAnimation(fig, animate, blit=True, frames=len(data), interval=1)
+anim = animation.FuncAnimation(fig, animate, frames=len(data), interval=1)
 # anim.save(f'{path}/videos/3D.mp4')
 # %%
+lim = 10
+fig, axes = plt.subplots(1, figsize=(5, 5))
+axes.set_xlabel("$x/R_\mathrm{h}$")
+axes.set_ylabel("$y/R_\mathrm{h}$")
+axes.set_ylim(-lim,lim)
+axes.set_xlim(-lim,lim)
+
+ref = np.zeros((Noutputs,3))
+ref[:,0] = -rsun + rsun*np.cos(angles)
+ref[:,1] = 0 - rsun*np.sin(angles)
+
+pref = (p-ref)/Rhill[0,0]
+sref = (s-ref)/Rhill[0,0]
+impref = (imp-ref)/Rhill[0,0]
+cospx, cospy = np.cos(angles)*pref[:,0], np.cos(angles)*pref[:,1]
+cossx, cossy = np.cos(angles)*sref[:,0], np.cos(angles)*sref[:,1]
+cosix, cosiy = np.cos(angles)*impref[:,0], np.cos(angles)*impref[:,1]
+sinpx, sinpy = np.sin(angles)*pref[:,0], np.sin(angles)*pref[:,1]
+sinsx, sinsy = np.sin(angles)*sref[:,0], np.sin(angles)*sref[:,1]
+sinix, siniy = np.sin(angles)*impref[:,0], np.sin(angles)*impref[:,1]
+
+Rhillprim = rsun*(m1/Msun/3.)**(1./3.)/Rhill[0,0]
+Rhillsec = rsun*(m2/Msun/3.)**(1./3.)/Rhill[0,0]
+Rhillimp = rsun*(mimp/Msun/3.)**(1./3.)/Rhill[0,0]
+primaryhill = plt.Circle((cospx[-1]-sinpy[-1], sinpx[-1]+cospy[-1]), Rhillprim[0], fc="none", ec="tab:orange")
+axes.add_artist(primaryhill)
+secondaryhill = plt.Circle((cossx[-1]-sinsy[-1], sinsx[-1]+cossy[-1]), Rhillsec[0], fc="none", ec="tab:blue")
+axes.add_artist(secondaryhill)
+impactorhill = plt.Circle((cosix[-1]-siniy[-1], sinix[-1]+cosiy[-1]), Rhillimp[0], fc="none", ec="tab:green")
+axes.add_artist(impactorhill)
+
+axes.plot(cospx-sinpy, sinpx+cospy, label="primary", c="tab:orange", lw=1.5)
+axes.plot(cossx-sinsy, sinsx+cossy, label="secondary", c="tab:blue", lw=1.5)
+axes.plot(cosix-siniy, sinix+cosiy, label="impactor", c="tab:green", lw=1.5)
+
+axes.plot(cospx[-1]-sinpy[-1], sinpx[-1]+cospy[-1], c="tab:orange", marker='o')
+axes.plot(cossx[-1]-sinsy[-1], sinsx[-1]+cossy[-1], c="tab:blue", marker='o')
+axes.plot(cosix[-1]-siniy[-1], sinix[-1]+cosiy[-1], c="tab:green", marker='o')
+
+axes.legend()
+fig.savefig('./result5.pdf', bbox_inches='tight')

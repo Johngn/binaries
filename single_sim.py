@@ -7,7 +7,6 @@ from matplotlib import animation
 from scipy.spatial.distance import pdist
 from timeit import default_timer as timed
 
-
 # constants
 G = 6.67428e-11                     # gravitational constanct in SI units
 au = 1.496e11                       # astronomical unit    
@@ -32,26 +31,24 @@ mu2 = G*m1
 # impactor
 simp = 10e3                         # radius of impactor
 y0 = 6*Rhill*(simp/10e3)**(3/2)     # y distance of impactor from binary
-mimp = 4./3.*np.pi*densimp*simp**3
+mimp = 4./3.*np.pi*densimp*simp**3  # mass of impactor
 
-B = 5*Rhill
+B = 5*Rhill                         # impact parameter       
 
-binaryi = np.deg2rad(0)
-impi = np.deg2rad(0)
+binaryi = np.deg2rad(0)             # inclination of binary
+impi = np.deg2rad(0)                # inclination of impactor
 
 sim = rebound.Simulation()
-sim.G = G
-sim.dt = 1e-5*Pbin 
-sim.softening = 0.1*s1
-sim.integrator = "ias15"
-sim.gravity    = "basic"
-sim.collision  = "none"
-sim.ri_ias15.epsilon=0
+sim.G = G                   # set gravitational constant
+sim.dt = 1e-5*Pbin          # set time-step
+sim.softening = 0.1*s1      # softening parameter - prevents divergences during close encounters - only needed if collisions are off
+# sim.ri_ias15.epsilon=0
 
-xb1 = -m2/(m1+m2)*rbin
-xb2 = m1/(m1+m2)*rbin
-vshear1 = -1.5*OmegaK*xb1
-vshear2 = -1.5*OmegaK*xb2
+xb1 = -m2/(m1+m2)*rbin      # slightly adjust initial x position of primary to keep centre of mass of binary at r
+xb2 = m1/(m1+m2)*rbin                   # slightly adjust initial x position of secondary to keep centre of mass of binary at r
+vshear1 = -1.5*OmegaK*xb1               # keplerian shear of primary
+vshear2 = -1.5*OmegaK*xb2               # keplerian shear of secondary
+        
 
 vK1 = np.sqrt(G*(Msun+m1)/(rsun+xb1))
 vK2 = np.sqrt(G*(Msun+m2)/(rsun+xb2))
@@ -72,7 +69,7 @@ ctheta0 = np.cos(theta0)
 
 sim.add(m=mimp, r=simp, x=(rsun+B)*ctheta0-rsun*np.cos(impi), y=(rsun+B)*stheta0*np.cos(impi), z=(rsun+B)*np.sin(impi), vx=-vorbi*stheta0, vy=vorbi*ctheta0, hash="impactor")
 
-Noutputs = 100000
+Noutputs = 10000
 totaltime = T*0.5*(simp/10e3)**(3/2)
 totaltime = T*0.5
 times = np.linspace(0.,totaltime, Noutputs)
@@ -152,6 +149,40 @@ r2 = distances[:,0]
 
 Cj = n**2*(x**2 + y**2) + 2*(mu1/r1 + mu2/r2) - vx**2 - vy**2
 # %%
+lim = 5
+fig, axes = plt.subplots(1, figsize=(9, 9))
+axes.set_xlabel("$x/R_\mathrm{h}$")
+axes.set_ylabel("$y/R_\mathrm{h}$")
+axes.set_ylim(-lim,lim)
+axes.set_xlim(-lim,lim)
+
+ref = np.zeros((Noutputs,3))
+ref[:,0] = -rsun + rsun*np.cos(angles)
+ref[:,1] = 0 - rsun*np.sin(angles)
+
+pref = (p-ref)/Rhill
+sref = (s-ref)/Rhill
+impref = (imp-ref)/Rhill
+cospx, cospy = np.cos(angles)*pref[:,1], np.cos(angles)*pref[:,1]
+cossx, cossy = np.cos(angles)*sref[:,1], np.cos(angles)*sref[:,1]
+cosix, cosiy = np.cos(angles)*impref[:,1], np.cos(angles)*impref[:,1]
+sinpx, sinpy = np.sin(angles)*pref[:,1], np.sin(angles)*pref[:,1]
+sinsx, sinsy = np.sin(angles)*sref[:,1], np.sin(angles)*sref[:,1]
+sinix, siniy = np.sin(angles)*impref[:,1], np.sin(angles)*impref[:,1]
+
+Rhillprim = rsun*(m1/Msun/3.)**(1./3.)/Rhill
+Rhillsec = rsun*(m2/Msun/3.)**(1./3.)/Rhill
+Rhillimp = rsun*(mimp/Msun/3.)**(1./3.)/Rhill
+primaryhill = plt.Circle((0,0), Rhillprim, fc="none", ec="tab:orange")
+secondaryhill = plt.Circle((0,0), Rhillsec, fc="none", ec="tab:blue")
+impactorhill = plt.Circle((0,0), Rhillimp, fc="none", ec="tab:green")
+
+axes.plot(cospx-sinpy, sinpx+cospy, label="primary", c="tab:orange", lw=1.5)
+axes.plot(cossx-sinsy, sinsx+cossy, label="secondary", c="tab:blue", lw=1.5)
+axes.plot(cosix-siniy, sinix+cosiy, label="impactor", c="tab:green", lw=1.5)
+
+axes.legend()
+# %%
 y = Cj
 plt.figure(figsize=(15,8))
 plt.title(f"Integrator={sim.integrator}  Imp radius={simp/1e3} km  b={B/Rhill} Rhill")
@@ -210,20 +241,19 @@ text = axes.text(-lim+(lim/10), lim-(lim/10), '', fontsize=15)
 axes.grid()
 axes.legend()
 
-# ref = np.zeros((Noutputs,3))
-# ref[:,0] = -rsun + rsun*np.cos(angles)
-# ref[:,1] = 0 - rsun*np.sin(angles)
+ref = np.zeros((Noutputs,3))
+ref[:,0] = -rsun + rsun*np.cos(angles)
+ref[:,1] = 0 - rsun*np.sin(angles)
 
-# pref = (p-ref)/Rhill
-# sref = (s-ref)/Rhill
-# impref = (imp-ref)/Rhill
-# cospx, cospy = np.cos(angles)*pref[:,0], np.cos(angles)*pref[:,1]
-# cossx, cossy = np.cos(angles)*sref[:,0], np.cos(angles)*sref[:,1]
-# cosix, cosiy = np.cos(angles)*impref[:,0], np.cos(angles)*impref[:,1]
-# sinpx, sinpy = np.sin(angles)*pref[:,0], np.sin(angles)*pref[:,1]
-# sinsx, sinsy = np.sin(angles)*sref[:,0], np.sin(angles)*sref[:,1]
-# sinix, siniy = np.sin(angles)*impref[:,0], np.sin(angles)*impref[:,1]
-
+pref = (p-ref)/Rhill
+sref = (s-ref)/Rhill
+impref = (imp-ref)/Rhill
+cospx, cospy = np.cos(angles)*pref[:,0], np.cos(angles)*pref[:,1]
+cossx, cossy = np.cos(angles)*sref[:,0], np.cos(angles)*sref[:,1]
+cosix, cosiy = np.cos(angles)*impref[:,0], np.cos(angles)*impref[:,1]
+sinpx, sinpy = np.sin(angles)*pref[:,0], np.sin(angles)*pref[:,1]
+sinsx, sinsy = np.sin(angles)*sref[:,0], np.sin(angles)*sref[:,1]
+sinix, siniy = np.sin(angles)*impref[:,0], np.sin(angles)*impref[:,1]
 
 sref = (s-p)/Rhill
 impref = (imp-p)/Rhill
@@ -260,8 +290,7 @@ def animate(i):
     text.set_text('{} Years'.format(np.round(times[i]/(year), 1)))
     return primarydot, secondarydot, impactordot, primaryline, secondaryline, impactorline, text, primaryhill, secondaryhill, impactorhill
 
-anim = animation.FuncAnimation(fig, animate, init_func=init,  frames=Noutputs, interval=1,blit=True)
-# anim.save(f'{path}/videos/2D.mp4')
+anim = animation.FuncAnimation(fig, animate, init_func=init,  frames=Noutputs, interval=1, blit=True)
 # %%
 lim = 2
 fig = plt.figure(figsize=(12,12))
@@ -307,5 +336,3 @@ def animate(i):
     return primarydot, secondarydot, impactordot, primaryline, secondaryline, impactorline, text
 
 anim = animation.FuncAnimation(fig, animate, frames=Noutputs, interval=10)
-# %%
-# anim.save('3D.mp4')

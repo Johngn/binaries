@@ -1,14 +1,12 @@
 # %%
-import glob, os, csv, rebound, mysql.connector, pymysql
+import glob, os, csv, rebound
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import mpl_toolkits.mplot3d.axes3d as p3
 from matplotlib import animation
 from timeit import default_timer as timed
-from sqlalchemy import create_engine
 
-path = '/home/john/Desktop/mastersproject'
 G = 6.67428e-11
 au = 1.496e11
 rsun = 44.*au
@@ -18,7 +16,7 @@ n = 2*np.pi/T
 year = 365.25*24.*60.*60.
 Noutputs = 1000
 
-filenames = glob.glob(f"{path}/results/final.csv")
+filenames = glob.glob(f"./results/final.csv")
 results = [pd.read_csv(i, delimiter=',') for i in filenames]
 data = pd.concat(results)
 
@@ -64,18 +62,21 @@ h[:,1] = np.cross(distance2,v2)[:,2]
 h[:,2] = np.cross(distance3,v3)[:,2]
 e = np.sqrt(1 + (2 * energy * h**2 / mu**2))
 # %%
-plt.figure(figsize=(8,8))
+plt.figure(figsize=(9,9))
+s = 40
 plt.scatter(b,simp, s=1, marker="x", c="black")
-plt.scatter(b[bound[:,0]],simp[bound[:,0]], label='primary-secondary', s=100)
-plt.scatter(b[bound[:,1]],simp[bound[:,1]], label='primary-impactor', s=100)
-plt.scatter(b[bound[:,2]],simp[bound[:,2]], label='secondary-impactor', s=100)
+plt.scatter(b[bound[:,0]], simp[bound[:,0]], label='primary-secondary', s=s)
+plt.scatter(b[bound[:,1]], simp[bound[:,1]], label='primary-impactor', s=s)
+plt.scatter(b[bound[:,2]], simp[bound[:,2]], label='secondary-impactor', s=s)
 plt.xlabel("Impact parameter (Hill radii)")
 plt.ylabel("Impactor radius (km)")
 # plt.legend()
 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.07),
           ncol=3, fancybox=True, shadow=True)
-# plt.grid()
-plt.savefig(f"{path}/img/final_bound", bbox_inches='tight')
+# plt.grid('both')
+plt.xticks(np.arange(0.5,10.6,0.5))
+plt.yticks(np.arange(0,101,5))
+plt.savefig(f"./img/final_bound", bbox_inches='tight')
 # anim.save(f'{path}/videos/2D.mp4')
 # %%
 y = energy
