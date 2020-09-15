@@ -33,13 +33,13 @@ vp = data[['vx prim','vy prim', 'vz prim']].to_numpy()
 vs = data[['vx sec','vy sec', 'vz sec']].to_numpy()
 vimp = data[['vx imp','vy imp', 'vz imp']].to_numpy()
 
-r, v, Rhill, mu, h, e = np.zeros((len(data),3)), np.zeros((len(data),3)), np.zeros((len(data),3)), np.zeros((len(data),3)), np.zeros((len(data),3)), np.zeros((len(data),3))
-r[:,0] = np.linalg.norm(p-s, axis=1)
-r[:,1] = np.linalg.norm(p-imp, axis=1)
-r[:,2] = np.linalg.norm(s-imp, axis=1)
-v[:,0] = np.linalg.norm(vp-vs, axis=1)
-v[:,1] = np.linalg.norm(vp-vimp, axis=1)
-v[:,2] = np.linalg.norm(vs-vimp, axis=1)
+R, V, Rhill, mu, h, e = np.zeros((len(data),3)), np.zeros((len(data),3)), np.zeros((len(data),3)), np.zeros((len(data),3)), np.zeros((len(data),3)), np.zeros((len(data),3))
+R[:,0] = np.linalg.norm(p-s, axis=1)
+R[:,1] = np.linalg.norm(p-imp, axis=1)
+R[:,2] = np.linalg.norm(s-imp, axis=1)
+V[:,0] = np.linalg.norm(vp-vs, axis=1)
+V[:,1] = np.linalg.norm(vp-vimp, axis=1)
+V[:,2] = np.linalg.norm(vs-vimp, axis=1)
 Rhill[:,0] = rsun*((m1+m2)/Msun/3.)**(1./3.)
 Rhill[:,1] = rsun*((m1+mimp)/Msun/3.)**(1./3.)
 Rhill[:,2] = rsun*((m2+mimp)/Msun/3.)**(1./3.)
@@ -47,9 +47,9 @@ mu[:,0] = G*(m1+m2)
 mu[:,1] = G*(m1+mimp)
 mu[:,2] = G*(m2+mimp)
 
-a = mu*r/(2*mu - r*v**2)
+a = mu*R/(2*mu - R*V**2)
 energy = -mu/2/a
-bound = np.logical_and(energy < 0, r < Rhill)
+bound = np.logical_and(energy < 0, R < Rhill)
 
 distance1 = p-s
 distance2 = p-imp

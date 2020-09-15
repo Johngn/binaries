@@ -13,14 +13,14 @@ s1, s2 = 10e3, 10e3                         # radius of primary and of secondary
 dens1, dens2, densimp = 1000., 1000., 1000. # density of primary, secondary, and impactor 
 m1 = 4./3.*np.pi*dens1*s1**3                # mass of primary calculated from density and radius
 m2 = 4./3.*np.pi*dens2*s2**3                # mass of secondary calculated from density and radius
-r = 44.*au                                  # distance of centre of mass of binary from the sun 
-OmegaK = np.sqrt(G*(Msun+m1+m2)/r**3)       # keplerian frequency at this distance
-Rhill = r*((m1+m2)/Msun/3.)**(1./3.)        # Hill radius of binary
+rsun = 44.*au                                  # distance of centre of mass of binary from the sun 
+OmegaK = np.sqrt(G*(Msun+m1+m2)/rsun**3)       # keplerian frequency at this distance
+Rhill = rsun*((m1+m2)/Msun/3.)**(1./3.)        # Hill radius of binary
 rbin = 0.5*Rhill                            # separation of binary is 0.5 of the Hill radius
 vorb = np.sqrt(G*(m1+m2)/rbin)              # orbital speed of primary and secondary around each other
 vshear = -1.5*OmegaK*rbin                   # calculates the change in velocity required to keep a body in a circular orbit
 Pbin = 2.*np.pi/np.sqrt(G*(m1+m2)/rbin**3)  # orbital period of primary and secondary around each other
-T = 2.*np.pi/np.sqrt(G*(Msun)/r**3)         # orbital period of binary around the sun
+T = 2.*np.pi/np.sqrt(G*(Msun)/rsun**3)         # orbital period of binary around the sun
 n = 2*np.pi/T                               # mean motion of binary around the sun
 mu1 = G*Msun                                # mu of a body is G times its mass          
 mu2 = G*m1
@@ -43,7 +43,6 @@ headers = ['time','b','imp radius','mass prim','x prim','y prim','z prim','vx pr
 simp = np.arange(10e3,41e3,10e3)
 # create range of impact parameters to loop throught
 b = np.arange(1.5,5.5,1)*Rhill
-
 
 initial, final = [], [] # empty arrays for initial and final positions and velocities for each body
 timer = timed() # start timer to time simulations
@@ -69,15 +68,15 @@ for j in range(len(b)):
         vshear1 = -1.5*OmegaK*xb1               # keplerian shear of primary
         vshear2 = -1.5*OmegaK*xb2               # keplerian shear of secondary
         
-        vK1 = np.sqrt(G*(Msun+m1)/(r+xb1))      # orbital speed of primary around sun
-        vK2 = np.sqrt(G*(Msun+m2)/(r+xb2))      # inital orbital speed of secondary around sun
+        vK1 = np.sqrt(G*(Msun+m1)/(rsun+xb1))      # orbital speed of primary around sun
+        vK2 = np.sqrt(G*(Msun+m2)/(rsun+xb2))      # inital orbital speed of secondary around sun
         
         vorb1 = -m2/(m1+m2)*vorb                # orbital speed of primary around secondary - adjusted to account for offset from COM
         vorb2 = m1/(m1+m2)*vorb                 # orbital speed of secondary around primary - adjusted to account for offset from COM
         sinbin = np.sin(binaryi)                # sin of inclination of binary
         cosbin = np.cos(binaryi)                # cos of inclination of binary
         
-        sim.add(m=Msun, x=-r, hash="sun")       # add sun to simulation
+        sim.add(m=Msun, x=-rsun, hash="sun")       # add sun to simulation
         
         primx = xb1*np.sin(np.pi/2-binaryi)     # x position of primary - accounts for inclination
         primz = xb1*np.sin(binaryi)             # z position of primary - accounts for inclination
@@ -95,14 +94,14 @@ for j in range(len(b)):
         # add secondary to simulation
         sim.add(m=m2, r=s2, x=secx, z=secz, vy=secvy, vz=secvz, hash="secondary")
         
-        vorbi = np.sqrt(G*Msun/(r+b[j]))        # orbital speed of impactor around sun
-        theta0 = y0/(r+b[j])                    # angle between impactor and line between binary COM and sun
+        vorbi = np.sqrt(G*Msun/(rsun+b[j]))        # orbital speed of impactor around sun
+        theta0 = y0/(rsun+b[j])                    # angle between impactor and line between binary COM and sun
         stheta0 = np.sin(theta0)                # sin of theta - needed for position of impactor
         ctheta0 = np.cos(theta0)                # cos of theta - needed for position of impactor
         
-        impx = (r+b[j])*ctheta0-r*np.cos(impi)  # x position of impactor
-        impy = (r+b[j])*stheta0*np.cos(impi)    # y position of impactor
-        impz = (r+b[j])*np.sin(impi)            # z position of impactor
+        impx = (rsun+b[j])*ctheta0-rsun*np.cos(impi)  # x position of impactor
+        impy = (rsun+b[j])*stheta0*np.cos(impi)    # y position of impactor
+        impz = (rsun+b[j])*np.sin(impi)            # z position of impactor
         impvx = -vorbi*stheta0                  # x velocity of impactor
         impvy = vorbi*ctheta0                   # y velocity of impactor
         
@@ -144,7 +143,7 @@ for j in range(len(b)):
         # create dataframe from results
         df = pd.DataFrame(particles)
         # write to csv with impactor size and impact parameter in title - round values to avoid long file names
-        df.to_csv(f'./results/presentation__b-{np.round(b[j]/Rhill, 1)}__r-{np.round(simp[i]/1e3, 1)}.csv', header=headers)
+        df.to_csv(f'./results/singletest__b-{np.round(b[j]/Rhill, 1)}__r-{np.round(simp[i]/1e3, 1)}.csv', header=headers)
         
         
         initial.append(particles[0])    # initial positions and velocities of bodies

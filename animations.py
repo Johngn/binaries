@@ -37,15 +37,15 @@ vs = data[['vx sec','vy sec', 'vz sec']].to_numpy()
 vimp = data[['vx imp','vy imp', 'vz imp']].to_numpy()
 
 # empty arrays for values
-r, v, Rhill, mu, h, e = np.zeros((len(data),3)), np.zeros((len(data),3)), np.zeros((len(data),3)), np.zeros((len(data),3)),np.zeros((len(data),3)),np.zeros((len(data),3))
+R, V, Rhill, mu, h, e = np.zeros((len(data),3)), np.zeros((len(data),3)), np.zeros((len(data),3)), np.zeros((len(data),3)),np.zeros((len(data),3)),np.zeros((len(data),3))
 
-r[:,0] = np.linalg.norm(p-s, axis=1)                # distance between primary and secondary
-r[:,1] = np.linalg.norm(p-imp, axis=1)              # distance between primary and impactor
-r[:,2] = np.linalg.norm(s-imp, axis=1)              # distance between secondary and impactor
+R[:,0] = np.linalg.norm(p-s, axis=1)                # distance between primary and secondary
+R[:,1] = np.linalg.norm(p-imp, axis=1)              # distance between primary and impactor
+R[:,2] = np.linalg.norm(s-imp, axis=1)              # distance between secondary and impactor
 
-v[:,0] = np.linalg.norm(vp-vs, axis=1)              # relative velocity between primary and secondary
-v[:,1] = np.linalg.norm(vp-vimp, axis=1)            # relative velocity between primary and impactor
-v[:,2] = np.linalg.norm(vs-vimp, axis=1)            # relative velocity between secondary and impactor
+V[:,0] = np.linalg.norm(vp-vs, axis=1)              # relative velocity between primary and secondary
+V[:,1] = np.linalg.norm(vp-vimp, axis=1)            # relative velocity between primary and impactor
+V[:,2] = np.linalg.norm(vs-vimp, axis=1)            # relative velocity between secondary and impactor
 
 Rhill[:,0] = rsun*((m1+m2)/Msun/3.)**(1./3.)        # combined Hill radius of primary and secondary
 Rhill[:,1] = rsun*((m1+mimp)/Msun/3.)**(1./3.)      # combined Hill radius of primary and impactor
@@ -55,9 +55,9 @@ mu[:,0] = G*(m1+m2)                                 # G times combined mass of p
 mu[:,1] = G*(m1+mimp)                               # G times combined mass of primary and impactor
 mu[:,2] = G*(m2+mimp)                               # G times combined mass of secondary and impactor
 
-a = mu*r/(2*mu - r*v**2)                            # semi-major axis between each pair of bodies
+a = mu*R/(2*mu - R*V**2)                            # semi-major axis between each pair of bodies
 energy = -mu/2/a                                    # total energy between each pair of bodies
-bound = np.logical_and(energy < 0, r < Rhill)       # bodies are bound if their energy is less than zero and they are closer together than the Hill radius
+bound = np.logical_and(energy < 0, R < Rhill)       # bodies are bound if their energy is less than zero and they are closer together than the Hill radius
 
 distance1 = p-s                                     # difference between x, y and z values of primary and secondary
 distance2 = p-imp                                   # difference between x, y and z values of primary and impactor
@@ -86,7 +86,7 @@ sinspxdot, sinspydot = np.sin(angles)*xdot, np.sin(angles)*ydot
 x, y = cosspx-sinspy+rsun, sinspx+cosspy
 vx, vy = cosspxdot-sinspydot, sinspxdot+cosspydot
 
-Cj = n**2*(x**2 + y**2) + 2*(mu[:,0]/r[:,0] + mu[:,1]/r[:,1]) - vx**2 - vy**2 # jacobian constant
+Cj = n**2*(x**2 + y**2) + 2*(mu[:,0]/R[:,0] + mu[:,1]/R[:,1]) - vx**2 - vy**2 # jacobian constant
 # %%
 lim = 5
 fig, axes = plt.subplots(1, figsize=(9, 9))
