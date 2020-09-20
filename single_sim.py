@@ -27,7 +27,7 @@ Pbin = 2.*np.pi/np.sqrt(G*(m1+m2)/rbin**3)  # orbital period of primary and seco
 T = 2.*np.pi/np.sqrt(G*Msun/rsun**3)         # orbital period of binary around the sun
 n = 2*np.pi/T                               # mean motion of binary around the sun
 
-simp = 300e3 # impactor radius
+simp = 1000e3 # impactor radius
 b = 1*Rhill1 # impact parameter
         
 y0 = Rhill1*simp/1e3                  # initial y distance of impactor from binary - larger for larger impactors
@@ -90,38 +90,43 @@ impvy = vorbi*ctheta0                   # y velocity of impactor
 # sim.additional_forces = dragForce
 # sim.force_is_velocity_dependent = 1
 # %%
-sim = rebound.Simulation()              # initialize rebound simulation
-sim.G = G                               # set G which sets units of integrator - SI in this case
-sim.dt = 1e-4*Pbin                      # set initial timestep of integrator - IAS15 is adaptive so this will change
-sim.softening = 0.1*s1                  # softening parameter which modifies potential of each particle to prevent divergences
-# sim.collision = 'direct'
-# sim.collision_resolve = 'merge'
-sim.add(m=Msun, x=-rsun, hash="sun")
-sim.add(m=m1, r=s1, x=primx, z=primz, vy=primvy, vz=primvz, hash="primary")
-sim.add(m=m2, r=s2, x=secx, z=secz, vy=secvy, vz=secvz, hash="secondary")
-sim.add(m=mimp, r=simp, x=impx, y=impy, z=impz, vx=impvx, vy=impvy, hash="impactor")
+def setupSimulation():
+    sim = rebound.Simulation()              # initialize rebound simulation
+    sim.G = G                               # set G which sets units of integrator - SI in this case
+    sim.dt = 1e-4*Pbin                      # set initial timestep of integrator - IAS15 is adaptive so this will change
+    sim.softening = 0.1*s1                  # softening parameter which modifies potential of each particle to prevent divergences
+    sim.collision = 'direct'
+    sim.collision_resolve = 'merge'
+    sim.add(m=Msun, x=-rsun, hash="sun")
+    sim.add(m=m1, r=s1, x=primx, z=primz, vy=primvy, vz=primvz, hash="primary")
+    sim.add(m=m2, r=s2, x=secx, z=secz, vy=secvy, vz=secvz, hash="secondary")
+    sim.add(m=mimp, r=simp, x=impx, y=impy, z=impz, vx=impvx, vy=impvy, hash="impactor")
+    return sim
+
+sim = setupSimulation()
 
 Noutputs = 1000             # number of outputs
 p, s, imp, sun = np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3)) # position
 vp, vs, vimp, vsun = np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3)) # velocity
 totaltime = T*simp/10e3*(1/b*Rhill1)*3. # total time of simulation - adjusted for different impactor sizes and distances
-totaltime = T/10
+totaltime = T/90
 times = np.linspace(0.,totaltime, Noutputs) # create times for integrations
 ps = sim.particles                      # create variable containing particles in simulation
 timer = timed() # start timer to time simulations
 for i, time in enumerate(times):
     sim.integrate(time)
-    p[i] = [ps["primary"].x, ps["primary"].y, ps["primary"].z]
-    s[i] = [ps["secondary"].x, ps["secondary"].y, ps["secondary"].z]
-    imp[i] = [ps["impactor"].x, ps["impactor"].y, ps["impactor"].z]
-    sun[i] = [ps["sun"].x, ps["sun"].y, ps["sun"].z]
-    vp[i] = [ps["primary"].vx, ps["primary"].vy, ps["primary"].vz]
-    vs[i] = [ps["secondary"].vx, ps["secondary"].vy, ps["secondary"].vz]
-    vimp[i] = [ps["impactor"].vx, ps["impactor"].vy, ps["impactor"].vz]
-    vsun[i] = [ps["sun"].vx, ps["sun"].vy, ps["sun"].vz]
+    if sim.N == 4:
+        sun[i] = [ps["sun"].x, ps["sun"].y, ps["sun"].z]
+        p[i] = [ps["primary"].x, ps["primary"].y, ps["primary"].z]
+        s[i] = [ps["secondary"].x, ps["secondary"].y, ps["secondary"].z]
+        imp[i] = [ps["impactor"].x, ps["impactor"].y, ps["impactor"].z]
+        vsun[i] = [ps["sun"].vx, ps["sun"].vy, ps["sun"].vz]
+        vp[i] = [ps["primary"].vx, ps["primary"].vy, ps["primary"].vz]
+        vs[i] = [ps["secondary"].vx, ps["secondary"].vy, ps["secondary"].vz]
+        vimp[i] = [ps["impactor"].vx, ps["impactor"].vy, ps["impactor"].vz]
             
 print(timed()-timer) # finish timer
-
+# %%
 R, V, mu, h = np.zeros((Noutputs,3)), np.zeros((Noutputs,3)), np.zeros((Noutputs,3)), np.zeros((Noutputs,3))
 
 R[:,0] = np.linalg.norm(p-s, axis=1)                # distance between primary and secondary
@@ -140,11 +145,41 @@ h[:,0] = np.cross(p-s,vp-vs)[:,2]                       # angular momentum
 h[:,1] = np.cross(p-imp,vp-vimp)[:,2]
 h[:,2] = np.cross(s-imp,vs-vimp)[:,2]
 
+def find_collision():
+    coll_i = np.argmax(R[:,0] == 0)-1
+    if coll_i != -1:
+        coll_pair = np.argmin(R[coll_i])
+        coll_v = V[coll_i,coll_pair]
+        
+        if coll_pair == 0:
+            R1 = p[coll_i]
+            R2 = s[coll_i]
+            V1 = vp[coll_i]
+            V2 = vs[coll_i]
+        
+        elif coll_pair == 1:
+            R1 = p[coll_i]
+            R2 = imp[coll_i]
+            V1 = vp[coll_i]
+            V2 = vimp[coll_i]
+        
+        elif coll_pair == 2:
+            R1 = s[coll_i]
+            R2 = imp[coll_i]
+            V1 = sp[coll_i]
+            V2 = vimp[coll_i]
+        
+        coll_angle = np.rad2deg(np.arccos(np.dot(V1,V2)/np.dot(np.linalg.norm(V1),np.linalg.norm(V2))))
+            
+        return [coll_v, coll_angle]
+    
+    else:
+        return 0
+    
+collision = find_collision()
+# %%
 semimajoraxis = mu*R/(2*mu-R*V**2)                           # semi-major axis between each pair of bodies
 energy = -mu/2/semimajoraxis                                    # total energy between each pair of bodies
-
-collisions = R < np.array([s1+s2, s1+simp, s2+simp])
-collision_speed = V[collisions]
 
 Rhill = np.array([Rhill1, rsun*(m2/Msun/3.)**(1./3.), rsun*(mimp/Msun/3.)**(1./3.)])
 bound = np.logical_and(energy < 0, R < Rhill)       # bodies are bound if their energy is less than zero and they are closer together than the Hill radius
@@ -164,7 +199,7 @@ sinspxdot, sinspydot = np.sin(angles)*xdot, np.sin(angles)*ydot
 x, y = cosspx-sinspy+rsun, sinspx+cosspy
 vx, vy = cosspxdot-sinspydot, sinspxdot+cosspydot
 
-Cj = n**2*(x**2+y**2) + 2*(mu[:,0]/R[:,0] + mu[:,1]/R[:,1]) - vx**2 - vy**2 # jacobian constant
+# Cj = n**2*(x**2+y**2) + 2*(mu[:,0]/R[:,0] + mu[:,1]/R[:,1]) - vx**2 - vy**2 # jacobian constant
 # %%
 lim = 4
 fig, axes = plt.subplots(1, figsize=(9, 9))
@@ -273,7 +308,7 @@ def animate(i):
 anim = animation.FuncAnimation(fig, animate, frames=Noutputs, interval=1, blit=True)
 # anim.save(f'{path}/videos/3D.mp4')
 # %%
-lim = 10
+lim = 1
 fig, axes = plt.subplots(1, figsize=(5, 5))
 axes.set_xlabel("$x/R_\mathrm{h}$")
 axes.set_ylabel("$y/R_\mathrm{h}$")
@@ -284,9 +319,9 @@ ref = np.zeros((Noutputs,3))
 ref[:,0] = -rsun + rsun*np.cos(angles)
 ref[:,1] = 0 - rsun*np.sin(angles)
 
-pref = (p-ref)/Rhill[0,0]
-sref = (s-ref)/Rhill[0,0]
-impref = (imp-ref)/Rhill[0,0]
+pref = (p-ref)/Rhill1
+sref = (s-ref)/Rhill1
+impref = (imp-ref)/Rhill1
 cospx, cospy = np.cos(angles)*pref[:,0], np.cos(angles)*pref[:,1]
 cossx, cossy = np.cos(angles)*sref[:,0], np.cos(angles)*sref[:,1]
 cosix, cosiy = np.cos(angles)*impref[:,0], np.cos(angles)*impref[:,1]
@@ -294,9 +329,9 @@ sinpx, sinpy = np.sin(angles)*pref[:,0], np.sin(angles)*pref[:,1]
 sinsx, sinsy = np.sin(angles)*sref[:,0], np.sin(angles)*sref[:,1]
 sinix, siniy = np.sin(angles)*impref[:,0], np.sin(angles)*impref[:,1]
 
-Rhillprim = rsun*(m1/Msun/3.)**(1./3.)/Rhill[0,0]
-Rhillsec = rsun*(m2/Msun/3.)**(1./3.)/Rhill[0,0]
-Rhillimp = rsun*(mimp/Msun/3.)**(1./3.)/Rhill[0,0]
+Rhillprim = rsun*(m1/Msun/3.)**(1./3.)/Rhill1
+Rhillsec = rsun*(m2/Msun/3.)**(1./3.)/Rhill1
+Rhillimp = rsun*(mimp/Msun/3.)**(1./3.)/Rhill1
 primaryhill = plt.Circle((cospx[-1]-sinpy[-1], sinpx[-1]+cospy[-1]), Rhillprim, fc="none", ec="tab:orange")
 axes.add_artist(primaryhill)
 secondaryhill = plt.Circle((cossx[-1]-sinsy[-1], sinsx[-1]+cossy[-1]), Rhillsec, fc="none", ec="tab:blue")
