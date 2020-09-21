@@ -12,7 +12,7 @@ G = 6.67428e-11                             # gravitational constanct in SI unit
 au = 1.496e11                               # astronomical unit    
 Msun = 1.9891e30                            # mass of sun
 year = 365.25*24.*60.*60.                   # number of seconds in a year
-s1, s2 = 130e3, 10e3                         # radius of primary and of secondary
+s1, s2 = 130e3, 80e3                         # radius of primary and of secondary
 dens1, dens2, densimp = 1000., 1000., 1000. # density of primary, secondary, and impactor 
 m1 = 4./3.*np.pi*dens1*s1**3                # mass of primary calculated from density and radius
 m2 = 4./3.*np.pi*dens2*s2**3                # mass of secondary calculated from density and radius
@@ -20,7 +20,6 @@ rsun = 44.*au                                  # distance of centre of mass of b
 OmegaK = np.sqrt(G*Msun/rsun**3)       # keplerian frequency at this distance
 Rhill1 = rsun*(m1/Msun/3.)**(1./3.)        # Hill radius of primary
 rbin = 0.3*Rhill1                            # separation of binary
-# rbin = 135000000
 vorb = np.sqrt(G*(m1+m2)/rbin)              # orbital speed of primary and secondary around each other
 vshear = -1.5*OmegaK*rbin                   # calculates the change in velocity required to keep a body in a circular orbit
 Pbin = 2.*np.pi/np.sqrt(G*(m1+m2)/rbin**3)  # orbital period of primary and secondary around each other
@@ -28,7 +27,7 @@ T = 2.*np.pi/np.sqrt(G*Msun/rsun**3)         # orbital period of binary around t
 n = 2*np.pi/T                               # mean motion of binary around the sun
 
 simp = 100e3 # impactor radius
-b = 4*Rhill1 # impact parameter
+b = 0.4*Rhill1 # impact parameter
         
 y0 = Rhill1*simp/1e3                  # initial y distance of impactor from binary - larger for larger impactors
 y0 = Rhill1

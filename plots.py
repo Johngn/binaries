@@ -16,7 +16,9 @@ n = 2*np.pi/T
 year = 365.25*24.*60.*60.
 Noutputs = 1000
 
-filenames = glob.glob(f"./results/final.csv")
+sim_name = 'coll'
+
+filenames = glob.glob(f'./results/{sim_name}_final.csv')
 results = [pd.read_csv(i, delimiter=',') for i in filenames]
 data = pd.concat(results)
 
@@ -33,63 +35,41 @@ vp = data[['vx prim','vy prim', 'vz prim']].to_numpy()
 vs = data[['vx sec','vy sec', 'vz sec']].to_numpy()
 vimp = data[['vx imp','vy imp', 'vz imp']].to_numpy()
 
-R, V, Rhill, mu, h, e = np.zeros((len(data),3)), np.zeros((len(data),3)), np.zeros((len(data),3)), np.zeros((len(data),3)), np.zeros((len(data),3)), np.zeros((len(data),3))
+R, V, mu, h = np.zeros((len(data),3)), np.zeros((len(data),3)), np.zeros((len(data),3)), np.zeros((len(data),3))
 R[:,0] = np.linalg.norm(p-s, axis=1)
 R[:,1] = np.linalg.norm(p-imp, axis=1)
 R[:,2] = np.linalg.norm(s-imp, axis=1)
 V[:,0] = np.linalg.norm(vp-vs, axis=1)
 V[:,1] = np.linalg.norm(vp-vimp, axis=1)
 V[:,2] = np.linalg.norm(vs-vimp, axis=1)
-Rhill[:,0] = rsun*((m1+m2)/Msun/3.)**(1./3.)
-Rhill[:,1] = rsun*((m1+mimp)/Msun/3.)**(1./3.)
-Rhill[:,2] = rsun*((m2+mimp)/Msun/3.)**(1./3.)
+h[:,0] = np.cross(p-s,vp-vs)[:,2]
+h[:,1] = np.cross(p-imp,vp-vimp)[:,2]
+h[:,2] = np.cross(s-imp,vs-vimp)[:,2]
 mu[:,0] = G*(m1+m2)
 mu[:,1] = G*(m1+mimp)
 mu[:,2] = G*(m2+mimp)
 
+Rhill = np.array([rsun*(m1/Msun/3.)**(1./3.), rsun*(m2/Msun/3.)**(1./3.), rsun*(mimp/Msun/3.)**(1./3.)])
+Rhill_largest = np.array([np.amax([Rhill[0], Rhill[1]]), np.amax([Rhill[0], Rhill[2]]), np.amax([Rhill[1], Rhill[2]])])
+
 a = mu*R/(2*mu - R*V**2)
 energy = -mu/2/a
-bound = np.logical_and(energy < 0, R < Rhill)
+e = np.sqrt(1 + (2*energy*h**2 / mu**2))
 
-distance1 = p-s
-distance2 = p-imp
-distance3 = s-imp
-v1 = vp-vs
-v2 = vp-vimp
-v3 = vs-vimp
-h[:,0] = np.cross(distance1,v1)[:,2]
-h[:,1] = np.cross(distance2,v2)[:,2]
-h[:,2] = np.cross(distance3,v3)[:,2]
-e = np.sqrt(1 + (2 * energy * h**2 / mu**2))
+bound = np.logical_and(np.logical_and(energy < 0, np.isfinite(energy)), R < Rhill_largest)
+collision = R[:,0] == 0
+
 # %%
 plt.figure(figsize=(9,9))
 s = 40
-plt.scatter(b,simp, s=1, marker="x", c="black")
+plt.scatter(b, simp, s=1, marker="x", c="black")
 plt.scatter(b[bound[:,0]], simp[bound[:,0]], label='primary-secondary', s=s)
 plt.scatter(b[bound[:,1]], simp[bound[:,1]], label='primary-impactor', s=s)
 plt.scatter(b[bound[:,2]], simp[bound[:,2]], label='secondary-impactor', s=s)
+plt.scatter(b[collision], simp[collision], label='collision', s=s)
 plt.xlabel("Impact parameter (Hill radii)")
 plt.ylabel("Impactor radius (km)")
-# plt.legend()
-plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.07),
-          ncol=3, fancybox=True, shadow=True)
-# plt.grid('both')
-plt.xticks(np.arange(0.5,10.6,0.5))
-plt.yticks(np.arange(0,101,5))
-plt.savefig(f"./img/final_bound", bbox_inches='tight')
-# anim.save(f'{path}/videos/2D.mp4')
-# %%
-y = energy
-plt.figure(figsize=(15,8))
-# plt.title(f"Integrator={sim.integrator} -- Impactor radius={simp/1e3} km -- b={B/Rhill} hill radii")
-plt.plot(y[:,0], label="Primary-Secondary", lw=1.5)
-plt.plot(y[:,1], label="Primary-Impactor", lw=1.5)
-plt.plot(y[:,2], label="Secondary-Impactor", lw=1.5)
-plt.axhline(y=0, ls="--", color="black", lw=1.5)
-plt.xlabel("Impactor mass (years)")
-plt.ylabel("Energy (J/kg)")
-# plt.xlim(0, np.amax(times)/year)
-# plt.ylim(-0.02, 0.02)
-plt.grid('both')
-plt.legend()
-# plt.savefig(f"energy_{str(sim.integrator)}", bbox_inches='tight')
+plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.07), ncol=3, fancybox=True, shadow=True)
+# plt.xticks(np.arange(0.5,10.6,0.5))
+# plt.yticks(np.arange(0,101,5))
+# plt.savefig(f"./img/final_bound", bbox_inches='tight')
