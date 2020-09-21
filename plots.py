@@ -1,26 +1,17 @@
 # %%
-import glob, os, csv, rebound
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import mpl_toolkits.mplot3d.axes3d as p3
-from matplotlib import animation
 from timeit import default_timer as timed
 
 G = 6.67428e-11
 au = 1.496e11
 rsun = 44.*au
 Msun = 1.9891e30
-T = 2.*np.pi/np.sqrt(G*(Msun)/rsun**3)
-n = 2*np.pi/T
-year = 365.25*24.*60.*60.
-Noutputs = 1000
 
 sim_name = 'coll'
 
-filenames = glob.glob(f'./results/{sim_name}_final.csv')
-results = [pd.read_csv(i, delimiter=',') for i in filenames]
-data = pd.concat(results)
+data = pd.read_csv(f'./results/{sim_name}_final.csv', delimiter=',')
 
 times = data['time'].to_numpy()
 b = data['b'].to_numpy()
@@ -58,7 +49,6 @@ e = np.sqrt(1 + (2*energy*h**2 / mu**2))
 
 bound = np.logical_and(np.logical_and(energy < 0, np.isfinite(energy)), R < Rhill_largest)
 collision = R[:,0] == 0
-
 # %%
 plt.figure(figsize=(9,9))
 s = 40

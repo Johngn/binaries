@@ -34,15 +34,15 @@ vs = data[['vx sec','vy sec', 'vz sec']].to_numpy()
 vimp = data[['vx imp','vy imp', 'vz imp']].to_numpy()
 
 OmegaK = np.sqrt(G*(Msun+m1+m2)/rsun**3)      # keplerian frequency at this distance
-angles = -OmegaK*times
+angles = -OmegaK*times                        # one full circle divided up into as many angles as there are outputs
 # %%
-R, V, mu, h = np.zeros((Noutputs,3)), np.zeros((Noutputs,3)), np.zeros((Noutputs,3)), np.zeros((Noutputs,3))
-R[:,0] = np.linalg.norm(p-s, axis=1)
-R[:,1] = np.linalg.norm(p-imp, axis=1)
-R[:,2] = np.linalg.norm(s-imp, axis=1)
-V[:,0] = np.linalg.norm(vp-vs, axis=1)
-V[:,1] = np.linalg.norm(vp-vimp, axis=1)
-V[:,2] = np.linalg.norm(vs-vimp, axis=1)
+dr, dv, mu, h = np.zeros((Noutputs,3)), np.zeros((Noutputs,3)), np.zeros((Noutputs,3)), np.zeros((Noutputs,3))
+dr[:,0] = np.linalg.norm(p-s, axis=1)
+dr[:,1] = np.linalg.norm(p-imp, axis=1)
+dr[:,2] = np.linalg.norm(s-imp, axis=1)
+dv[:,0] = np.linalg.norm(vp-vs, axis=1)
+dv[:,1] = np.linalg.norm(vp-vimp, axis=1)
+dv[:,2] = np.linalg.norm(vs-vimp, axis=1)
 h[:,0] = np.cross(p-s,vp-vs)[:,2]
 h[:,1] = np.cross(p-imp,vp-vimp)[:,2]
 h[:,2] = np.cross(s-imp,vs-vimp)[:,2]
@@ -50,29 +50,47 @@ mu[:,0] = G*(m1+m2)
 mu[:,1] = G*(m1+mimp)
 mu[:,2] = G*(m2+mimp)                           # G times combined mass of secondary and impactor
 
-a = mu*R/(2*mu-R*V**2)                            # semi-major axis between each pair of bodies
+a = mu*dr/(2*mu-dr*dv**2)                            # semi-major axis between each pair of bodies
 energy = -mu/2/a                                    # total energy between each pair of bodies
 e = np.sqrt(1+(2*energy*h**2/mu**2))
 
 Rhill = np.array([rsun*(m1/Msun/3.)**(1./3.), rsun*(m2/Msun/3.)**(1./3.), rsun*(mimp/Msun/3.)**(1./3.)])
 Rhill_largest = np.array([np.amax([Rhill[0], Rhill[1]]), np.amax([Rhill[0], Rhill[2]]), np.amax([Rhill[1], Rhill[2]])])
-bound = np.logical_and(np.logical_and(energy < 0, np.isfinite(energy)), R < Rhill_largest)
+bound = np.logical_and(np.logical_and(energy < 0, np.isfinite(energy)), dr < Rhill_largest)
 
-sp = (s-p)/Rhill[0]
-ip = (imp-p)/Rhill[0]
-cosspx, cosspy = np.cos(angles)*sp[:,0], np.cos(angles)*sp[:,1]
-sinspx, sinspy = np.sin(angles)*sp[:,0], np.sin(angles)*sp[:,1]
+sp = (s-p)/Rhill[0]         # difference between positions of secondary and primary
+ip = (imp-p)/Rhill[0]       # difference between positions of impactor and primary
+cosspx, cosspy = np.cos(angles)*sp[:,0], np.cos(angles)*sp[:,1] # cos of reference angles times difference between positions of secondary and primary
+sinspx, sinspy = np.sin(angles)*sp[:,0], np.sin(angles)*sp[:,1] # sin of reference angles times difference between positions of secondary and primary
 
-xdot = vs[:,0] - vp[:,0]
-ydot = vs[:,1] - vp[:,1]
-cosspxdot, cosspydot = np.cos(angles)*xdot, np.cos(angles)*ydot
-sinspxdot, sinspydot = np.sin(angles)*xdot, np.sin(angles)*ydot
+xdot = vs[:,0] - vp[:,0]        # x component of difference in velocities between secondary and primary
+ydot = vs[:,1] - vp[:,1]        # y component of difference in velocities between secondary and primary
+cosspxdot, cosspydot = np.cos(angles)*xdot, np.cos(angles)*ydot # cos of reference angles times difference between velocities of secondary and primary
+sinspxdot, sinspydot = np.sin(angles)*xdot, np.sin(angles)*ydot # sin of reference angles times difference between velocities of secondary and primary
 
-x, y = cosspx-sinspy+rsun, sinspx+cosspy
-vx, vy = cosspxdot-sinspydot, sinspxdot+cosspydot
+x, y = cosspx-sinspy+rsun, sinspx+cosspy                # x and y values for calculating jacobian constant
+vx, vy = cosspxdot-sinspydot, sinspxdot+cosspydot       # vx and vy values for calculating jacobian constant
 
-Cj = n**2*(x**2 + y**2) + 2*(mu[:,0]/R[:,0] + mu[:,1]/R[:,1]) - vx**2 - vy**2 # jacobian constant
+Cj = n**2*(x**2 + y**2) + 2*(mu[:,0]/dr[:,0] + mu[:,1]/dr[:,1]) - vx**2 - vy**2 # jacobian constant
+
+ref = np.zeros((Noutputs,3))            # reference point that keeps binary at centre of animation
+ref[:,0] = -rsun + rsun*np.cos(angles)  # x values of reference
+ref[:,1] = 0 - rsun*np.sin(angles)      # y values of reference
+pref = (p-ref)/Rhill[0]                 # difference between primary and reference point
+sref = (s-ref)/Rhill[0]                 # difference between secondary and reference point
+impref = (imp-ref)/Rhill[0]             # difference between impactor and reference point
+cospx, cospy = np.cos(angles)*pref[:,0], np.cos(angles)*pref[:,1]       # cos of reference angles times relative location of primary
+cossx, cossy = np.cos(angles)*sref[:,0], np.cos(angles)*sref[:,1]       # cos of reference angles times relative location of secondary
+cosix, cosiy = np.cos(angles)*impref[:,0], np.cos(angles)*impref[:,1]   # cos of reference angles times relative location of impactor
+sinpx, sinpy = np.sin(angles)*pref[:,0], np.sin(angles)*pref[:,1]       # sin of reference angles times relative location of primary
+sinsx, sinsy = np.sin(angles)*sref[:,0], np.sin(angles)*sref[:,1]       # sin of reference angles times relative location of secondary
+sinix, siniy = np.sin(angles)*impref[:,0], np.sin(angles)*impref[:,1]   # sin of reference angles times relative location of impactor
+
+primaryhill = plt.Circle((0,0), Rhill[0]/Rhill[0], fc="none", ec="tab:orange") # circle with hill radius of primary - normalized for plotting
+secondaryhill = plt.Circle((0,0), Rhill[1]/Rhill[0], fc="none", ec="tab:blue") # circle with hill radius of secondary - normalized for plotting
+impactorhill = plt.Circle((0,0), Rhill[2]/Rhill[0], fc="none", ec="tab:green") # circle with hill radius of impactor - normalized for plotting
 # %%
+'''2D ANIMATION OF OUTCOME OF SIMULATION'''
 lim = 5
 fig, axes = plt.subplots(1, figsize=(9, 9))
 axes.set_xlabel("$x/R_\mathrm{h}$")
@@ -87,27 +105,6 @@ secondarydot, = axes.plot([], [], marker="o", ms=7, c="tab:blue")
 impactordot, = axes.plot([], [], marker="o", ms=7, c="tab:green")
 text = axes.text(-lim+(lim/10), lim-(lim/10), '', fontsize=15)
 axes.legend()
-
-ref = np.zeros((Noutputs,3))
-ref[:,0] = -rsun + rsun*np.cos(angles)
-ref[:,1] = 0 - rsun*np.sin(angles)
-
-pref = (p-ref)/Rhill[0]
-sref = (s-ref)/Rhill[0]
-impref = (imp-ref)/Rhill[0]
-cospx, cospy = np.cos(angles)*pref[:,0], np.cos(angles)*pref[:,1]
-cossx, cossy = np.cos(angles)*sref[:,0], np.cos(angles)*sref[:,1]
-cosix, cosiy = np.cos(angles)*impref[:,0], np.cos(angles)*impref[:,1]
-sinpx, sinpy = np.sin(angles)*pref[:,0], np.sin(angles)*pref[:,1]
-sinsx, sinsy = np.sin(angles)*sref[:,0], np.sin(angles)*sref[:,1]
-sinix, siniy = np.sin(angles)*impref[:,0], np.sin(angles)*impref[:,1]
-
-Rhillprim = rsun*(m1/Msun/3.)**(1./3.)/Rhill[0]
-Rhillsec = rsun*(m2/Msun/3.)**(1./3.)/Rhill[0]
-Rhillimp = rsun*(mimp/Msun/3.)**(1./3.)/Rhill[0]
-primaryhill = plt.Circle((0,0), Rhillprim, fc="none", ec="tab:orange")
-secondaryhill = plt.Circle((0,0), Rhillsec, fc="none", ec="tab:blue")
-impactorhill = plt.Circle((0,0), Rhillimp, fc="none", ec="tab:green")
 
 def init():
     axes.add_patch(primaryhill)
@@ -135,6 +132,7 @@ f = f'vid/ps_animation.mp4'
 writervideo = FFMpegWriter(fps=10) # ffmpeg must be installed
 anim.save(f, writer=writervideo)
 # %%
+'''3D ANIMATION OF OUTCOME OF SIMULATION'''
 lim = 0.5
 fig = plt.figure(figsize=(12,12))
 axes = fig.add_subplot(111, projection='3d')
@@ -152,12 +150,6 @@ secondarydot, = axes.plot([], [], [], marker="o", ms=8, c="tab:blue")
 impactordot, = axes.plot([], [], [], marker="o", ms=8, c="tab:green")
 text = axes.text(-lim+(lim/10), lim-(lim/10), lim-(lim/10), '', fontsize=15)
 axes.legend()
-
-angles = -OmegaK*times
-cosspx, cosspy = np.cos(angles)*sp[:,0], np.cos(angles)*sp[:,1]
-cosipx, cosipy = np.cos(angles)*ip[:,0], np.cos(angles)*ip[:,1]
-sinspx, sinspy = np.sin(angles)*sp[:,0], np.sin(angles)*sp[:,1]
-sinipx, sinipy = np.sin(angles)*ip[:,0], np.sin(angles)*ip[:,1]
 
 def animate(i):
     primaryline.set_data(cospx[0:i]-sinpy[0:i], sinpx[0:i]+cospy[0:i])
@@ -177,35 +169,19 @@ def animate(i):
 
 anim = animation.FuncAnimation(fig, animate, frames=len(data), interval=1)
 # %%
-lim = 0.5
-fig, axes = plt.subplots(1, figsize=(5, 5))
+'''2D PLOT OF OUTCOME OF SIMULATION'''
+lim = 1
+fig, axes = plt.subplots(1, figsize=(8, 8))
 axes.set_xlabel("$x/R_\mathrm{h}$")
 axes.set_ylabel("$y/R_\mathrm{h}$")
 axes.set_ylim(-lim,lim)
 axes.set_xlim(-lim,lim)
 
-ref = np.zeros((Noutputs,3))
-ref[:,0] = -rsun + rsun*np.cos(angles)
-ref[:,1] = 0 - rsun*np.sin(angles)
-
-pref = (p-ref)/Rhill[0]
-sref = (s-ref)/Rhill[0]
-impref = (imp-ref)/Rhill[0]
-cospx, cospy = np.cos(angles)*pref[:,0], np.cos(angles)*pref[:,1]
-cossx, cossy = np.cos(angles)*sref[:,0], np.cos(angles)*sref[:,1]
-cosix, cosiy = np.cos(angles)*impref[:,0], np.cos(angles)*impref[:,1]
-sinpx, sinpy = np.sin(angles)*pref[:,0], np.sin(angles)*pref[:,1]
-sinsx, sinsy = np.sin(angles)*sref[:,0], np.sin(angles)*sref[:,1]
-sinix, siniy = np.sin(angles)*impref[:,0], np.sin(angles)*impref[:,1]
-
-Rhillprim = rsun*(m1/Msun/3.)**(1./3.)/Rhill[0]
-Rhillsec = rsun*(m2/Msun/3.)**(1./3.)/Rhill[0]
-Rhillimp = rsun*(mimp/Msun/3.)**(1./3.)/Rhill[0]
-primaryhill = plt.Circle((cospx[-1]-sinpy[-1], sinpx[-1]+cospy[-1]), Rhillprim, fc="none", ec="tab:orange")
+primaryhill = plt.Circle((cospx[-1]-sinpy[-1], sinpx[-1]+cospy[-1]), Rhill[0]/Rhill[0], fc="none", ec="tab:orange")
+secondaryhill = plt.Circle((cossx[-1]-sinsy[-1], sinsx[-1]+cossy[-1]), Rhill[1]/Rhill[0], fc="none", ec="tab:blue")
+impactorhill = plt.Circle((cosix[-1]-siniy[-1], sinix[-1]+cosiy[-1]), Rhill[2]/Rhill[0], fc="none", ec="tab:green")
 axes.add_artist(primaryhill)
-secondaryhill = plt.Circle((cossx[-1]-sinsy[-1], sinsx[-1]+cossy[-1]), Rhillsec, fc="none", ec="tab:blue")
 axes.add_artist(secondaryhill)
-impactorhill = plt.Circle((cosix[-1]-siniy[-1], sinix[-1]+cosiy[-1]), Rhillimp, fc="none", ec="tab:green")
 axes.add_artist(impactorhill)
 
 axes.plot(cospx-sinpy, sinpx+cospy, label="primary", c="tab:orange", lw=1.5)
