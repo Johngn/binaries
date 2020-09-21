@@ -35,7 +35,7 @@ vimp = data[['vx imp','vy imp', 'vz imp']].to_numpy()
 
 OmegaK = np.sqrt(G*(Msun+m1+m2)/rsun**3)      # keplerian frequency at this distance
 angles = -OmegaK*times                        # one full circle divided up into as many angles as there are outputs
-# %%
+
 dr, dv, mu, h = np.zeros((Noutputs,3)), np.zeros((Noutputs,3)), np.zeros((Noutputs,3)), np.zeros((Noutputs,3))
 dr[:,0] = np.linalg.norm(p-s, axis=1)
 dr[:,1] = np.linalg.norm(p-imp, axis=1)
@@ -49,6 +49,30 @@ h[:,2] = np.cross(s-imp,vs-vimp)[:,2]
 mu[:,0] = G*(m1+m2)
 mu[:,1] = G*(m1+mimp)
 mu[:,2] = G*(m2+mimp)                           # G times combined mass of secondary and impactor
+
+def find_collision():
+    coll_i = np.argmax(dr[:,0] == 0)-1
+    if coll_i != -1:
+        coll_pair = np.argmin(dr[coll_i])
+        coll_v = dv[coll_i,coll_pair]        
+        if coll_pair == 0:
+            V1 = vp[coll_i]
+            V2 = vs[coll_i]        
+        elif coll_pair == 1:
+            V1 = vp[coll_i]
+            V2 = vimp[coll_i]        
+        elif coll_pair == 2:
+            V1 = sp[coll_i]
+            V2 = vimp[coll_i]
+        
+        coll_angle = np.rad2deg(np.arccos(np.dot(V1,V2)/np.dot(np.linalg.norm(V1),np.linalg.norm(V2))))
+            
+        return [coll_pair, coll_v, coll_angle]
+    
+    else:
+        return 0
+    
+collision = find_collision()
 
 a = mu*dr/(2*mu-dr*dv**2)                            # semi-major axis between each pair of bodies
 energy = -mu/2/a                                    # total energy between each pair of bodies
@@ -85,10 +109,6 @@ cosix, cosiy = np.cos(angles)*impref[:,0], np.cos(angles)*impref[:,1]   # cos of
 sinpx, sinpy = np.sin(angles)*pref[:,0], np.sin(angles)*pref[:,1]       # sin of reference angles times relative location of primary
 sinsx, sinsy = np.sin(angles)*sref[:,0], np.sin(angles)*sref[:,1]       # sin of reference angles times relative location of secondary
 sinix, siniy = np.sin(angles)*impref[:,0], np.sin(angles)*impref[:,1]   # sin of reference angles times relative location of impactor
-
-primaryhill = plt.Circle((0,0), Rhill[0]/Rhill[0], fc="none", ec="tab:orange") # circle with hill radius of primary - normalized for plotting
-secondaryhill = plt.Circle((0,0), Rhill[1]/Rhill[0], fc="none", ec="tab:blue") # circle with hill radius of secondary - normalized for plotting
-impactorhill = plt.Circle((0,0), Rhill[2]/Rhill[0], fc="none", ec="tab:green") # circle with hill radius of impactor - normalized for plotting
 # %%
 '''2D ANIMATION OF OUTCOME OF SIMULATION'''
 lim = 5
@@ -105,6 +125,10 @@ secondarydot, = axes.plot([], [], marker="o", ms=7, c="tab:blue")
 impactordot, = axes.plot([], [], marker="o", ms=7, c="tab:green")
 text = axes.text(-lim+(lim/10), lim-(lim/10), '', fontsize=15)
 axes.legend()
+
+primaryhill = plt.Circle((0,0), Rhill[0]/Rhill[0], fc="none", ec="tab:orange") # circle with hill radius of primary - normalized for plotting
+secondaryhill = plt.Circle((0,0), Rhill[1]/Rhill[0], fc="none", ec="tab:blue") # circle with hill radius of secondary - normalized for plotting
+impactorhill = plt.Circle((0,0), Rhill[2]/Rhill[0], fc="none", ec="tab:green") # circle with hill radius of impactor - normalized for plotting
 
 def init():
     axes.add_patch(primaryhill)
@@ -134,7 +158,7 @@ anim.save(f, writer=writervideo)
 # %%
 '''3D ANIMATION OF OUTCOME OF SIMULATION'''
 lim = 0.5
-fig = plt.figure(figsize=(12,12))
+fig = plt.figure(figsize=(9,9))
 axes = fig.add_subplot(111, projection='3d')
 axes.set_xlabel("$x/R_\mathrm{h}$")
 axes.set_ylabel("$y/R_\mathrm{h}$")

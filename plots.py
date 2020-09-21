@@ -2,7 +2,6 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from timeit import default_timer as timed
 
 G = 6.67428e-11
 au = 1.496e11
@@ -49,8 +48,8 @@ e = np.sqrt(1 + (2*energy*h**2 / mu**2))
 
 bound = np.logical_and(np.logical_and(energy < 0, np.isfinite(energy)), R < Rhill_largest)
 collision = R[:,0] == 0
-# %%
-plt.figure(figsize=(9,9))
+
+plt.figure(figsize=(6,6))
 s = 40
 plt.scatter(b, simp, s=1, marker="x", c="black")
 plt.scatter(b[bound[:,0]], simp[bound[:,0]], label='primary-secondary', s=s)
@@ -59,7 +58,7 @@ plt.scatter(b[bound[:,2]], simp[bound[:,2]], label='secondary-impactor', s=s)
 plt.scatter(b[collision], simp[collision], label='collision', s=s)
 plt.xlabel("Impact parameter (Hill radii)")
 plt.ylabel("Impactor radius (km)")
-plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.07), ncol=3, fancybox=True, shadow=True)
+plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=3, fancybox=True, shadow=True)
 # plt.xticks(np.arange(0.5,10.6,0.5))
 # plt.yticks(np.arange(0,101,5))
 # plt.savefig(f"./img/final_bound", bbox_inches='tight')
