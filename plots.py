@@ -2,13 +2,14 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 G = 6.67428e-11
 au = 1.496e11
 rsun = 44.*au
 Msun = 1.9891e30
 
-sim_name = 'coll'
+sim_name = 'test'
 
 data = pd.read_csv(f'./results/{sim_name}_final.csv', delimiter=',')
 
@@ -48,7 +49,7 @@ e = np.sqrt(1 + (2*energy*h**2 / mu**2))
 
 bound = np.logical_and(np.logical_and(energy < 0, np.isfinite(energy)), R < Rhill_largest)
 collision = R[:,0] == 0
-
+# %%
 plt.figure(figsize=(6,6))
 s = 40
 plt.scatter(b, simp, s=1, marker="x", c="black")
@@ -62,3 +63,14 @@ plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=3, fancybox=True
 # plt.xticks(np.arange(0.5,10.6,0.5))
 # plt.yticks(np.arange(0,101,5))
 # plt.savefig(f"./img/final_bound", bbox_inches='tight')
+# %%
+binary_e = np.reshape(e[:,0], (len(np.unique(simp)), len(np.unique(b))))
+plt.figure(figsize=(8,6))
+ax = sns.heatmap(binary_e, 
+                 annot=True, 
+                 linewidths=0.5, 
+                 cmap="YlGnBu",
+                 yticklabels=np.asarray((np.flip(np.unique(simp))), dtype=int),
+                 xticklabels=np.round(np.unique(b), 2))
+plt.xlabel("Impact parameter (Hill radii)")
+plt.ylabel("Impactor radius (km)")

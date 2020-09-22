@@ -20,13 +20,13 @@ rsun = 44.*au                                  # distance of centre of mass of b
 OmegaK = np.sqrt(G*Msun/rsun**3)       # keplerian frequency at this distance
 Rhill1 = rsun*(m1/Msun/3.)**(1./3.)        # Hill radius of primary
 rbin = 0.3*Rhill1                            # separation of binary
-vorb = np.sqrt(G*(m1+m2)/rbin)              # orbital speed of primary and secondary around each other
+vorb = np.sqrt(G*(m1+m2)/rbin)/5              # orbital speed of primary and secondary around each other
 vshear = -1.5*OmegaK*rbin                   # calculates the change in velocity required to keep a body in a circular orbit
 Pbin = 2.*np.pi/np.sqrt(G*(m1+m2)/rbin**3)  # orbital period of primary and secondary around each other
 T = 2.*np.pi/np.sqrt(G*Msun/rsun**3)         # orbital period of binary around the sun
 n = 2*np.pi/T                               # mean motion of binary around the sun
 
-simp = 100e3 # impactor radius
+simp = 1000e3 # impactor radius
 b = 0.4*Rhill1 # impact parameter
         
 y0 = Rhill1*simp/1e3                  # initial y distance of impactor from binary - larger for larger impactors
@@ -95,7 +95,7 @@ def setupSimulation():
     sim.dt = 1e-4*Pbin                      # set initial timestep of integrator - IAS15 is adaptive so this will change
     sim.softening = 0.1*s1                  # softening parameter which modifies potential of each particle to prevent divergences
     sim.collision = 'direct'
-    sim.collision_resolve = 'merge'
+    # sim.collision_resolve = 'hardsphere'
     sim.add(m=Msun, x=-rsun, hash="sun")
     sim.add(m=m1, r=s1, x=primx, z=primz, vy=primvy, vz=primvz, hash="primary")
     sim.add(m=m2, r=s2, x=secx, z=secz, vy=secvy, vz=secvz, hash="secondary")
@@ -108,31 +108,37 @@ Noutputs = 1000             # number of outputs
 p, s, imp, sun = np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3)) # position
 vp, vs, vimp, vsun = np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3)) # velocity
 totaltime = T*simp/10e3*(1/b*Rhill1)*3. # total time of simulation - adjusted for different impactor sizes and distances
-totaltime = T
+totaltime = T/100
 times = np.linspace(0.,totaltime, Noutputs) # create times for integrations
-ps = sim.particles                      # create variable containing particles in simulation
+parts = sim.particles                      # create variable containing particles in simulation
 timer = timed() # start timer to time simulations
 for i, time in enumerate(times):
+    # print(parts)
     sim.integrate(time)
-    if sim.N == 4:
-        sun[i] = [ps["sun"].x, ps["sun"].y, ps["sun"].z]
-        p[i] = [ps["primary"].x, ps["primary"].y, ps["primary"].z]
-        s[i] = [ps["secondary"].x, ps["secondary"].y, ps["secondary"].z]
-        imp[i] = [ps["impactor"].x, ps["impactor"].y, ps["impactor"].z]
-        vsun[i] = [ps["sun"].vx, ps["sun"].vy, ps["sun"].vz]
-        vp[i] = [ps["primary"].vx, ps["primary"].vy, ps["primary"].vz]
-        vs[i] = [ps["secondary"].vx, ps["secondary"].vy, ps["secondary"].vz]
-        vimp[i] = [ps["impactor"].vx, ps["impactor"].vy, ps["impactor"].vz]
+    # if sim.N == 4:
+    sun[i] = [parts["sun"].x, parts["sun"].y, parts["sun"].z]
+    p[i] = [parts["primary"].x, parts["primary"].y, parts["primary"].z]
+    # if parts["secondary"]:
+    s[i] = [parts["secondary"].x, parts["secondary"].y, parts["secondary"].z]
+    # if sim.N > 3:
+    imp[i] = [parts["impactor"].x, parts["impactor"].y, parts["impactor"].z]
+    vsun[i] = [parts["sun"].vx, parts["sun"].vy, parts["sun"].vz]
+    vp[i] = [parts["primary"].vx, parts["primary"].vy, parts["primary"].vz]
+    vs[i] = [parts["secondary"].vx, parts["secondary"].vy, parts["secondary"].vz]
+    vimp[i] = [parts["impactor"].vx, parts["impactor"].vy, parts["impactor"].vz]
+    
+    for part in parts:
+        print(particle.hash, particle.lastcollision)
             
 print(timed()-timer) # finish timer
 # %%
-R, V, mu, h = np.zeros((Noutputs,3)), np.zeros((Noutputs,3)), np.zeros((Noutputs,3)), np.zeros((Noutputs,3))
-R[:,0] = np.linalg.norm(p-s, axis=1)                # distance between primary and secondary
-R[:,1] = np.linalg.norm(p-imp, axis=1)              # distance between primary and impactor
-R[:,2] = np.linalg.norm(s-imp, axis=1)              # distance between secondary and impactor
-V[:,0] = np.linalg.norm(vp-vs, axis=1)              # relative velocity between primary and secondary
-V[:,1] = np.linalg.norm(vp-vimp, axis=1)            # relative velocity between primary and impactor
-V[:,2] = np.linalg.norm(vs-vimp, axis=1)            # relative velocity between secondary and impactor
+dr, dv, mu, h = np.zeros((Noutputs,3)), np.zeros((Noutputs,3)), np.zeros((Noutputs,3)), np.zeros((Noutputs,3))
+dr[:,0] = np.linalg.norm(p-s, axis=1)                # distance between primary and secondary
+dr[:,1] = np.linalg.norm(p-imp, axis=1)              # distance between primary and impactor
+dr[:,2] = np.linalg.norm(s-imp, axis=1)              # distance between secondary and impactor
+dv[:,0] = np.linalg.norm(vp-vs, axis=1)              # relative velocity between primary and secondary
+dv[:,1] = np.linalg.norm(vp-vimp, axis=1)            # relative velocity between primary and impactor
+dv[:,2] = np.linalg.norm(vs-vimp, axis=1)            # relative velocity between secondary and impactor
 mu[:,0] = G*(m1+m2)                                 # G times combined mass of primary and secondary
 mu[:,1] = G*(m1+mimp)                               # G times combined mass of primary and impactor
 mu[:,2] = G*(m2+mimp)                               # G times combined mass of secondary and impactor
@@ -141,10 +147,10 @@ h[:,1] = np.cross(p-imp,vp-vimp)[:,2]
 h[:,2] = np.cross(s-imp,vs-vimp)[:,2]
 
 def find_collision():
-    coll_i = np.argmax(R[:,0] == 0)-1
+    coll_i = np.argmax(dr[:,0] == 0)-1
     if coll_i != -1:
-        coll_pair = np.argmin(R[coll_i])
-        coll_v = V[coll_i,coll_pair]        
+        coll_pair = np.argmin(dr[coll_i])
+        coll_v = dv[coll_i,coll_pair]        
         if coll_pair == 0:
             V1 = vp[coll_i]
             V2 = vs[coll_i]        
@@ -164,13 +170,13 @@ def find_collision():
     
 collision = find_collision()
 # %%
-semimajoraxis = mu*R/(2*mu-R*V**2)                           # semi-major axis between each pair of bodies
+semimajoraxis = mu*dr/(2*mu-dr*dv**2)                           # semi-major axis between each pair of bodies
 energy = -mu/2/semimajoraxis                                    # total energy between each pair of bodies 
 ecc = np.sqrt(1+(2*energy*h**2/mu**2))
 
 Rhill = np.array([Rhill1, rsun*(m2/Msun/3.)**(1./3.), rsun*(mimp/Msun/3.)**(1./3.)])
 Rhill_largest = np.array([np.amax([Rhill[0], Rhill[1]]), np.amax([Rhill[0], Rhill[2]]), np.amax([Rhill[1], Rhill[2]])])
-bound = np.logical_and(np.logical_and(energy < 0, np.isfinite(energy)), R < Rhill_largest)       # bodies are bound if their energy is less than zero and they are closer together than the Hill radius
+bound = np.logical_and(np.logical_and(energy < 0, np.isfinite(energy)), dr < Rhill_largest)       # bodies are bound if their energy is less than zero and they are closer together than the Hill radius
 
 angles = -OmegaK*times
 
@@ -189,7 +195,7 @@ vx, vy = cosspxdot-sinspydot, sinspxdot+cosspydot
 
 # plt.plot(ecc[:,0])
 
-# Cj = n**2*(x**2+y**2) + 2*(mu[:,0]/R[:,0] + mu[:,1]/R[:,1]) - vx**2 - vy**2 # jacobian constant
+# Cj = n**2*(x**2+y**2) + 2*(mu[:,0]/dr[:,0] + mu[:,1]/dr[:,1]) - vx**2 - vy**2 # jacobian constant
 # %%
 lim = 4
 fig, axes = plt.subplots(1, figsize=(9, 9))

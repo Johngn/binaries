@@ -16,7 +16,7 @@ m2 = 4./3.*np.pi*dens2*s2**3                # mass of secondary calculated from 
 rsun = 44.*au                                  # distance of centre of mass of binary from the sun 
 OmegaK = np.sqrt(G*(Msun+m1+m2)/rsun**3)       # keplerian frequency at this distance
 Rhill = rsun*((m1)/Msun/3.)**(1./3.)        # Hill radius of binary
-rbin = 0.3*Rhill                            # separation of binary is 0.5 of the Hill radius
+rbin = 0.5*Rhill                            # separation of binary is 0.5 of the Hill radius
 vorb = np.sqrt(G*(m1+m2)/rbin)              # orbital speed of primary and secondary around each other
 vshear = -1.5*OmegaK*rbin                   # calculates the change in velocity required to keep a body in a circular orbit
 Pbin = 2.*np.pi/np.sqrt(G*(m1+m2)/rbin**3)  # orbital period of primary and secondary around each other
@@ -39,10 +39,10 @@ headers = ['time','b','imp radius','mass prim','x prim','y prim','z prim','vx pr
            'mass imp','x imp','y imp','z imp','vx imp','vy imp','vz imp',
            'mass sun','x sun','y sun','z sun','vx sun','vy sun','vz sun',]
 
-sim_name = "coll"
+sim_name = "test"
 
-simp = np.arange(100e3,131e3,10e3) # create range of impactor sizes to loop through
-b = np.arange(0.4,5.5,1)*Rhill # create range of impact parameters to loop through
+simp = np.arange(100e3,131e3,3e3) # create range of impactor sizes to loop through
+b = np.arange(2.5,5.5,.4)*Rhill # create range of impact parameters to loop through
 
 timer = timed() # start timer to time simulations
 
@@ -51,7 +51,8 @@ for j in range(len(b)):             # loop through each impact parameter
     for i in range(len(simp)):      # loop throught each impactor radius
         
         totaltime = T/2.2*simp[i]/10e3*(1/b[j]*Rhill)*3. # total time of simulation - adjusted for different impactor sizes and distances
-        totaltime = T
+        print(totaltime/T)
+        # totaltime = T
         times = np.reshape(np.linspace(0.,totaltime, Noutputs), (Noutputs,1)) # create times for integrations - reshape for hstack below
         y0 = Rhill*simp[i]/1e3                  # initial y distance of impactor from binary - larger for larger impactors
         y0 = Rhill
