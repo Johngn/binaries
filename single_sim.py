@@ -88,14 +88,14 @@ impvy = vorbi*ctheta0                   # y velocity of impactor
     
 # sim.additional_forces = dragForce
 # sim.force_is_velocity_dependent = 1
-# %%
+
 def setupSimulation():
     sim = rebound.Simulation()              # initialize rebound simulation
     sim.G = G                               # set G which sets units of integrator - SI in this case
     sim.dt = 1e-4*Pbin                      # set initial timestep of integrator - IAS15 is adaptive so this will change
     sim.softening = 0.1*s1                  # softening parameter which modifies potential of each particle to prevent divergences
     sim.collision = 'direct'
-    # sim.collision_resolve = 'hardsphere'
+    sim.collision_resolve = 'merge'
     sim.add(m=Msun, x=-rsun, hash="sun")
     sim.add(m=m1, r=s1, x=primx, z=primz, vy=primvy, vz=primvz, hash="primary")
     sim.add(m=m2, r=s2, x=secx, z=secz, vy=secvy, vz=secvz, hash="secondary")
@@ -110,26 +110,26 @@ vp, vs, vimp, vsun = np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3)), np.zeros(
 totaltime = T*simp/10e3*(1/b*Rhill1)*3. # total time of simulation - adjusted for different impactor sizes and distances
 totaltime = T/100
 times = np.linspace(0.,totaltime, Noutputs) # create times for integrations
-parts = sim.particles                      # create variable containing particles in simulation
+ps = sim.particles                      # create variable containing particles in simulation
 timer = timed() # start timer to time simulations
 for i, time in enumerate(times):
-    # print(parts)
-    sim.integrate(time)
-    # if sim.N == 4:
-    sun[i] = [parts["sun"].x, parts["sun"].y, parts["sun"].z]
-    p[i] = [parts["primary"].x, parts["primary"].y, parts["primary"].z]
-    # if parts["secondary"]:
-    s[i] = [parts["secondary"].x, parts["secondary"].y, parts["secondary"].z]
-    # if sim.N > 3:
-    imp[i] = [parts["impactor"].x, parts["impactor"].y, parts["impactor"].z]
-    vsun[i] = [parts["sun"].vx, parts["sun"].vy, parts["sun"].vz]
-    vp[i] = [parts["primary"].vx, parts["primary"].vy, parts["primary"].vz]
-    vs[i] = [parts["secondary"].vx, parts["secondary"].vy, parts["secondary"].vz]
-    vimp[i] = [parts["impactor"].vx, parts["impactor"].vy, parts["impactor"].vz]
-    
-    for part in parts:
-        print(particle.hash, particle.lastcollision)
-            
+    try:
+        sim.integrate(time)
+        sun[i] = [ps["sun"].x, ps["sun"].y, ps["sun"].z]
+        p[i] = [ps["primary"].x, ps["primary"].y, ps["primary"].z]
+        s[i] = [ps["secondary"].x, ps["secondary"].y, ps["secondary"].z]
+        imp[i] = [ps["impactor"].x, ps["impactor"].y, ps["impactor"].z]
+        vsun[i] = [ps["sun"].vx, ps["sun"].vy, ps["sun"].vz]
+        vp[i] = [ps["primary"].vx, ps["primary"].vy, ps["primary"].vz]
+        vs[i] = [ps["secondary"].vx, ps["secondary"].vy, ps["secondary"].vz]
+        vimp[i] = [ps["impactor"].vx, ps["impactor"].vy, ps["impactor"].vz]
+    except rebound.Collision:
+        collided = []
+        for item in sim.particles:
+            if item.lastcollision == sim.t:
+                collided.append([item.index, item.x, item.y, item.z, item.vx, item.vy, item.vz])
+        collided = np.array(collided)
+
 print(timed()-timer) # finish timer
 # %%
 dr, dv, mu, h = np.zeros((Noutputs,3)), np.zeros((Noutputs,3)), np.zeros((Noutputs,3)), np.zeros((Noutputs,3))
@@ -145,30 +145,6 @@ mu[:,2] = G*(m2+mimp)                               # G times combined mass of s
 h[:,0] = np.cross(p-s,vp-vs)[:,2]                       # angular momentum
 h[:,1] = np.cross(p-imp,vp-vimp)[:,2]
 h[:,2] = np.cross(s-imp,vs-vimp)[:,2]
-
-def find_collision():
-    coll_i = np.argmax(dr[:,0] == 0)-1
-    if coll_i != -1:
-        coll_pair = np.argmin(dr[coll_i])
-        coll_v = dv[coll_i,coll_pair]        
-        if coll_pair == 0:
-            V1 = vp[coll_i]
-            V2 = vs[coll_i]        
-        elif coll_pair == 1:
-            V1 = vp[coll_i]
-            V2 = vimp[coll_i]        
-        elif coll_pair == 2:
-            V1 = sp[coll_i]
-            V2 = vimp[coll_i]
-        
-        coll_angle = np.rad2deg(np.arccos(np.dot(V1,V2)/np.dot(np.linalg.norm(V1),np.linalg.norm(V2))))
-            
-        return [coll_pair, coll_v, coll_angle]
-    
-    else:
-        return 0
-    
-collision = find_collision()
 # %%
 semimajoraxis = mu*dr/(2*mu-dr*dv**2)                           # semi-major axis between each pair of bodies
 energy = -mu/2/semimajoraxis                                    # total energy between each pair of bodies 

@@ -17,7 +17,11 @@ T = 2.*np.pi/np.sqrt(G*(Msun)/rsun**3)      # orbital period of binary around th
 n = 2*np.pi/T                               # mean motion of binary around the sun
 year = 365.25*24.*60.*60.                   # number of seconds in a year
 
-data = pd.read_csv(f'./results/coll__b-0.4__r-100.0.csv')
+sim_name = 'coord_test3'
+b = '2.4'
+r = '160.0'
+
+data = pd.read_csv(f'./results/{sim_name}__b-{b}__r-{r}.csv')
 Noutputs = len(data)                             # number of outputs for plotting
 
 times = data['time'].to_numpy()
@@ -26,6 +30,7 @@ simp = data['imp radius'].to_numpy()[0]
 m1 = data['mass prim'].to_numpy()[0]
 m2 = data['mass sec'].to_numpy()[0]
 mimp = data['mass imp'].to_numpy()[0]
+sun = data[['x sun','y sun', 'z sun']].to_numpy()
 p = data[['x prim','y prim', 'z prim']].to_numpy()
 s = data[['x sec','y sec', 'z sec']].to_numpy()
 imp = data[['x imp','y imp', 'z imp']].to_numpy()
@@ -33,7 +38,7 @@ vp = data[['vx prim','vy prim', 'vz prim']].to_numpy()
 vs = data[['vx sec','vy sec', 'vz sec']].to_numpy()
 vimp = data[['vx imp','vy imp', 'vz imp']].to_numpy()
 
-OmegaK = np.sqrt(G*(Msun+m1+m2)/rsun**3)      # keplerian frequency at this distance
+OmegaK = np.sqrt(G*(Msun)/rsun**3)      # keplerian frequency at this distance
 angles = -OmegaK*times                        # one full circle divided up into as many angles as there are outputs
 
 dr, dv, mu, h = np.zeros((Noutputs,3)), np.zeros((Noutputs,3)), np.zeros((Noutputs,3)), np.zeros((Noutputs,3))
@@ -49,30 +54,6 @@ h[:,2] = np.cross(s-imp,vs-vimp)[:,2]
 mu[:,0] = G*(m1+m2)
 mu[:,1] = G*(m1+mimp)
 mu[:,2] = G*(m2+mimp)                           # G times combined mass of secondary and impactor
-
-def find_collision():
-    coll_i = np.argmax(dr[:,0] == 0)-1
-    if coll_i != -1:
-        coll_pair = np.argmin(dr[coll_i])
-        coll_v = dv[coll_i,coll_pair]        
-        if coll_pair == 0:
-            V1 = vp[coll_i]
-            V2 = vs[coll_i]        
-        elif coll_pair == 1:
-            V1 = vp[coll_i]
-            V2 = vimp[coll_i]        
-        elif coll_pair == 2:
-            V1 = sp[coll_i]
-            V2 = vimp[coll_i]
-        
-        coll_angle = np.rad2deg(np.arccos(np.dot(V1,V2)/np.dot(np.linalg.norm(V1),np.linalg.norm(V2))))
-            
-        return [coll_pair, coll_v, coll_angle]
-    
-    else:
-        return 0
-    
-collision = find_collision()
 
 a = mu*dr/(2*mu-dr*dv**2)                            # semi-major axis between each pair of bodies
 energy = -mu/2/a                                    # total energy between each pair of bodies
@@ -98,7 +79,7 @@ vx, vy = cosspxdot-sinspydot, sinspxdot+cosspydot       # vx and vy values for c
 Cj = n**2*(x**2 + y**2) + 2*(mu[:,0]/dr[:,0] + mu[:,1]/dr[:,1]) - vx**2 - vy**2 # jacobian constant
 
 ref = np.zeros((Noutputs,3))            # reference point that keeps binary at centre of animation
-ref[:,0] = -rsun + rsun*np.cos(angles)  # x values of reference
+ref[:,0] = 0 + rsun*np.cos(angles)  # x values of reference
 ref[:,1] = 0 - rsun*np.sin(angles)      # y values of reference
 pref = (p-ref)/Rhill[0]                 # difference between primary and reference point
 sref = (s-ref)/Rhill[0]                 # difference between secondary and reference point
@@ -109,9 +90,9 @@ cosix, cosiy = np.cos(angles)*impref[:,0], np.cos(angles)*impref[:,1]   # cos of
 sinpx, sinpy = np.sin(angles)*pref[:,0], np.sin(angles)*pref[:,1]       # sin of reference angles times relative location of primary
 sinsx, sinsy = np.sin(angles)*sref[:,0], np.sin(angles)*sref[:,1]       # sin of reference angles times relative location of secondary
 sinix, siniy = np.sin(angles)*impref[:,0], np.sin(angles)*impref[:,1]   # sin of reference angles times relative location of impactor
-# %%
+
 '''2D ANIMATION OF OUTCOME OF SIMULATION'''
-lim = 5
+lim = 10
 fig, axes = plt.subplots(1, figsize=(9, 9))
 axes.set_xlabel("$x/R_\mathrm{h}$")
 axes.set_ylabel("$y/R_\mathrm{h}$")
@@ -157,7 +138,7 @@ writervideo = FFMpegWriter(fps=10) # ffmpeg must be installed
 anim.save(f, writer=writervideo)
 # %%
 '''3D ANIMATION OF OUTCOME OF SIMULATION'''
-lim = 0.5
+lim = 2
 fig = plt.figure(figsize=(9,9))
 axes = fig.add_subplot(111, projection='3d')
 axes.set_xlabel("$x/R_\mathrm{h}$")
