@@ -175,7 +175,7 @@ def animate(i):
 anim = animation.FuncAnimation(fig, animate, frames=len(data), interval=1)
 # %%
 '''2D PLOT OF OUTCOME OF SIMULATION'''
-lim = 1
+lim = 10
 fig, axes = plt.subplots(1, figsize=(8, 8))
 axes.set_xlabel("$x/R_\mathrm{h}$")
 axes.set_ylabel("$y/R_\mathrm{h}$")

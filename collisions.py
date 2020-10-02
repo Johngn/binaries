@@ -11,13 +11,13 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-sim_name = 'coord_test3'
-b = '2.4'
-r = '160.0'
+sim_name = 'coll5'
+b = '1.8'
+r = '1000.0'
 
 coll_data = pd.read_csv(f'./results/collision_{sim_name}__b-{b}__r-{r}.csv')
 data = pd.read_csv(f'./results/{sim_name}__b-{b}__r-{r}.csv')
-Noutputs = len(data)
+noutputs = len(data)
 
 times = data['time'].to_numpy()
 p = data[['x prim','y prim','z prim']].to_numpy()
@@ -31,40 +31,42 @@ coll_time = coll_data['time'].to_numpy()
 bodies = coll_data['body'].to_numpy()
 r = coll_data['r'].to_numpy()
 m = coll_data['m'].to_numpy()
-R = coll_data[['x','y','z']].to_numpy()
-V = coll_data[['vx','vy','vz']].to_numpy()
+r = coll_data[['x','y','z']].to_numpy()
+v = coll_data[['vx','vy','vz']].to_numpy()
 
-G = 6.67428e-11                             # gravitational constanct in SI units
+g = 6.67428e-11                             # gravitational constanct in SI units
 au = 1.496e11                               # astronomical unit    
-Msun = 1.9891e30                            # mass of sun
-rsun = 44.*au                                  # distance of centre of mass of binary from the sun 
-OmegaK = np.sqrt(G*Msun/rsun**3)       # keplerian frequency at this distance
-vk = np.sqrt(G*Msun/rsun)
-angles = -OmegaK*times
-theta = -OmegaK*coll_time[0]
-v_ref = np.zeros((Noutputs,3))
-v_ref[:,0] = np.sin(angles)
-v_ref[:,1] = np.cos(angles)
-va = vk*v_ref
+msun = 1.9891e30                            # mass of sun
+rsun = 44.*au                               # distance of centre of mass of binary from the sun 
+omegaK = np.sqrt(g*msun/rsun**3)            # keplerian frequency at this distance
+vk = np.sqrt(g*msun/rsun)                   # keplerian velocity at this distance
+angles = -omegaK*times                      # angles of reference point at each time
+
+v_ref = np.zeros((noutputs,3))
+v_ref[:,0] = np.sin(angles)                 # x values of azimuthal unit vector (reference point)
+v_ref[:,1] = np.cos(angles)                 # y values of azimuthal unit vector (reference point)
+va = vk*v_ref                               # azimuthal velocity vector (reference point)
+
+theta = -omegaK*coll_time[0]                # angle at which collision occured
+vref = np.array([np.sin(theta),np.cos(theta),0])*vk
 
 
+v1 = v[0]-vref                                # velocity of body 1 in reference frame
+v2 = v[1]-vref                                # velocity of body 2 in reference frame
+# u_1 = v1/np.linalg.norm(v1)                 # unit velocity vector of body 1 in reference frame
+# u_2 = v2/np.linalg.norm(v2)                 # unit velocity vector of body 2 in reference frame
+# dr = np.linalg.norm(r[0]-r[1])              # distance between bodies
+# dv = np.linalg.norm(v[0]-v[1])              # relative velocity between bodies
+# dv2 = np.linalg.norm(v1-v2, axis=1)
 
-V1 = V[0]-va
-V2 = V[1]-va
-u_1 = V1/np.linalg.norm(V1)
-u_2 = V2/np.linalg.norm(V2)
-dr = np.linalg.norm(R[0]-R[1])
-dv = np.linalg.norm(V[0]-V[1])
-dv2 = np.linalg.norm(v1-v2)
-
-ref = np.zeros((Noutputs,3))            # reference point that keeps binary at centre of animation
+ref = np.zeros((noutputs,3))            # reference point that keeps binary at centre of animation
 ref[:,0] = 0 + rsun*np.cos(angles)  # x values of reference
 ref[:,1] = 0 - rsun*np.sin(angles)      # y values of reference
 
 
 
-# ref = np.array([0 + rsun*np.cos(theta),0 - rsun*np.sin(theta)])
 
-collision_angle = np.arccos(np.dot(V[0],V[1])/np.dot(np.linalg.norm(V[0]),np.linalg.norm(V[1])))
+
+collision_angle = np.arccos(np.dot(v[0],v[1])/np.dot(np.linalg.norm(v[0]),np.linalg.norm(v[1])))
 collision_angle = np.arccos(np.dot(v1,v2)/np.dot(np.linalg.norm(v1),np.linalg.norm(v2)))
 collision_angle_deg = np.rad2deg(collision_angle)
