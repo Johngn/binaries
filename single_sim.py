@@ -111,10 +111,19 @@ totaltime = T*simp/10e3*(1/b*Rhill1)*3. # total time of simulation - adjusted fo
 totaltime = T/100
 times = np.linspace(0.,totaltime, Noutputs) # create times for integrations
 ps = sim.particles                      # create variable containing particles in simulation
+
+
+# from rebound import hash as h
+# ps[h('primary')]
+# for p in ps:
+#     print(p.hash)
+    
 timer = timed() # start timer to time simulations
 for i, time in enumerate(times):
     try:
         sim.integrate(time)
+        # if ps[h("impactor")]:
+        #     print(len(ps))
         sun[i] = [ps["sun"].x, ps["sun"].y, ps["sun"].z]
         p[i] = [ps["primary"].x, ps["primary"].y, ps["primary"].z]
         s[i] = [ps["secondary"].x, ps["secondary"].y, ps["secondary"].z]

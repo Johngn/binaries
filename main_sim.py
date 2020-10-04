@@ -42,8 +42,8 @@ coll_headers = ['time','body','r','m','x','y','z','vx','vy','vz']
 
 sim_name = "coord_test3"
 
-simp = np.arange(100e3,200e3,20e3) # create range of impactor sizes to loop through
-b = np.arange(2.4,6.5,1.4)*Rhill # create range of impact parameters to loop through
+simp = np.arange(101e3,200e3,20e3) # create range of impactor sizes to loop through
+b = np.arange(2.3,6.5,1.4)*Rhill # create range of impact parameters to loop through
 
 timer = timed() # start timer to time simulations
 
