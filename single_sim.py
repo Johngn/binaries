@@ -104,40 +104,45 @@ def setupSimulation():
 
 sim = setupSimulation()
 
-Noutputs = 1000             # number of outputs
-p, s, imp, sun = np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3)) # position
-vp, vs, vimp, vsun = np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3)) # velocity
+Noutputs = 100             # number of outputs
+p, s, imp = np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3)) # position
+vp, vs, vimp = np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3)) # velocity
 totaltime = T*simp/10e3*(1/b*Rhill1)*3. # total time of simulation - adjusted for different impactor sizes and distances
 totaltime = T/100
 times = np.linspace(0.,totaltime, Noutputs) # create times for integrations
 ps = sim.particles                      # create variable containing particles in simulation
 
-
-# from rebound import hash as h
-# ps[h('primary')]
-# for p in ps:
-#     print(p.hash)
-    
+all_ps = [p.hash.value for j, p in enumerate(ps)]
+collided = np.zeros((4, 7))
+loop_order = 0
 timer = timed() # start timer to time simulations
 for i, time in enumerate(times):
-    try:
-        sim.integrate(time)
-        # if ps[h("impactor")]:
-        #     print(len(ps))
-        sun[i] = [ps["sun"].x, ps["sun"].y, ps["sun"].z]
+    # try:
+    sim.integrate(time)
+    existing_ps = [p.hash.value for j, p in enumerate(ps)]
+    if all_ps[1] in existing_ps:
         p[i] = [ps["primary"].x, ps["primary"].y, ps["primary"].z]
-        s[i] = [ps["secondary"].x, ps["secondary"].y, ps["secondary"].z]
-        imp[i] = [ps["impactor"].x, ps["impactor"].y, ps["impactor"].z]
-        vsun[i] = [ps["sun"].vx, ps["sun"].vy, ps["sun"].vz]
         vp[i] = [ps["primary"].vx, ps["primary"].vy, ps["primary"].vz]
+    if all_ps[2] in existing_ps:
+        s[i] = [ps["secondary"].x, ps["secondary"].y, ps["secondary"].z]
         vs[i] = [ps["secondary"].vx, ps["secondary"].vy, ps["secondary"].vz]
+    if all_ps[3] in existing_ps:
+        imp[i] = [ps["impactor"].x, ps["impactor"].y, ps["impactor"].z]
         vimp[i] = [ps["impactor"].vx, ps["impactor"].vy, ps["impactor"].vz]
-    except rebound.Collision:
-        collided = []
-        for item in sim.particles:
-            if item.lastcollision == sim.t:
-                collided.append([item.index, item.x, item.y, item.z, item.vx, item.vy, item.vz])
-        collided = np.array(collided)
+        
+    for item in ps:
+        if item.lastcollision != 0:
+            print(existing_ps)
+            # print(item.lastcollision)1
+            # order = 
+            # print(item.index)
+            # if item.index not in collided[:,0]:
+            #     collided[loop_order] = [item.index, item.x, item.y, item.z, item.vx, item.vy, item.vz]
+            #     loop_order += 1
+    # collided = np.array(collided)
+    # except rebound.Collision:
+        
+        
 
 print(timed()-timer) # finish timer
 # %%
