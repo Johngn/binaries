@@ -11,9 +11,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-sim_name = 'coll5'
-b = '1.8'
-r = '1000.0'
+sim_name = 'COLL'
+b = '0.3'
+r = '1001.0'
 
 coll_data = pd.read_csv(f'./results/collision_{sim_name}__b-{b}__r-{r}.csv')
 data = pd.read_csv(f'./results/{sim_name}__b-{b}__r-{r}.csv')
@@ -53,19 +53,15 @@ vref = np.array([np.sin(theta),np.cos(theta),0])*vk
 
 v1 = v[0]-vref                                # velocity of body 1 in reference frame
 v2 = v[1]-vref                                # velocity of body 2 in reference frame
-# u_1 = v1/np.linalg.norm(v1)                 # unit velocity vector of body 1 in reference frame
-# u_2 = v2/np.linalg.norm(v2)                 # unit velocity vector of body 2 in reference frame
-# dr = np.linalg.norm(r[0]-r[1])              # distance between bodies
-# dv = np.linalg.norm(v[0]-v[1])              # relative velocity between bodies
-# dv2 = np.linalg.norm(v1-v2, axis=1)
+u_1 = v1/np.linalg.norm(v1)                 # unit velocity vector of body 1 in reference frame
+u_2 = v2/np.linalg.norm(v2)                 # unit velocity vector of body 2 in reference frame
+dr = np.linalg.norm(r[0]-r[1])              # distance between bodies
+dv = np.linalg.norm(v[0]-v[1])              # relative velocity between bodies
+dv2 = np.linalg.norm(v1-v2, axis=0)
 
 ref = np.zeros((noutputs,3))            # reference point that keeps binary at centre of animation
 ref[:,0] = 0 + rsun*np.cos(angles)  # x values of reference
 ref[:,1] = 0 - rsun*np.sin(angles)      # y values of reference
-
-
-
-
 
 collision_angle = np.arccos(np.dot(v[0],v[1])/np.dot(np.linalg.norm(v[0]),np.linalg.norm(v[1])))
 collision_angle = np.arccos(np.dot(v1,v2)/np.dot(np.linalg.norm(v1),np.linalg.norm(v2)))

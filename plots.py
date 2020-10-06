@@ -9,7 +9,7 @@ au = 1.496e11
 rsun = 44.*au
 Msun = 1.9891e30
 
-sim_name = 'new_coord_test'
+sim_name = 'COLL'
 
 data = pd.read_csv(f'./results/{sim_name}_final.csv')
 

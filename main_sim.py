@@ -40,22 +40,15 @@ headers = ['time','b','imp radius','mass prim','x prim','y prim','z prim','vx pr
            'mass sun','x sun','y sun','z sun','vx sun','vy sun','vz sun',]
 coll_headers = ['time','body','r','m','x','y','z','vx','vy','vz']
 
-sim_name = "coord_test3"
+sim_name = "COLL"
 
-simp = np.arange(101e3,200e3,20e3) # create range of impactor sizes to loop through
-b = np.arange(2.3,6.5,1.4)*Rhill # create range of impact parameters to loop through
+simp = np.arange(1001e3,2000e3,200e3) # create range of impactor sizes to loop through
+b = np.arange(0.3,6.5,1.4)*Rhill # create range of impact parameters to loop through
 
 timer = timed() # start timer to time simulations
 
 for j in range(len(b)):             # loop through each impact parameter
     for i in range(len(simp)):      # loop throught each impactor radius
-        print('step ' + str(j + 1) + '-' + str(i+1))
-        totaltime = 3*T*simp[i]/s1/b[j]*Rhill # total time of simulation - adjusted for different impactor sizes and distances
-        print(totaltime/T)
-        # totaltime = T/10
-        times = np.reshape(np.linspace(0.,totaltime, Noutputs), (Noutputs,1)) # create times for integrations - reshape for hstack below
-        y0 = Rhill*simp[i]/s1*10                 # initial y distance of impactor from binary - larger for larger impactors
-        # y0 = Rhill
         mimp = 4./3.*np.pi*densimp*simp[i]**3   # mass of impactor
         xb1 = -m2/(m1+m2)*rbin                  # slightly adjust initial x position of primary to keep centre of mass of binary at r
         xb2 = m1/(m1+m2)*rbin                   # slightly adjust initial x position of secondary to keep centre of mass of binary at r
@@ -92,6 +85,14 @@ for j in range(len(b)):             # loop through each impact parameter
         impvx = -vorbi*stheta0                  # x velocity of impactor
         impvy = vorbi*ctheta0                   # y velocity of impactor
         
+        print('step ' + str(j + 1) + '-' + str(i+1))
+        # totaltime = 3*T*simp[i]/s1/b[j]*Rhill # total time of simulation - adjusted for different impactor sizes and distances
+        # print(totaltime/T)
+        totaltime = T/100
+        times = np.reshape(np.linspace(0.,totaltime, Noutputs), (Noutputs,1)) # create times for integrations - reshape for hstack below
+        y0 = Rhill*simp[i]/s1*10                 # initial y distance of impactor from binary - larger for larger impactors
+        y0 = Rhill
+        
         def setupSimulation():
             sim = rebound.Simulation()              # initialize rebound simulation
             sim.G = G                               # set G which sets units of integrator - SI in this case
@@ -108,30 +109,38 @@ for j in range(len(b)):             # loop through each impact parameter
         sim = setupSimulation()
         ps = sim.particles                      # create variable containing particles in simulation                
         
-        
-        for k, time in enumerate(times):
-            try:
+        try:
+            for k, time in enumerate(times):
                 sim.integrate(time)
-                # print(k)
-                # if ps['sun']
-                sun[k] = [ps["sun"].x, ps["sun"].y, ps["sun"].z]
                 p[k] = [ps["primary"].x, ps["primary"].y, ps["primary"].z]
                 s[k] = [ps["secondary"].x, ps["secondary"].y, ps["secondary"].z]
                 imp[k] = [ps["impactor"].x, ps["impactor"].y, ps["impactor"].z]
-                vsun[k] = [ps["sun"].vx, ps["sun"].vy, ps["sun"].vz]
                 vp[k] = [ps["primary"].vx, ps["primary"].vy, ps["primary"].vz]
                 vs[k] = [ps["secondary"].vx, ps["secondary"].vy, ps["secondary"].vz]
                 vimp[k] = [ps["impactor"].vx, ps["impactor"].vy, ps["impactor"].vz]
-            except rebound.Collision:
-                # print('error'+str(k))
-                collided = []
-                for item in sim.particles:
-                    if item.lastcollision == sim.t:
-                        collided.append([sim.t, item.index, item.r, item.m, item.x, item.y, item.z, item.vx, item.vy, item.vz])
-                collided = np.array(collided)
-                df_coll = pd.DataFrame(collided)
-                df_coll.to_csv(f'./results/collision_{sim_name}__b-{np.round(b[j]/Rhill, 1)}__r-{np.round(simp[i]/1e3, 1)}.csv', header=coll_headers)
-        
+        except rebound.Collision:
+            collided = []
+            for item in sim.particles:
+                if item.lastcollision == sim.t:
+                    collided.append([sim.t, item.index, item.r, item.m, item.x, item.y, item.z, item.vx, item.vy, item.vz])
+            collided = np.array(collided)
+            df_coll = pd.DataFrame(collided)
+            df_coll.to_csv(f'./results/collision_{sim_name}__b-{np.round(b[j]/Rhill, 1)}__r-{np.round(simp[i]/1e3, 1)}.csv', header=coll_headers)
+ 
+            sim.collision_resolve = 'merge'
+
+            for k, time in enumerate(times):
+                sim.integrate(time)
+                existing_ps = [p.hash.value for j, p in enumerate(ps)]
+                if all_ps[1] in existing_ps:
+                    p[k] = [ps["primary"].x, ps["primary"].y, ps["primary"].z]
+                    vp[k] = [ps["primary"].vx, ps["primary"].vy, ps["primary"].vz]
+                if all_ps[2] in existing_ps:
+                    s[k] = [ps["secondary"].x, ps["secondary"].y, ps["secondary"].z]
+                    vs[k] = [ps["secondary"].vx, ps["secondary"].vy, ps["secondary"].vz]
+                if all_ps[3] in existing_ps:
+                    imp[k] = [ps["impactor"].x, ps["impactor"].y, ps["impactor"].z]
+                    vimp[k] = [ps["impactor"].vx, ps["impactor"].vy, ps["impactor"].vz]
             
         # create matrix of results in same order as header created above - reshape some to avoid error
         particles = np.hstack((times,

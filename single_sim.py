@@ -95,7 +95,7 @@ def setupSimulation():
     sim.dt = 1e-4*Pbin                      # set initial timestep of integrator - IAS15 is adaptive so this will change
     sim.softening = 0.1*s1                  # softening parameter which modifies potential of each particle to prevent divergences
     sim.collision = 'direct'
-    sim.collision_resolve = 'merge'
+    # sim.collision_resolve = 'merge'
     sim.add(m=Msun, x=-rsun, hash="sun")
     sim.add(m=m1, r=s1, x=primx, z=primz, vy=primvy, vz=primvz, hash="primary")
     sim.add(m=m2, r=s2, x=secx, z=secz, vy=secvy, vz=secvz, hash="secondary")
@@ -113,39 +113,54 @@ times = np.linspace(0.,totaltime, Noutputs) # create times for integrations
 ps = sim.particles                      # create variable containing particles in simulation
 
 all_ps = [p.hash.value for j, p in enumerate(ps)]
-collided = np.zeros((4, 7))
-loop_order = 0
 timer = timed() # start timer to time simulations
-for i, time in enumerate(times):
-    # try:
+# try:
+for k, time in enumerate(times):
     sim.integrate(time)
-    existing_ps = [p.hash.value for j, p in enumerate(ps)]
-    if all_ps[1] in existing_ps:
-        p[i] = [ps["primary"].x, ps["primary"].y, ps["primary"].z]
-        vp[i] = [ps["primary"].vx, ps["primary"].vy, ps["primary"].vz]
-    if all_ps[2] in existing_ps:
-        s[i] = [ps["secondary"].x, ps["secondary"].y, ps["secondary"].z]
-        vs[i] = [ps["secondary"].vx, ps["secondary"].vy, ps["secondary"].vz]
-    if all_ps[3] in existing_ps:
-        imp[i] = [ps["impactor"].x, ps["impactor"].y, ps["impactor"].z]
-        vimp[i] = [ps["impactor"].vx, ps["impactor"].vy, ps["impactor"].vz]
+    p[k] = [ps["primary"].x, ps["primary"].y, ps["primary"].z]
+    s[k] = [ps["secondary"].x, ps["secondary"].y, ps["secondary"].z]
+    imp[k] = [ps["impactor"].x, ps["impactor"].y, ps["impactor"].z]
+    vp[k] = [ps["primary"].vx, ps["primary"].vy, ps["primary"].vz]
+    vs[k] = [ps["secondary"].vx, ps["secondary"].vy, ps["secondary"].vz]
+    vimp[k] = [ps["impactor"].vx, ps["impactor"].vy, ps["impactor"].vz]
+# except rebound.Collision:
+#     collided = []
+#     for item in sim.particles:
+#         if item.lastcollision == sim.t:
+#             collided.append([sim.t, item.index, item.r, item.m, item.x, item.y, item.z, item.vx, item.vy, item.vz])
+#     collided = np.array(collided)
+    
+#     sim.collision_resolve = 'merge'
+
+#     for i, time in enumerate(times):
+#         sim.integrate(time)
+#         existing_ps = [p.hash.value for j, p in enumerate(ps)]
+#         if all_ps[1] in existing_ps:
+#             p[i] = [ps["primary"].x, ps["primary"].y, ps["primary"].z]
+#             vp[i] = [ps["primary"].vx, ps["primary"].vy, ps["primary"].vz]
+#         if all_ps[2] in existing_ps:
+#             s[i] = [ps["secondary"].x, ps["secondary"].y, ps["secondary"].z]
+#             vs[i] = [ps["secondary"].vx, ps["secondary"].vy, ps["secondary"].vz]
+#         if all_ps[3] in existing_ps:
+#             imp[i] = [ps["impactor"].x, ps["impactor"].y, ps["impactor"].z]
+#             vimp[i] = [ps["impactor"].vx, ps["impactor"].vy, ps["impactor"].vz]
         
-    for item in ps:
-        if item.lastcollision != 0:
-            print(existing_ps)
-            # print(item.lastcollision)1
-            # order = 
-            # print(item.index)
-            # if item.index not in collided[:,0]:
-            #     collided[loop_order] = [item.index, item.x, item.y, item.z, item.vx, item.vy, item.vz]
-            #     loop_order += 1
+    # for item in ps:
+    #     if item.lastcollision != 0:
+    #         # print(existing_ps)
+    #         print(item.lastcollision)
+    #         # order = 
+    #         print(item.index)
+    #         if item.index not in collided[:,0]:
+    #             collided[loop_order] = [item.index, item.x, item.y, item.z, item.vx, item.vy, item.vz]
+    #             loop_order += 1
     # collided = np.array(collided)
     # except rebound.Collision:
         
         
 
 print(timed()-timer) # finish timer
-# %%
+
 dr, dv, mu, h = np.zeros((Noutputs,3)), np.zeros((Noutputs,3)), np.zeros((Noutputs,3)), np.zeros((Noutputs,3))
 dr[:,0] = np.linalg.norm(p-s, axis=1)                # distance between primary and secondary
 dr[:,1] = np.linalg.norm(p-imp, axis=1)              # distance between primary and impactor
@@ -159,7 +174,7 @@ mu[:,2] = G*(m2+mimp)                               # G times combined mass of s
 h[:,0] = np.cross(p-s,vp-vs)[:,2]                       # angular momentum
 h[:,1] = np.cross(p-imp,vp-vimp)[:,2]
 h[:,2] = np.cross(s-imp,vs-vimp)[:,2]
-# %%
+
 semimajoraxis = mu*dr/(2*mu-dr*dv**2)                           # semi-major axis between each pair of bodies
 energy = -mu/2/semimajoraxis                                    # total energy between each pair of bodies 
 ecc = np.sqrt(1+(2*energy*h**2/mu**2))
