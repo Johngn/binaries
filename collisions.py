@@ -29,7 +29,7 @@ vimp = data[['vx imp','vy imp','vz imp']].to_numpy()
 
 coll_time = coll_data['time'].to_numpy()
 bodies = coll_data['body'].to_numpy()
-r = coll_data['r'].to_numpy()
+radius = coll_data['r'].to_numpy()
 m = coll_data['m'].to_numpy()
 r = coll_data[['x','y','z']].to_numpy()
 v = coll_data[['vx','vy','vz']].to_numpy()
@@ -57,10 +57,10 @@ u_1 = v1/np.linalg.norm(v1)                 # unit velocity vector of body 1 in 
 u_2 = v2/np.linalg.norm(v2)                 # unit velocity vector of body 2 in reference frame
 dr = np.linalg.norm(r[0]-r[1])              # distance between bodies
 dv = np.linalg.norm(v[0]-v[1])              # relative velocity between bodies
-dv2 = np.linalg.norm(v1-v2, axis=0)
+dv2 = np.linalg.norm(v1-v2)
 
 ref = np.zeros((noutputs,3))            # reference point that keeps binary at centre of animation
-ref[:,0] = 0 + rsun*np.cos(angles)  # x values of reference
+ref[:,0] = 0 + rsun*np.cos(angles)      # x values of reference
 ref[:,1] = 0 - rsun*np.sin(angles)      # y values of reference
 
 collision_angle = np.arccos(np.dot(v[0],v[1])/np.dot(np.linalg.norm(v[0]),np.linalg.norm(v[1])))

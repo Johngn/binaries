@@ -26,48 +26,48 @@ Pbin = 2.*np.pi/np.sqrt(G*(m1+m2)/rbin**3)  # orbital period of primary and seco
 T = 2.*np.pi/np.sqrt(G*Msun/rsun**3)         # orbital period of binary around the sun
 n = 2*np.pi/T                               # mean motion of binary around the sun
 
-simp = 1000e3 # impactor radius
-b = 0.4*Rhill1 # impact parameter
+# simp = 1000e3 # impactor radius
+# b = 0.4*Rhill1 # impact parameter
         
-y0 = Rhill1*simp/1e3                  # initial y distance of impactor from binary - larger for larger impactors
-y0 = Rhill1
-mimp = 4./3.*np.pi*densimp*simp**3   # mass of impactor
+# y0 = Rhill1*simp/1e3                  # initial y distance of impactor from binary - larger for larger impactors
+# y0 = Rhill1
+# mimp = 4./3.*np.pi*densimp*simp**3   # mass of impactor
 
 xb1 = -m2/(m1+m2)*rbin                  # slightly adjust initial x position of primary to keep centre of mass of binary at r
-xb2 = m1/(m1+m2)*rbin                   # slightly adjust initial x position of secondary to keep centre of mass of binary at r
+# xb2 = m1/(m1+m2)*rbin                   # slightly adjust initial x position of secondary to keep centre of mass of binary at r
 
 vshear1 = -1.5*OmegaK*xb1               # keplerian shear of primary
-vshear2 = -1.5*OmegaK*xb2               # keplerian shear of secondary
+# vshear2 = -1.5*OmegaK*xb2               # keplerian shear of secondary
 
 vK1 = np.sqrt(G*(Msun+m1)/(rsun+xb1))      # orbital speed of primary around sun
-vK2 = np.sqrt(G*(Msun+m2)/(rsun+xb2))      # inital orbital speed of secondary around sun
+# vK2 = np.sqrt(G*(Msun+m2)/(rsun+xb2))      # inital orbital speed of secondary around sun
 
-binaryi = np.deg2rad(0)     # inclination of binary
-vorb1 = -m2/(m1+m2)*vorb                # orbital speed of primary around secondary - adjusted to account for offset from COM
-vorb2 = m1/(m1+m2)*vorb                 # orbital speed of secondary around primary - adjusted to account for offset from COM
-sinbin = np.sin(binaryi)                # sin of inclination of binary
-cosbin = np.cos(binaryi)                # cos of inclination of binary
+# binaryi = np.deg2rad(0)     # inclination of binary
+# vorb1 = -m2/(m1+m2)*vorb                # orbital speed of primary around secondary - adjusted to account for offset from COM
+# vorb2 = m1/(m1+m2)*vorb                 # orbital speed of secondary around primary - adjusted to account for offset from COM
+# sinbin = np.sin(binaryi)                # sin of inclination of binary
+# cosbin = np.cos(binaryi)                # cos of inclination of binary
 
 primx = xb1*np.sin(np.pi/2-binaryi)     # x position of primary - accounts for inclination
 primz = xb1*np.sin(binaryi)             # z position of primary - accounts for inclination
 primvy = vK1+vorb1*cosbin               # y velocity of primary - vy is keplerian velocity plus vorb
 primvz = -vorb1*sinbin                  # z velocity of primary - added if i > 0
 
-secx = xb2*np.sin(np.pi/2-binaryi)     # x position of secondary - accounts for inclination
-secz = xb2*np.sin(binaryi)             # z position of secondary - accounts for inclination
-secvy = vK2+vorb2*cosbin               # y velocity of secondary - vy is keplerian velocity plus vorb
-secvz = -vorb2*sinbin                  # z velocity of secondary - added if i > 0
+# secx = xb2*np.sin(np.pi/2-binaryi)     # x position of secondary - accounts for inclination
+# secz = xb2*np.sin(binaryi)             # z position of secondary - accounts for inclination
+# secvy = vK2+vorb2*cosbin               # y velocity of secondary - vy is keplerian velocity plus vorb
+# secvz = -vorb2*sinbin                  # z velocity of secondary - added if i > 0
 
-impi = np.deg2rad(0)        # inclination of impactor
-vorbi = np.sqrt(G*Msun/(rsun+b))        # orbital speed of impactor around sun
-theta0 = y0/(rsun+b)                    # angle between impactor and line between binary COM and sun
-stheta0 = np.sin(theta0)                # sin of theta - needed for position of impactor
-ctheta0 = np.cos(theta0)                # cos of theta - needed for position of impactor
-impx = (rsun+b)*ctheta0-rsun*np.cos(impi)  # x position of impactor
-impy = (rsun+b)*stheta0*np.cos(impi)    # y position of impactor
-impz = (rsun+b)*np.sin(impi)            # z position of impactor
-impvx = -vorbi*stheta0                  # x velocity of impactor
-impvy = vorbi*ctheta0                   # y velocity of impactor
+# impi = np.deg2rad(0)        # inclination of impactor
+# vorbi = np.sqrt(G*Msun/(rsun+b))        # orbital speed of impactor around sun
+# theta0 = y0/(rsun+b)                    # angle between impactor and line between binary COM and sun
+# stheta0 = np.sin(theta0)                # sin of theta - needed for position of impactor
+# ctheta0 = np.cos(theta0)                # cos of theta - needed for position of impactor
+# impx = (rsun+b)*ctheta0-rsun*np.cos(impi)  # x position of impactor
+# impy = (rsun+b)*stheta0*np.cos(impi)    # y position of impactor
+# impz = (rsun+b)*np.sin(impi)            # z position of impactor
+# impvx = -vorbi*stheta0                  # x velocity of impactor
+# impvy = vorbi*ctheta0                   # y velocity of impactor
 
 # Cd = 2.
 # rho_g = 1e-20
