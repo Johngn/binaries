@@ -8,14 +8,14 @@ from timeit import default_timer as timed
 g = 6.67428e-11                             # gravitational constanct in SI units
 au = 1.496e11                               # astronomical unit    
 msun = 1.9891e30                            # mass of sun
-s1, s2 = 130e3, 80e3                         # radius of primary and of secondary
+s1, s2 = 100e3, 100e3                         # radius of primary and of secondary
 dens1, dens2, densimp = 1000., 1000., 1000. # density of primary, secondary, and impactor 
 m1 = 4./3.*np.pi*dens1*s1**3                # mass of primary calculated from density and radius
 m2 = 4./3.*np.pi*dens2*s2**3                # mass of secondary calculated from density and radius
 rsun = 44.*au                                  # distance of centre of mass of binary from the sun 
 omegak = np.sqrt(g*msun/rsun**3)       # keplerian frequency at this distance
 rhill = rsun*(m1/msun/3.)**(1./3.)        # Hill radius of binary
-rbin = 0.3*rhill                            # separation of binary is 0.5 of the Hill radius
+rbin = 0.05*rhill                            # separation of binary is 0.5 of the Hill radius
 vorb = np.sqrt(g*(m1+m2)/rbin)              # orbital speed of primary and secondary around each other
 vshear = -1.5*omegak*rbin                   # calculates the change in velocity required to keep a body in a circular orbit
 pbin = 2.*np.pi/np.sqrt(g*(m1+m2)/rbin**3)  # orbital period of primary and secondary around each other
@@ -39,10 +39,10 @@ headers = ['time','b','imp radius',
            'mass imp','x imp','y imp','z imp','vx imp','vy imp','vz imp',]
 coll_headers = ['time','body','r','m','x','y','z','vx','vy','vz']
 
-sim_name = "COLL1"
+sim_name = "OCT10-1"
 
-simp = np.arange(1001e3,2000e3,2000e3) # create range of impactor sizes to loop through
-b = np.arange(0.3,6.5,14)*rhill # create range of impact parameters to loop through
+simp = np.arange(100e3,200e3,10e3) # create range of impactor sizes to loop through
+b = np.arange(2,6.5,0.5)*rhill # create range of impact parameters to loop through
 
 timer = timed() # start timer to time simulations
 
@@ -158,7 +158,7 @@ for j in range(len(b)):             # loop through each impact parameter
         
         df = pd.DataFrame(particles)
         # write to csv with impactor size and impact parameter in title - round values to avoid long file names
-        df.to_csv(f'./results/{sim_name}__b-{np.round(b[j]/rhill, 1)}__r-{np.round(simp[i]/1e3, 1)}.csv', header=headers)
+        df.to_csv(f'./results/{sim_name}_b-{np.round(b[j]/rhill, 1)}_r-{np.round(simp[i]/1e3, 1)}.csv', header=headers)
         
         initial.append(particles[0])    # initial positions and velocities of bodies
         final.append(particles[-1])     # final positions and velocities of bodies
