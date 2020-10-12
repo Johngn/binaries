@@ -39,29 +39,37 @@ au = 1.496e11                               # astronomical unit
 msun = 1.9891e30                            # mass of sun
 rsun = 44.*au                               # distance of centre of mass of binary from the sun 
 omegaK = np.sqrt(g*msun/rsun**3)            # keplerian frequency at this distance
+rhill = rsun*(m/msun/3.)**(1./3.)        # Hill radius of binary
 vk = np.sqrt(g*msun/rsun)                   # keplerian velocity at this distance
 angles = -omegaK*times                      # angles of reference point at each time
 
-v_ref = np.zeros((noutputs,3))
-v_ref[:,0] = np.sin(angles)                 # x values of azimuthal unit vector (reference point)
-v_ref[:,1] = np.cos(angles)                 # y values of azimuthal unit vector (reference point)
-va = vk*v_ref                               # azimuthal velocity vector (reference point)
+
+ref = np.zeros((noutputs,3))            # reference point that keeps binary at centre of animation
+ref[:,0] = 0 + rsun*np.cos(angles)      # x values of reference
+ref[:,1] = 0 - rsun*np.sin(angles)      # y values of reference
+
+# v_ref = np.zeros((noutputs,3))
+# v_ref[:,0] = np.sin(angles)                 # x values of azimuthal unit vector (reference point)
+# v_ref[:,1] = np.cos(angles)                 # y values of azimuthal unit vector (reference point)
+# va = vk*v_ref                               # azimuthal velocity vector (reference point)
 
 theta = -omegaK*coll_time[0]                # angle at which collision occured
 vref = np.array([np.sin(theta),np.cos(theta),0])*vk
-
 
 v1 = v[0]-vref                                # velocity of body 1 in reference frame
 v2 = v[1]-vref                                # velocity of body 2 in reference frame
 u_1 = v1/np.linalg.norm(v1)                 # unit velocity vector of body 1 in reference frame
 u_2 = v2/np.linalg.norm(v2)                 # unit velocity vector of body 2 in reference frame
-dr = np.linalg.norm(r[0]-r[1])              # distance between bodies
-dv = np.linalg.norm(v[0]-v[1])              # relative velocity between bodies
-dv2 = np.linalg.norm(v1-v2)
 
-ref = np.zeros((noutputs,3))            # reference point that keeps binary at centre of animation
-ref[:,0] = 0 + rsun*np.cos(angles)      # x values of reference
-ref[:,1] = 0 - rsun*np.sin(angles)      # y values of reference
+v_pos = r[0]-r[1]
+v_dir = v[0]-v[1]
+dr = np.linalg.norm(v_pos)              # distance between bodies
+dv = np.linalg.norm(v_dir)
+
+a = v_pos
+n = v_dir/dv
+
+b = np.linalg.norm(a-np.dot(a,n)*n)
 
 collision_angle = np.arccos(np.dot(v[0],v[1])/np.dot(np.linalg.norm(v[0]),np.linalg.norm(v[1])))
 collision_angle = np.arccos(np.dot(v1,v2)/np.dot(np.linalg.norm(v1),np.linalg.norm(v2)))

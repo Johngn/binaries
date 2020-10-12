@@ -14,7 +14,7 @@ m1 = 4./3.*np.pi*dens1*s1**3                # mass of primary calculated from de
 m2 = 4./3.*np.pi*dens2*s2**3                # mass of secondary calculated from density and radius
 rsun = 44.*au                                  # distance of centre of mass of binary from the sun 
 omegak = np.sqrt(g*msun/rsun**3)       # keplerian frequency at this distance
-rhill = rsun*(m1/msun/3.)**(1./3.)        # Hill radius of binary
+rhill = rsun*(m1/msun/3.)**(1./3.)        # Hill radius of primary
 rbin = 0.05*rhill                            # separation of binary is 0.5 of the Hill radius
 vorb = np.sqrt(g*(m1+m2)/rbin)              # orbital speed of primary and secondary around each other
 vshear = -1.5*omegak*rbin                   # calculates the change in velocity required to keep a body in a circular orbit
@@ -74,7 +74,7 @@ for j in range(len(b)):             # loop through each impact parameter
         secvz = -vorb2*sinbin                  # z velocity of secondary - added if i > 0
         
         y0 = rhill*simp[i]/s1*10                 # initial y distance of impactor from binary - larger for larger impactors
-        y0 = rhill
+        # y0 = rhill
         
         vorbi = np.sqrt(g*msun/(rsun+b[j]))        # orbital speed of impactor around sun
         theta0 = y0/(rsun+b[j])                    # angle between impactor and line between binary COM and sun
@@ -90,7 +90,7 @@ for j in range(len(b)):             # loop through each impact parameter
         print('step ' + str(j + 1) + '-' + str(i+1))
         # totaltime = 3*T*simp[i]/s1/b[j]*rhill # total time of simulation - adjusted for different impactor sizes and distances
         # print(totaltime/t)
-        totaltime = t/100
+        totaltime = t
         times = np.reshape(np.linspace(0.,totaltime, noutputs), (noutputs,1)) # create times for integrations - reshape for hstack below
         
         def setupSimulation():

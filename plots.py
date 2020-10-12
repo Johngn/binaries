@@ -9,7 +9,7 @@ au = 1.496e11
 rsun = 44.*au
 Msun = 1.9891e30
 
-sim_name = 'COLL'
+sim_name = 'OCT11_dmr'
 
 data = pd.read_csv(f'./results/{sim_name}_final.csv')
 
@@ -49,7 +49,7 @@ e = np.sqrt(1 + (2*energy*h**2 / mu**2))
 
 bound = np.logical_and(np.logical_and(energy < 0, np.isfinite(energy)), R < Rhill_largest)
 collision = R[:,0] == 0
-# %%
+
 plt.figure(figsize=(6,6))
 s = 40
 plt.scatter(b, simp, s=1, marker="x", c="black")
