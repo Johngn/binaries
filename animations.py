@@ -17,7 +17,7 @@ T = 2.*np.pi/np.sqrt(G*(Msun)/rsun**3)      # orbital period of binary around th
 n = 2*np.pi/T                               # mean motion of binary around the sun
 year = 365.25*24.*60.*60.                   # number of seconds in a year
 
-sim_name = 'OCT13'
+sim_name = 'OCT13_2'
 b = '3.5'
 r = '180.0'
 
@@ -91,7 +91,7 @@ sinsx, sinsy = np.sin(angles)*sref[:,0], np.sin(angles)*sref[:,1]       # sin of
 sinix, siniy = np.sin(angles)*impref[:,0], np.sin(angles)*impref[:,1]   # sin of reference angles times relative location of impactor
 
 '''2D ANIMATION OF OUTCOME OF SIMULATION'''
-lim = 5
+lim = 15
 fig, axes = plt.subplots(1, figsize=(9, 9))
 axes.set_xlabel("$x/R_\mathrm{h}$")
 axes.set_ylabel("$y/R_\mathrm{h}$")

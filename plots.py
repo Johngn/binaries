@@ -9,7 +9,7 @@ au = 1.496e11
 rsun = 44.*au
 Msun = 1.9891e30
 
-sim_name = 'OCT13'
+sim_name = 'OCT13_2'
 
 data = pd.read_csv(f'./results/{sim_name}_final.csv')
 
