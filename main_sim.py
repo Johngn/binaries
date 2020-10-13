@@ -15,7 +15,7 @@ m2 = 4./3.*np.pi*dens2*s2**3                # mass of secondary calculated from 
 rsun = 44.*au                                  # distance of centre of mass of binary from the sun 
 omegak = np.sqrt(g*msun/rsun**3)       # keplerian frequency at this distance
 rhill = rsun*(m1/msun/3.)**(1./3.)        # Hill radius of primary
-rbin = 0.05*rhill                            # separation of binary is 0.5 of the Hill radius
+rbin = 0.2*rhill                            # separation of binary is 0.5 of the Hill radius
 vorb = np.sqrt(g*(m1+m2)/rbin)              # orbital speed of primary and secondary around each other
 vshear = -1.5*omegak*rbin                   # calculates the change in velocity required to keep a body in a circular orbit
 pbin = 2.*np.pi/np.sqrt(g*(m1+m2)/rbin**3)  # orbital period of primary and secondary around each other
@@ -39,7 +39,7 @@ headers = ['time','b','imp radius',
            'mass imp','x imp','y imp','z imp','vx imp','vy imp','vz imp',]
 coll_headers = ['time','body','r','m','x','y','z','vx','vy','vz']
 
-sim_name = "OCT10-1"
+sim_name = "OCT13"
 
 simp = np.arange(100e3,200e3,10e3) # create range of impactor sizes to loop through
 b = np.arange(2,6.5,0.5)*rhill # create range of impact parameters to loop through
@@ -73,7 +73,7 @@ for j in range(len(b)):             # loop through each impact parameter
         secvy = vK2+vorb2*cosbin               # y velocity of secondary - vy is keplerian velocity plus vorb
         secvz = -vorb2*sinbin                  # z velocity of secondary - added if i > 0
         
-        y0 = rhill*simp[i]/s1*10                 # initial y distance of impactor from binary - larger for larger impactors
+        y0 = rhill*simp[i]/s1*2.5 * s1/100e3  *b[j]/rhill               # initial y distance of impactor from binary - larger for larger impactors
         # y0 = rhill
         
         vorbi = np.sqrt(g*msun/(rsun+b[j]))        # orbital speed of impactor around sun
@@ -88,9 +88,8 @@ for j in range(len(b)):             # loop through each impact parameter
         impvy = vorbi*ctheta0                   # y velocity of impactor
         
         print('step ' + str(j + 1) + '-' + str(i+1))
-        # totaltime = 3*T*simp[i]/s1/b[j]*rhill # total time of simulation - adjusted for different impactor sizes and distances
-        # print(totaltime/t)
-        totaltime = t
+        totaltime = t*y0/rhill/10 # total time of simulation - adjusted for different impactor sizes and distances
+        print(totaltime/t)
         times = np.reshape(np.linspace(0.,totaltime, noutputs), (noutputs,1)) # create times for integrations - reshape for hstack below
         
         def setupSimulation():
