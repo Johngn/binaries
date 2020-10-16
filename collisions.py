@@ -32,18 +32,21 @@ au = 1.496e11                               # astronomical unit
 msun = 1.9891e30                            # mass of sun
 rsun = 44.*au                               # distance of centre of mass of binary from the sun 
 omegaK = np.sqrt(g*msun/rsun**3)            # keplerian frequency at this distance
-rhill = rsun*(m/msun/3.)**(1./3.)        # Hill radius of binary
+rhill = rsun*(m/msun/3.)**(1./3.)           # Hill radius of each body
 vk = np.sqrt(g*msun/rsun)                   # keplerian velocity at this distance
 angles = -omegaK*times                      # angles of reference point at each time
 
 v_pos = r[0]-r[1]
 v_dir = v[0]-v[1]
 dr = np.linalg.norm(v_pos)              # distance between bodies
-dv = np.linalg.norm(v_dir)
+dv = np.linalg.norm(v_dir)              # collision speed
 
 n = v_dir/dv
 
 b = np.linalg.norm(v_pos-np.dot(v_pos,n)*n)/1e3
+
+v_e = np.sqrt(2*g*m/radius)     # escape speed for each body
+fragmentation = dr > v_e        # collision causes fragmentation if speed greater than escape speed
 
 
 # %%

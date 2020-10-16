@@ -17,9 +17,9 @@ T = 2.*np.pi/np.sqrt(G*(Msun)/rsun**3)      # orbital period of binary around th
 n = 2*np.pi/T                               # mean motion of binary around the sun
 year = 365.25*24.*60.*60.                   # number of seconds in a year
 
-sim_name = 'OCT13_2'
-b = '3.5'
-r = '180.0'
+sim_name = 'OCT15_3'
+b = '2.4'
+r = '120.0'
 
 data = pd.read_csv(f'./results/{sim_name}_b-{b}_r-{r}.csv')
 Noutputs = len(data)                             # number of outputs for plotting
@@ -37,7 +37,7 @@ vp = data[['vx prim','vy prim', 'vz prim']].to_numpy()
 vs = data[['vx sec','vy sec', 'vz sec']].to_numpy()
 vimp = data[['vx imp','vy imp', 'vz imp']].to_numpy()
 
-OmegaK = np.sqrt(G*(Msun)/rsun**3)      # keplerian frequency at this distance
+OmegaK = np.sqrt(G*Msun/rsun**3)      # keplerian frequency at this distance
 angles = -OmegaK*times                        # one full circle divided up into as many angles as there are outputs
 
 dr, dv, mu, h = np.zeros((Noutputs,3)), np.zeros((Noutputs,3)), np.zeros((Noutputs,3)), np.zeros((Noutputs,3))
@@ -91,7 +91,7 @@ sinsx, sinsy = np.sin(angles)*sref[:,0], np.sin(angles)*sref[:,1]       # sin of
 sinix, siniy = np.sin(angles)*impref[:,0], np.sin(angles)*impref[:,1]   # sin of reference angles times relative location of impactor
 
 '''2D ANIMATION OF OUTCOME OF SIMULATION'''
-lim = 15
+lim = 5
 fig, axes = plt.subplots(1, figsize=(9, 9))
 axes.set_xlabel("$x/R_\mathrm{h}$")
 axes.set_ylabel("$y/R_\mathrm{h}$")

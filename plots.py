@@ -9,9 +9,9 @@ au = 1.496e11
 rsun = 44.*au
 Msun = 1.9891e30
 
-sim_name = 'OCT13_2'
+sim_name = 'OCT15_4'
 
-data = pd.read_csv(f'./results/{sim_name}_final.csv')
+data = pd.read_csv(f'./results/{sim_name}_initial.csv')
 
 times = data['time'].to_numpy()
 b = data['b'].to_numpy()
@@ -50,42 +50,48 @@ e = np.sqrt(1 + (2*energy*h**2 / mu**2))
 bound = np.logical_and(np.logical_and(energy < 0, np.isfinite(energy)), R < Rhill_largest)
 collision = R[:,0] == 0
 
-plt.figure(figsize=(6,6))
-s = 40
-plt.scatter(b, simp, s=1, marker="x", c="black")
-plt.scatter(b[bound[:,0]], simp[bound[:,0]], label='primary-secondary', s=s)
-plt.scatter(b[bound[:,1]], simp[bound[:,1]], label='primary-impactor', s=s)
-plt.scatter(b[bound[:,2]], simp[bound[:,2]], label='secondary-impactor', s=s)
-plt.scatter(b[collision], simp[collision], label='collision', s=s)
+plt.figure(figsize=(8,6))
+s = 100
+plt.scatter(simp, b, s=1, marker="x", c="black")
+plt.scatter(simp[bound[:,0]], b[bound[:,0]], label='primary-secondary', s=s)
+plt.scatter(simp[bound[:,1]], b[bound[:,1]], label='primary-impactor', s=s)
+plt.scatter(simp[bound[:,2]], b[bound[:,2]], label='secondary-impactor', s=s)
+plt.scatter(simp[collision], b[collision], label='collision', s=s)
 plt.xlabel("Impact parameter (Hill radii)")
 plt.ylabel("Impactor radius (km)")
 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=3, fancybox=True, shadow=True)
-# plt.xticks(np.arange(0.5,10.6,0.5))
+# plt.yticks(np.arange(0.5,10.6,0.5))
 # plt.yticks(np.arange(0,101,5))
 # plt.savefig(f"./img/final_bound", bbox_inches='tight')
 # %%
-binary_e = np.reshape(e[:,0], (len(np.unique(simp)), len(np.unique(b))))
+binary_e = np.reshape(e[:,0], (len(np.unique(b)), len(np.unique(simp))))
 binary_e[binary_e > 1] = np.nan
-plt.figure(figsize=(8,6))
+
+fig, ax = plt.subplots(1, figsize=(11, 6))
 ax = sns.heatmap(binary_e, 
                  annot=True, 
                  linewidths=0.5, 
                  cmap="YlGnBu",
-                 yticklabels=np.asarray((np.flip(np.unique(simp))), dtype=int),
-                 xticklabels=np.round(np.unique(b), 2))
+                 xticklabels=np.asarray((np.unique(simp)), dtype=int),
+                 yticklabels=np.round(np.unique(b), 2)
+                 )
+# ax.invert_xaxis()
+ax.invert_yaxis()
 plt.title("Final eccentricity of binary")
-plt.xlabel("Impact parameter (Hill radii)")
-plt.ylabel("Impactor radius (km)")
+plt.ylabel("Impact parameter (Hill radii)")
+plt.xlabel("Impactor radius (km)")
 # %%
-binary_a = np.reshape(a[:,0], (len(np.unique(simp)), len(np.unique(b))))/rhill
+binary_a = np.reshape(a[:,0], (len(np.unique(b)), len(np.unique(simp))))/Rhill[0,0]
 binary_a[binary_a < 0] = np.nan
-plt.figure(figsize=(8,6))
+
+fig, ax = plt.subplots(1, figsize=(11, 6))
 ax = sns.heatmap(binary_a, 
                  annot=True, 
                  linewidths=0.5, 
                  cmap="YlGnBu",
-                 yticklabels=np.asarray((np.flip(np.unique(simp))), dtype=int),
-                 xticklabels=np.round(np.unique(b), 2))
+                 xticklabels=np.asarray((np.unique(simp)), dtype=int),
+                 yticklabels=np.round(np.unique(b), 2))
+ax.invert_yaxis()
 plt.title("Final semi-major axis of binary")
-plt.xlabel("Impact parameter (Hill radii)")
-plt.ylabel("Impactor radius (km)")
+plt.ylabel("Impact parameter (Hill radii)")
+plt.xlabel("Impactor radius (km)")
