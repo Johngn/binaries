@@ -17,9 +17,9 @@ T = 2.*np.pi/np.sqrt(G*(Msun)/rsun**3)      # orbital period of binary around th
 n = 2*np.pi/T                               # mean motion of binary around the sun
 year = 365.25*24.*60.*60.                   # number of seconds in a year
 
-sim_name = 'OCT15_4'
+sim_name = 'OCT15_3'
 b = '3.2'
-r = '140.0'
+r = '160.0'
 
 data = pd.read_csv(f'./results/{sim_name}_b-{b}_r-{r}.csv')
 Noutputs = len(data)                             # number of outputs for plotting

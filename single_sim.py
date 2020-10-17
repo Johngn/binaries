@@ -8,66 +8,66 @@ from timeit import default_timer as timed
 from matplotlib import animation
 from matplotlib.animation import FuncAnimation, FFMpegWriter
 
-G = 6.67428e-11                             # gravitational constanct in SI units
+g = 6.67428e-11                             # gravitational constanct in SI units
 au = 1.496e11                               # astronomical unit    
-Msun = 1.9891e30                            # mass of sun
+msun = 1.9891e30                            # mass of sun
 year = 365.25*24.*60.*60.                   # number of seconds in a year
-s1, s2 = 130e3, 80e3                         # radius of primary and of secondary
+s1, s2 = 100e3, 0.1e3                         # radius of primary and of secondary
 dens1, dens2, densimp = 1000., 1000., 1000. # density of primary, secondary, and impactor 
 m1 = 4./3.*np.pi*dens1*s1**3                # mass of primary calculated from density and radius
 m2 = 4./3.*np.pi*dens2*s2**3                # mass of secondary calculated from density and radius
 rsun = 44.*au                                  # distance of centre of mass of binary from the sun 
-OmegaK = np.sqrt(G*Msun/rsun**3)       # keplerian frequency at this distance
-Rhill1 = rsun*(m1/Msun/3.)**(1./3.)        # Hill radius of primary
-rbin = 0.3*Rhill1                            # separation of binary
-vorb = np.sqrt(G*(m1+m2)/rbin)/5              # orbital speed of primary and secondary around each other
-vshear = -1.5*OmegaK*rbin                   # calculates the change in velocity required to keep a body in a circular orbit
-Pbin = 2.*np.pi/np.sqrt(G*(m1+m2)/rbin**3)  # orbital period of primary and secondary around each other
-T = 2.*np.pi/np.sqrt(G*Msun/rsun**3)         # orbital period of binary around the sun
-n = 2*np.pi/T                               # mean motion of binary around the sun
+omegak = np.sqrt(g*msun/rsun**3)       # keplerian frequency at this distance
+rhill1 = rsun*(m1/msun/3.)**(1./3.)        # Hill radius of primary
+rbin = 0.3*rhill1                            # separation of binary
+vorb = np.sqrt(g*(m1+m2)/rbin)              # orbital speed of primary and secondary around each other
+vshear = -1.5*omegak*rbin                   # calculates the change in velocity required to keep a body in a circular orbit
+pbin = 2.*np.pi/np.sqrt(g*(m1+m2)/rbin**3)  # orbital period of primary and secondary around each other
+t = 2.*np.pi/np.sqrt(g*msun/rsun**3)         # orbital period of binary around the sun
+n = 2*np.pi/t                               # mean motion of binary around the sun
 
-# simp = 1000e3 # impactor radius
-# b = 0.4*Rhill1 # impact parameter
+simp = 1e3 # impactor radius
+b = 400000*rhill1 # impact parameter
         
-# y0 = Rhill1*simp/1e3                  # initial y distance of impactor from binary - larger for larger impactors
-# y0 = Rhill1
-# mimp = 4./3.*np.pi*densimp*simp**3   # mass of impactor
+y0 = rhill1*simp/1e3                  # initial y distance of impactor from binary - larger for larger impactors
+y0 = 0
+mimp = 4./3.*np.pi*densimp*simp**3   # mass of impactor
 
 xb1 = -m2/(m1+m2)*rbin                  # slightly adjust initial x position of primary to keep centre of mass of binary at r
-# xb2 = m1/(m1+m2)*rbin                   # slightly adjust initial x position of secondary to keep centre of mass of binary at r
+xb2 = m1/(m1+m2)*rbin                   # slightly adjust initial x position of secondary to keep centre of mass of binary at r
 
-vshear1 = -1.5*OmegaK*xb1               # keplerian shear of primary
-# vshear2 = -1.5*OmegaK*xb2               # keplerian shear of secondary
+vshear1 = -1.5*omegak*xb1               # keplerian shear of primary
+vshear2 = -1.5*omegak*xb2               # keplerian shear of secondary
 
-vK1 = np.sqrt(G*(Msun+m1)/(rsun+xb1))      # orbital speed of primary around sun
-# vK2 = np.sqrt(G*(Msun+m2)/(rsun+xb2))      # inital orbital speed of secondary around sun
+vk1 = np.sqrt(g*(msun+m1)/(rsun+xb1))      # orbital speed of primary around sun
+vk2 = np.sqrt(g*(msun+m2)/(rsun+xb2))      # inital orbital speed of secondary around sun
 
-# binaryi = np.deg2rad(0)     # inclination of binary
-# vorb1 = -m2/(m1+m2)*vorb                # orbital speed of primary around secondary - adjusted to account for offset from COM
-# vorb2 = m1/(m1+m2)*vorb                 # orbital speed of secondary around primary - adjusted to account for offset from COM
-# sinbin = np.sin(binaryi)                # sin of inclination of binary
-# cosbin = np.cos(binaryi)                # cos of inclination of binary
+binaryi = np.deg2rad(0)                 # inclination of binary
+sinbin = np.sin(binaryi)                # sin of inclination of binary
+cosbin = np.cos(binaryi)                # cos of inclination of binary
 
+vorb1 = -m2/(m1+m2)*vorb                # orbital speed of primary around secondary - adjusted to account for offset from COM
 primx = xb1*np.sin(np.pi/2-binaryi)     # x position of primary - accounts for inclination
 primz = xb1*np.sin(binaryi)             # z position of primary - accounts for inclination
-primvy = vK1+vorb1*cosbin               # y velocity of primary - vy is keplerian velocity plus vorb
+primvy = vk1+vorb1*cosbin               # y velocity of primary - vy is keplerian velocity plus vorb
 primvz = -vorb1*sinbin                  # z velocity of primary - added if i > 0
 
-# secx = xb2*np.sin(np.pi/2-binaryi)     # x position of secondary - accounts for inclination
-# secz = xb2*np.sin(binaryi)             # z position of secondary - accounts for inclination
-# secvy = vK2+vorb2*cosbin               # y velocity of secondary - vy is keplerian velocity plus vorb
-# secvz = -vorb2*sinbin                  # z velocity of secondary - added if i > 0
+vorb2 = m1/(m1+m2)*vorb                 # orbital speed of secondary around primary - adjusted to account for offset from COM
+secx = xb2*np.sin(np.pi/2-binaryi)     # x position of secondary - accounts for inclination
+secz = xb2*np.sin(binaryi)             # z position of secondary - accounts for inclination
+secvy = vk2+vorb2*cosbin               # y velocity of secondary - vy is keplerian velocity plus vorb
+secvz = -vorb2*sinbin                  # z velocity of secondary - added if i > 0
 
-# impi = np.deg2rad(0)        # inclination of impactor
-# vorbi = np.sqrt(G*Msun/(rsun+b))        # orbital speed of impactor around sun
-# theta0 = y0/(rsun+b)                    # angle between impactor and line between binary COM and sun
-# stheta0 = np.sin(theta0)                # sin of theta - needed for position of impactor
-# ctheta0 = np.cos(theta0)                # cos of theta - needed for position of impactor
-# impx = (rsun+b)*ctheta0-rsun*np.cos(impi)  # x position of impactor
-# impy = (rsun+b)*stheta0*np.cos(impi)    # y position of impactor
-# impz = (rsun+b)*np.sin(impi)            # z position of impactor
-# impvx = -vorbi*stheta0                  # x velocity of impactor
-# impvy = vorbi*ctheta0                   # y velocity of impactor
+impi = np.deg2rad(0)        # inclination of impactor
+vorbi = np.sqrt(g*msun/(rsun+b))        # orbital speed of impactor around sun
+theta0 = y0/(rsun+b)                    # angle between impactor and line between binary COM and sun
+stheta0 = np.sin(theta0)                # sin of theta - needed for position of impactor
+ctheta0 = np.cos(theta0)                # cos of theta - needed for position of impactor
+impx = (rsun+b)*ctheta0-rsun*np.cos(impi)  # x position of impactor
+impy = (rsun+b)*stheta0*np.cos(impi)    # y position of impactor
+impz = (rsun+b)*np.sin(impi)            # z position of impactor
+impvx = -vorbi*stheta0                  # x velocity of impactor
+impvy = vorbi*ctheta0                   # y velocity of impactor
 
 # Cd = 2.
 # rho_g = 1e-20
@@ -91,12 +91,11 @@ primvz = -vorb1*sinbin                  # z velocity of primary - added if i > 0
 
 def setupSimulation():
     sim = rebound.Simulation()              # initialize rebound simulation
-    sim.G = G                               # set G which sets units of integrator - SI in this case
-    sim.dt = 1e-4*Pbin                      # set initial timestep of integrator - IAS15 is adaptive so this will change
+    sim.G = g                               # set G which sets units of integrator - SI in this case
+    sim.dt = 1e-4*pbin                      # set initial timestep of integrator - IAS15 is adaptive so this will change
     sim.softening = 0.1*s1                  # softening parameter which modifies potential of each particle to prevent divergences
     sim.collision = 'direct'
-    # sim.collision_resolve = 'merge'
-    sim.add(m=Msun, x=-rsun, hash="sun")
+    sim.add(m=msun, x=-rsun, hash="sun")
     sim.add(m=m1, r=s1, x=primx, z=primz, vy=primvy, vz=primvz, hash="primary")
     sim.add(m=m2, r=s2, x=secx, z=secz, vy=secvy, vz=secvz, hash="secondary")
     sim.add(m=mimp, r=simp, x=impx, y=impy, z=impz, vx=impvx, vy=impvy, hash="impactor")
@@ -104,73 +103,60 @@ def setupSimulation():
 
 sim = setupSimulation()
 
-Noutputs = 100             # number of outputs
-p, s, imp = np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3)) # position
-vp, vs, vimp = np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3)), np.zeros((Noutputs, 3)) # velocity
-totaltime = T*simp/10e3*(1/b*Rhill1)*3. # total time of simulation - adjusted for different impactor sizes and distances
-totaltime = T/100
-times = np.linspace(0.,totaltime, Noutputs) # create times for integrations
+noutputs = 10000             # number of outputs
+p, s, imp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3)) # position
+vp, vs, vimp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3)) # velocity
+totaltime = t*simp/10e3*(1/b*rhill1)*3. # total time of simulation - adjusted for different impactor sizes and distances
+totaltime = t
+times = np.linspace(0.,totaltime, noutputs) # create times for integrations
 ps = sim.particles                      # create variable containing particles in simulation
 
 all_ps = [p.hash.value for j, p in enumerate(ps)]
 timer = timed() # start timer to time simulations
-# try:
-for k, time in enumerate(times):
-    sim.integrate(time)
-    p[k] = [ps["primary"].x, ps["primary"].y, ps["primary"].z]
-    s[k] = [ps["secondary"].x, ps["secondary"].y, ps["secondary"].z]
-    imp[k] = [ps["impactor"].x, ps["impactor"].y, ps["impactor"].z]
-    vp[k] = [ps["primary"].vx, ps["primary"].vy, ps["primary"].vz]
-    vs[k] = [ps["secondary"].vx, ps["secondary"].vy, ps["secondary"].vz]
-    vimp[k] = [ps["impactor"].vx, ps["impactor"].vy, ps["impactor"].vz]
-# except rebound.Collision:
-#     collided = []
-#     for item in sim.particles:
-#         if item.lastcollision == sim.t:
-#             collided.append([sim.t, item.index, item.r, item.m, item.x, item.y, item.z, item.vx, item.vy, item.vz])
-#     collided = np.array(collided)
-    
-#     sim.collision_resolve = 'merge'
+try:
+    for k, time in enumerate(times):
+        sim.integrate(time)
+        p[k] = [ps["primary"].x, ps["primary"].y, ps["primary"].z]
+        s[k] = [ps["secondary"].x, ps["secondary"].y, ps["secondary"].z]
+        imp[k] = [ps["impactor"].x, ps["impactor"].y, ps["impactor"].z]
+        vp[k] = [ps["primary"].vx, ps["primary"].vy, ps["primary"].vz]
+        vs[k] = [ps["secondary"].vx, ps["secondary"].vy, ps["secondary"].vz]
+        vimp[k] = [ps["impactor"].vx, ps["impactor"].vy, ps["impactor"].vz]
+except rebound.Collision:
+    collided = []
+    for item in sim.particles:
+        if item.lastcollision == sim.t:
+            collided.append([sim.t, item.index, item.r, item.m, item.x, item.y, item.z, item.vx, item.vy, item.vz])
+    collided = np.array(collided) 
+    sim.collision_resolve = 'merge'
 
-#     for i, time in enumerate(times):
-#         sim.integrate(time)
-#         existing_ps = [p.hash.value for j, p in enumerate(ps)]
-#         if all_ps[1] in existing_ps:
-#             p[i] = [ps["primary"].x, ps["primary"].y, ps["primary"].z]
-#             vp[i] = [ps["primary"].vx, ps["primary"].vy, ps["primary"].vz]
-#         if all_ps[2] in existing_ps:
-#             s[i] = [ps["secondary"].x, ps["secondary"].y, ps["secondary"].z]
-#             vs[i] = [ps["secondary"].vx, ps["secondary"].vy, ps["secondary"].vz]
-#         if all_ps[3] in existing_ps:
-#             imp[i] = [ps["impactor"].x, ps["impactor"].y, ps["impactor"].z]
-#             vimp[i] = [ps["impactor"].vx, ps["impactor"].vy, ps["impactor"].vz]
-        
-    # for item in ps:
-    #     if item.lastcollision != 0:
-    #         # print(existing_ps)
-    #         print(item.lastcollision)
-    #         # order = 
-    #         print(item.index)
-    #         if item.index not in collided[:,0]:
-    #             collided[loop_order] = [item.index, item.x, item.y, item.z, item.vx, item.vy, item.vz]
-    #             loop_order += 1
-    # collided = np.array(collided)
-    # except rebound.Collision:
+    for k, time in enumerate(times):
+        sim.integrate(time)
+        existing_ps = [p.hash.value for j, p in enumerate(ps)]
+        if all_ps[1] in existing_ps:
+            p[k] = [ps["primary"].x, ps["primary"].y, ps["primary"].z]
+            vp[k] = [ps["primary"].vx, ps["primary"].vy, ps["primary"].vz]
+        if all_ps[2] in existing_ps:
+            s[k] = [ps["secondary"].x, ps["secondary"].y, ps["secondary"].z]
+            vs[k] = [ps["secondary"].vx, ps["secondary"].vy, ps["secondary"].vz]
+        if all_ps[3] in existing_ps:
+            imp[k] = [ps["impactor"].x, ps["impactor"].y, ps["impactor"].z]
+            vimp[k] = [ps["impactor"].vx, ps["impactor"].vy, ps["impactor"].vz]
         
         
 
 print(timed()-timer) # finish timer
 
-dr, dv, mu, h = np.zeros((Noutputs,3)), np.zeros((Noutputs,3)), np.zeros((Noutputs,3)), np.zeros((Noutputs,3))
+dr, dv, mu, h = np.zeros((noutputs,3)), np.zeros((noutputs,3)), np.zeros((noutputs,3)), np.zeros((noutputs,3))
 dr[:,0] = np.linalg.norm(p-s, axis=1)                # distance between primary and secondary
 dr[:,1] = np.linalg.norm(p-imp, axis=1)              # distance between primary and impactor
 dr[:,2] = np.linalg.norm(s-imp, axis=1)              # distance between secondary and impactor
 dv[:,0] = np.linalg.norm(vp-vs, axis=1)              # relative velocity between primary and secondary
 dv[:,1] = np.linalg.norm(vp-vimp, axis=1)            # relative velocity between primary and impactor
 dv[:,2] = np.linalg.norm(vs-vimp, axis=1)            # relative velocity between secondary and impactor
-mu[:,0] = G*(m1+m2)                                 # G times combined mass of primary and secondary
-mu[:,1] = G*(m1+mimp)                               # G times combined mass of primary and impactor
-mu[:,2] = G*(m2+mimp)                               # G times combined mass of secondary and impactor
+mu[:,0] = g*(m1+m2)                                 # G times combined mass of primary and secondary
+mu[:,1] = g*(m1+mimp)                               # G times combined mass of primary and impactor
+mu[:,2] = g*(m2+mimp)                               # G times combined mass of secondary and impactor
 h[:,0] = np.cross(p-s,vp-vs)[:,2]                       # angular momentum
 h[:,1] = np.cross(p-imp,vp-vimp)[:,2]
 h[:,2] = np.cross(s-imp,vs-vimp)[:,2]
@@ -179,14 +165,14 @@ semimajoraxis = mu*dr/(2*mu-dr*dv**2)                           # semi-major axi
 energy = -mu/2/semimajoraxis                                    # total energy between each pair of bodies 
 ecc = np.sqrt(1+(2*energy*h**2/mu**2))
 
-Rhill = np.array([Rhill1, rsun*(m2/Msun/3.)**(1./3.), rsun*(mimp/Msun/3.)**(1./3.)])
-Rhill_largest = np.array([np.amax([Rhill[0], Rhill[1]]), np.amax([Rhill[0], Rhill[2]]), np.amax([Rhill[1], Rhill[2]])])
-bound = np.logical_and(np.logical_and(energy < 0, np.isfinite(energy)), dr < Rhill_largest)       # bodies are bound if their energy is less than zero and they are closer together than the Hill radius
+rhill = np.array([rhill1, rsun*(m2/msun/3.)**(1./3.), rsun*(mimp/msun/3.)**(1./3.)])
+rhill_largest = np.array([np.amax([rhill[0], rhill[1]]), np.amax([rhill[0], rhill[2]]), np.amax([rhill[1], rhill[2]])])
+bound = np.logical_and(np.logical_and(energy < 0, np.isfinite(energy)), dr < rhill_largest)       # bodies are bound if their energy is less than zero and they are closer together than the Hill radius
 
-angles = -OmegaK*times
+angles = -omegak*times
 
-sp = (s-p)/Rhill1
-ip = (imp-p)/Rhill1
+sp = (s-p)/rhill1
+ip = (imp-p)/rhill1
 cosspx, cosspy = np.cos(angles)*sp[:,0], np.cos(angles)*sp[:,1]
 sinspx, sinspy = np.sin(angles)*sp[:,0], np.sin(angles)*sp[:,1]
 
@@ -198,11 +184,11 @@ sinspxdot, sinspydot = np.sin(angles)*xdot, np.sin(angles)*ydot
 x, y = cosspx-sinspy+rsun, sinspx+cosspy
 vx, vy = cosspxdot-sinspydot, sinspxdot+cosspydot
 
-# plt.plot(ecc[:,0])
+plt.plot(ecc[:,0])
 
-# Cj = n**2*(x**2+y**2) + 2*(mu[:,0]/dr[:,0] + mu[:,1]/dr[:,1]) - vx**2 - vy**2 # jacobian constant
-# %%
-lim = 4
+# cj = n**2*(x**2+y**2) + 2*(mu[:,0]/dr[:,0] + mu[:,1]/dr[:,1]) - vx**2 - vy**2 # jacobian constant
+#%%
+lim = 1
 fig, axes = plt.subplots(1, figsize=(9, 9))
 axes.set_xlabel("$x/R_\mathrm{h}$")
 axes.set_ylabel("$y/R_\mathrm{h}$")
@@ -218,13 +204,13 @@ text = axes.text(-lim+(lim/10), lim-(lim/10), '', fontsize=15)
 # axes.grid()
 axes.legend()
 
-ref = np.zeros((Noutputs,3))
+ref = np.zeros((noutputs,3))
 ref[:,0] = -rsun + rsun*np.cos(angles)
 ref[:,1] = 0 - rsun*np.sin(angles)
 
-pref = (p-ref)/Rhill1
-sref = (s-ref)/Rhill1
-impref = (imp-ref)/Rhill1
+pref = (p-ref)/rhill1
+sref = (s-ref)/rhill1
+impref = (imp-ref)/rhill1
 cospx, cospy = np.cos(angles)*pref[:,0], np.cos(angles)*pref[:,1]
 cossx, cossy = np.cos(angles)*sref[:,0], np.cos(angles)*sref[:,1]
 cosix, cosiy = np.cos(angles)*impref[:,0], np.cos(angles)*impref[:,1]
@@ -232,12 +218,12 @@ sinpx, sinpy = np.sin(angles)*pref[:,0], np.sin(angles)*pref[:,1]
 sinsx, sinsy = np.sin(angles)*sref[:,0], np.sin(angles)*sref[:,1]
 sinix, siniy = np.sin(angles)*impref[:,0], np.sin(angles)*impref[:,1]
 
-Rhillprim = rsun*(m1/Msun/3.)**(1./3.)/Rhill1
-Rhillsec = rsun*(m2/Msun/3.)**(1./3.)/Rhill1
-Rhillimp = rsun*(mimp/Msun/3.)**(1./3.)/Rhill1
-primaryhill = plt.Circle((0,0), Rhillprim, fc="none", ec="tab:orange")
-secondaryhill = plt.Circle((0,0), Rhillsec, fc="none", ec="tab:blue")
-impactorhill = plt.Circle((0,0), Rhillimp, fc="none", ec="tab:green")
+rhillprim = rsun*(m1/msun/3.)**(1./3.)/rhill1
+rhillsec = rsun*(m2/msun/3.)**(1./3.)/rhill1
+rhillimp = rsun*(mimp/msun/3.)**(1./3.)/rhill1
+primaryhill = plt.Circle((0,0), rhillprim, fc="none", ec="tab:orange")
+secondaryhill = plt.Circle((0,0), rhillsec, fc="none", ec="tab:blue")
+impactorhill = plt.Circle((0,0), rhillimp, fc="none", ec="tab:green")
 
 def init():
     axes.add_patch(primaryhill)
@@ -258,7 +244,7 @@ def animate(i):
     text.set_text('{} Years'.format(int(times[i]/(year))))
     return primarydot, secondarydot, impactordot, primaryline, secondaryline, impactorline, text, primaryhill, secondaryhill, impactorhill
 
-anim = animation.FuncAnimation(fig, animate, init_func=init,  frames=Noutputs, interval=1, blit=True)
+anim = animation.FuncAnimation(fig, animate, init_func=init,  frames=noutputs, interval=1, blit=True)
 # %%
 plt.rcParams['animation.ffmpeg_path'] = '/usr/bin/ffmpeg'
 

@@ -15,7 +15,7 @@ m2 = 4./3.*np.pi*dens2*s2**3                # mass of secondary calculated from 
 rsun = 44.*au                                  # distance of centre of mass of binary from the sun 
 omegak = np.sqrt(g*msun/rsun**3)       # keplerian frequency at this distance
 rhill = rsun*(m1/msun/3.)**(1./3.)        # Hill radius of primary
-rbin = 0.4*rhill                            # separation of binary is 0.5 of the Hill radius
+rbin = 0.4*rhill                            # separation of binary
 vorb = np.sqrt(g*(m1+m2)/rbin)              # orbital speed of primary and secondary around each other
 vshear = -1.5*omegak*rbin                   # calculates the change in velocity required to keep a body in a circular orbit
 pbin = 2.*np.pi/np.sqrt(g*(m1+m2)/rbin**3)  # orbital period of primary and secondary around each other
@@ -55,8 +55,8 @@ for j in range(len(b)):             # loop through each impact parameter
         vshear1 = -1.5*omegak*xb1               # keplerian shear of primary
         vshear2 = -1.5*omegak*xb2               # keplerian shear of secondary
         
-        vK1 = np.sqrt(g*(msun+m1)/(rsun+xb1))      # orbital speed of primary around sun
-        vK2 = np.sqrt(g*(msun+m2)/(rsun+xb2))      # inital orbital speed of secondary around sun
+        vK1 = np.sqrt(g*msun/(rsun+xb1))      # orbital speed of primary around sun
+        vK2 = np.sqrt(g*msun/(rsun+xb2))      # inital orbital speed of secondary around sun
         
         vorb1 = -m2/(m1+m2)*vorb                # orbital speed of primary around secondary - adjusted to account for offset from COM
         vorb2 = m1/(m1+m2)*vorb                 # orbital speed of secondary around primary - adjusted to account for offset from COM
@@ -124,7 +124,7 @@ for j in range(len(b)):             # loop through each impact parameter
                     collided.append([sim.t, item.index, item.r, item.m, item.x, item.y, item.z, item.vx, item.vy, item.vz])
             collided = np.array(collided)
             df_coll = pd.DataFrame(collided)
-            df_coll.to_csv(f'./results/collision_{sim_name}__b-{np.round(b[j]/rhill, 1)}__r-{np.round(simp[i]/1e3, 1)}.csv', header=coll_headers)
+            df_coll.to_csv(f'./results/collision_{sim_name}_b-{np.round(b[j]/rhill, 1)}_r-{np.round(simp[i]/1e3, 1)}.csv', header=coll_headers)
  
             sim.collision_resolve = 'merge'
 

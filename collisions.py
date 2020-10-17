@@ -11,12 +11,12 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-sim_name = 'COLL'
-b = '0.3'
-r = '1001.0'
+sim_name = 'OCT15_3'
+b = '3.2'
+r = '160.0'
 
 coll_data = pd.read_csv(f'./results/collision_{sim_name}__b-{b}__r-{r}.csv')
-data = pd.read_csv(f'./results/{sim_name}__b-{b}__r-{r}.csv')
+data = pd.read_csv(f'./results/{sim_name}_b-{b}_r-{r}.csv')
 noutputs = len(data)
 times = data['time'].to_numpy()
 
@@ -31,22 +31,33 @@ g = 6.67428e-11                             # gravitational constanct in SI unit
 au = 1.496e11                               # astronomical unit    
 msun = 1.9891e30                            # mass of sun
 rsun = 44.*au                               # distance of centre of mass of binary from the sun 
-omegaK = np.sqrt(g*msun/rsun**3)            # keplerian frequency at this distance
+omegak = np.sqrt(g*msun/rsun**3)            # keplerian frequency at this distance
 rhill = rsun*(m/msun/3.)**(1./3.)           # Hill radius of each body
 vk = np.sqrt(g*msun/rsun)                   # keplerian velocity at this distance
-angles = -omegaK*times                      # angles of reference point at each time
+angles = -omegak*times                      # angles of reference point at each time
 
-v_pos = r[0]-r[1]
-v_dir = v[0]-v[1]
-dr = np.linalg.norm(v_pos)              # distance between bodies
-dv = np.linalg.norm(v_dir)              # collision speed
+position_vector = r[0]-r[1]
+velocity_vector = v[0]-v[1]
+dr = np.linalg.norm(position_vector)              # distance between bodies
+dv = np.linalg.norm(velocity_vector)              # collision speed
 
-n = v_dir/dv
+collision_unit_vector = -position_vector/dr
+collision_speed = np.dot(velocity_vector,collision_unit_vector)
 
-b = np.linalg.norm(v_pos-np.dot(v_pos,n)*n)/1e3
+n = velocity_vector/dv
 
-v_e = np.sqrt(2*g*m/radius)     # escape speed for each body
-fragmentation = dr > v_e        # collision causes fragmentation if speed greater than escape speed
+b = np.linalg.norm(position_vector-np.dot(position_vector,n)*n)
+theta = np.arcsin(b/dr)
+# theta = np.rad2deg(theta)
+
+collision_energy = 0.5*m*collision_speed**2
+
+gravitational_binding_energy = 3*g*m**2/(5*radius)
+
+obliquity = b/dr
+
+escape_speed = np.sqrt(2*g*m/radius)     # escape speed for each body
+fragmentation = collision_speed > escape_speed        # collision causes fragmentation if speed greater than escape speed
 
 
 # %%
