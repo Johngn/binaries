@@ -1,17 +1,34 @@
 # %%
+import re
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+from glob import glob
 
 G = 6.67428e-11
 au = 1.496e11
 rsun = 44.*au
 Msun = 1.9891e30
 
-sim_name = 'OCT15_4'
+sim_name = 'OCT15_3'
 
-data = pd.read_csv(f'./results/{sim_name}_initial.csv')
+data = pd.read_csv(f'./results/{sim_name}_final.csv')
+collisions = glob(f'./results/collision_{sim_name}*')
+coll_params = np.zeros((len(collisions), 3))
+
+for i, collision in enumerate(collisions):
+    params = re.findall('[0-9]+\.[0-9]+', collision)
+    params = [float(param) for param in params]
+    
+    collided_bodies = pd.read_csv(collision)['body'].values
+    if collided_bodies[0] == 1 and collided_bodies[1] == 2:
+        params.append(1)
+    if collided_bodies[0] == 1 and collided_bodies[1] == 3:
+        params.append(2)
+    if collided_bodies[0] == 2 and collided_bodies[1] == 3:
+        params.append(3)
+    coll_params[i] = params
 
 times = data['time'].to_numpy()
 b = data['b'].to_numpy()
@@ -48,15 +65,18 @@ energy = -mu/2/a
 e = np.sqrt(1 + (2*energy*h**2 / mu**2))
 
 bound = np.logical_and(np.logical_and(energy < 0, np.isfinite(energy)), R < Rhill_largest)
-collision = R[:,0] == 0
+# collision = R[:,0] == 0
 
 plt.figure(figsize=(8,6))
 s = 100
 plt.scatter(simp, b, s=1, marker="x", c="black")
-plt.scatter(simp[bound[:,0]], b[bound[:,0]], label='primary-secondary', s=s)
-plt.scatter(simp[bound[:,1]], b[bound[:,1]], label='primary-impactor', s=s)
-plt.scatter(simp[bound[:,2]], b[bound[:,2]], label='secondary-impactor', s=s)
-plt.scatter(simp[collision], b[collision], label='collision', s=s)
+plt.scatter(simp[bound[:,0]], b[bound[:,0]], label='primary-secondary', s=s, c="tab:blue")
+plt.scatter(simp[bound[:,1]], b[bound[:,1]], label='primary-impactor', s=s, c="tab:orange")
+plt.scatter(simp[bound[:,2]], b[bound[:,2]], label='secondary-impactor', s=s, c="tab:green")
+# plt.scatter(simp[collision], b[collision], label='collision', s=s)
+plt.scatter(coll_params[coll_params[:,2] == 1][:,1], coll_params[coll_params[:,2] == 1][:,0], marker='x', s=s*2, c="tab:blue")
+plt.scatter(coll_params[coll_params[:,2] == 2][:,1], coll_params[coll_params[:,2] == 2][:,0], marker='x', s=s*2, c="tab:orange")
+plt.scatter(coll_params[coll_params[:,2] == 3][:,1], coll_params[coll_params[:,2] == 3][:,0], marker='x', s=s*2, c="tab:green")
 plt.xlabel("Impact parameter (Hill radii)")
 plt.ylabel("Impactor radius (km)")
 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=3, fancybox=True, shadow=True)

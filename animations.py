@@ -17,9 +17,9 @@ T = 2.*np.pi/np.sqrt(G*(Msun)/rsun**3)      # orbital period of binary around th
 n = 2*np.pi/T                               # mean motion of binary around the sun
 year = 365.25*24.*60.*60.                   # number of seconds in a year
 
-sim_name = 'OCT15_3'
-b = '2.4'
-r = '120.0'
+sim_name = 'OCT15_4'
+b = '3.2'
+r = '140.0'
 
 data = pd.read_csv(f'./results/{sim_name}_b-{b}_r-{r}.csv')
 Noutputs = len(data)                             # number of outputs for plotting
@@ -91,7 +91,7 @@ sinsx, sinsy = np.sin(angles)*sref[:,0], np.sin(angles)*sref[:,1]       # sin of
 sinix, siniy = np.sin(angles)*impref[:,0], np.sin(angles)*impref[:,1]   # sin of reference angles times relative location of impactor
 
 '''2D ANIMATION OF OUTCOME OF SIMULATION'''
-lim = 5
+lim = 15
 fig, axes = plt.subplots(1, figsize=(9, 9))
 axes.set_xlabel("$x/R_\mathrm{h}$")
 axes.set_ylabel("$y/R_\mathrm{h}$")
@@ -171,7 +171,7 @@ def animate(i):
     text.set_text('{} Years'.format(int(times[i]/(year))))
     return primarydot, secondarydot, impactordot, primaryline, secondaryline, impactorline, text
 
-anim = animation.FuncAnimation(fig, animate, frames=len(data), interval=1)
+anim = animation.FuncAnimation(fig, animate, frames=Noutputs, interval=1)
 # %%
 '''2D PLOT OF OUTCOME OF SIMULATION'''
 lim = 10
