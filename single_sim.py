@@ -13,7 +13,7 @@ au = 1.496e11                               # astronomical unit
 msun = 1.9891e30                            # mass of sun
 year = 365.25*24.*60.*60.                   # number of seconds in a year
 s1, s2 = 100e3, 100e3                         # radius of primary and of secondary
-dens1, dens2, densimp = 1000., 1000., 1000. # density of primary, secondary, and impactor 
+dens1, dens2, densimp = 1000., 1000., 0. # density of primary, secondary, and impactor 
 m1 = 4./3.*np.pi*dens1*s1**3                # mass of primary calculated from density and radius
 m2 = 4./3.*np.pi*dens2*s2**3                # mass of secondary calculated from density and radius
 rsun = 44.*au                                  # distance of centre of mass of binary from the sun 
@@ -27,10 +27,10 @@ t = 2.*np.pi/np.sqrt(g*msun/rsun**3)         # orbital period of binary around t
 n = 2*np.pi/t                               # mean motion of binary around the sun
 vk = np.sqrt(g*msun/rsun)      # orbital speed of primary around sun
 simp = 100e3 # impactor radius
-b = 1.5*rhill1 # impact parameter
+b = 15*rhill1 # impact parameter
         
 y0 = rhill1*simp/1e3                  # initial y distance of impactor from binary - larger for larger impactors
-y0 = 4*rhill1
+y0 = 0
 mimp = 4./3.*np.pi*densimp*simp**3   # mass of impactor
 
 # vshear1 = -1.5*omegak*xb1               # keplerian shear of primary
