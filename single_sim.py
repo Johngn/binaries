@@ -12,7 +12,7 @@ g = 6.67428e-11                             # gravitational constanct in SI unit
 au = 1.496e11                               # astronomical unit    
 msun = 1.9891e30                            # mass of sun
 year = 365.25*24.*60.*60.                   # number of seconds in a year
-s1, s2 = 100e3, 0.1e3                         # radius of primary and of secondary
+s1, s2 = 100e3, 100e3                         # radius of primary and of secondary
 dens1, dens2, densimp = 1000., 1000., 1000. # density of primary, secondary, and impactor 
 m1 = 4./3.*np.pi*dens1*s1**3                # mass of primary calculated from density and radius
 m2 = 4./3.*np.pi*dens2*s2**3                # mass of secondary calculated from density and radius
@@ -21,41 +21,39 @@ omegak = np.sqrt(g*msun/rsun**3)       # keplerian frequency at this distance
 rhill1 = rsun*(m1/msun/3.)**(1./3.)        # Hill radius of primary
 rbin = 0.3*rhill1                            # separation of binary
 vorb = np.sqrt(g*(m1+m2)/rbin)              # orbital speed of primary and secondary around each other
-vshear = -1.5*omegak*rbin                   # calculates the change in velocity required to keep a body in a circular orbit
+# vshear = -1.5*omegak*rbin                   # calculates the change in velocity required to keep a body in a circular orbit
 pbin = 2.*np.pi/np.sqrt(g*(m1+m2)/rbin**3)  # orbital period of primary and secondary around each other
 t = 2.*np.pi/np.sqrt(g*msun/rsun**3)         # orbital period of binary around the sun
 n = 2*np.pi/t                               # mean motion of binary around the sun
-
-simp = 1e3 # impactor radius
-b = 400000*rhill1 # impact parameter
+vk = np.sqrt(g*msun/rsun)      # orbital speed of primary around sun
+simp = 100e3 # impactor radius
+b = 1.5*rhill1 # impact parameter
         
 y0 = rhill1*simp/1e3                  # initial y distance of impactor from binary - larger for larger impactors
-y0 = 0
+y0 = 4*rhill1
 mimp = 4./3.*np.pi*densimp*simp**3   # mass of impactor
 
-xb1 = -m2/(m1+m2)*rbin                  # slightly adjust initial x position of primary to keep centre of mass of binary at r
-xb2 = m1/(m1+m2)*rbin                   # slightly adjust initial x position of secondary to keep centre of mass of binary at r
+# vshear1 = -1.5*omegak*xb1               # keplerian shear of primary
+# vshear2 = -1.5*omegak*xb2               # keplerian shear of secondary
 
-vshear1 = -1.5*omegak*xb1               # keplerian shear of primary
-vshear2 = -1.5*omegak*xb2               # keplerian shear of secondary
-
-vk1 = np.sqrt(g*(msun+m1)/(rsun+xb1))      # orbital speed of primary around sun
-vk2 = np.sqrt(g*(msun+m2)/(rsun+xb2))      # inital orbital speed of secondary around sun
 
 binaryi = np.deg2rad(0)                 # inclination of binary
 sinbin = np.sin(binaryi)                # sin of inclination of binary
 cosbin = np.cos(binaryi)                # cos of inclination of binary
 
+xb1 = -m2/(m1+m2)*rbin                  # slightly adjust initial x position of primary to keep centre of mass of binary at r
 vorb1 = -m2/(m1+m2)*vorb                # orbital speed of primary around secondary - adjusted to account for offset from COM
-primx = xb1*np.sin(np.pi/2-binaryi)     # x position of primary - accounts for inclination
+primx = xb1*np.cos(binaryi)     # x position of primary - accounts for inclination
 primz = xb1*np.sin(binaryi)             # z position of primary - accounts for inclination
-primvy = vk1+vorb1*cosbin               # y velocity of primary - vy is keplerian velocity plus vorb
+primvy = vk+vorb1*cosbin               # y velocity of primary - vy is keplerian velocity plus vorb
 primvz = -vorb1*sinbin                  # z velocity of primary - added if i > 0
 
+xb2 = m1/(m1+m2)*rbin                   # slightly adjust initial x position of secondary to keep centre of mass of binary at r
+vk2 = np.sqrt(g*(msun)/(rsun))      # inital orbital speed of secondary around sun
 vorb2 = m1/(m1+m2)*vorb                 # orbital speed of secondary around primary - adjusted to account for offset from COM
-secx = xb2*np.sin(np.pi/2-binaryi)     # x position of secondary - accounts for inclination
+secx = xb2*np.cos(binaryi)     # x position of secondary - accounts for inclination
 secz = xb2*np.sin(binaryi)             # z position of secondary - accounts for inclination
-secvy = vk2+vorb2*cosbin               # y velocity of secondary - vy is keplerian velocity plus vorb
+secvy = vk+vorb2*cosbin               # y velocity of secondary - vy is keplerian velocity plus vorb
 secvz = -vorb2*sinbin                  # z velocity of secondary - added if i > 0
 
 impi = np.deg2rad(0)        # inclination of impactor
@@ -96,22 +94,23 @@ def setupSimulation():
     sim.softening = 0.1*s1                  # softening parameter which modifies potential of each particle to prevent divergences
     sim.collision = 'direct'
     sim.add(m=msun, x=-rsun, hash="sun")
-    sim.add(m=m1, r=s1, x=primx, z=primz, vy=primvy, vz=primvz, hash="primary")
-    sim.add(m=m2, r=s2, x=secx, z=secz, vy=secvy, vz=secvz, hash="secondary")
+    sim.add(m=m1, r=s1, x=primx, vy=primvy, hash="primary")
+    sim.add(m=m2, r=s2, x=secx, vy=secvy, hash="secondary")
     sim.add(m=mimp, r=simp, x=impx, y=impy, z=impz, vx=impvx, vy=impvy, hash="impactor")
     return sim
 
 sim = setupSimulation()
 
-noutputs = 10000             # number of outputs
+noutputs = 1000             # number of outputs
 p, s, imp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3)) # position
 vp, vs, vimp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3)) # velocity
-totaltime = t*simp/10e3*(1/b*rhill1)*3. # total time of simulation - adjusted for different impactor sizes and distances
+# totaltime = t*simp/10e3*(1/b*rhill1)*3. # total time of simulation - adjusted for different impactor sizes and distances
 totaltime = t
 times = np.linspace(0.,totaltime, noutputs) # create times for integrations
 ps = sim.particles                      # create variable containing particles in simulation
 
 all_ps = [p.hash.value for j, p in enumerate(ps)]
+
 timer = timed() # start timer to time simulations
 try:
     for k, time in enumerate(times):
@@ -128,6 +127,7 @@ except rebound.Collision:
         if item.lastcollision == sim.t:
             collided.append([sim.t, item.index, item.r, item.m, item.x, item.y, item.z, item.vx, item.vy, item.vz])
     collided = np.array(collided) 
+    
     sim.collision_resolve = 'merge'
 
     for k, time in enumerate(times):
@@ -142,9 +142,6 @@ except rebound.Collision:
         if all_ps[3] in existing_ps:
             imp[k] = [ps["impactor"].x, ps["impactor"].y, ps["impactor"].z]
             vimp[k] = [ps["impactor"].vx, ps["impactor"].vy, ps["impactor"].vz]
-        
-        
-
 print(timed()-timer) # finish timer
 
 dr, dv, mu, h = np.zeros((noutputs,3)), np.zeros((noutputs,3)), np.zeros((noutputs,3)), np.zeros((noutputs,3))
@@ -164,12 +161,11 @@ h[:,2] = np.cross(s-imp,vs-vimp)[:,2]
 semimajoraxis = mu*dr/(2*mu-dr*dv**2)                           # semi-major axis between each pair of bodies
 energy = -mu/2/semimajoraxis                                    # total energy between each pair of bodies 
 ecc = np.sqrt(1+(2*energy*h**2/mu**2))
+angles = -omegak*times
 
 rhill = np.array([rhill1, rsun*(m2/msun/3.)**(1./3.), rsun*(mimp/msun/3.)**(1./3.)])
 rhill_largest = np.array([np.amax([rhill[0], rhill[1]]), np.amax([rhill[0], rhill[2]]), np.amax([rhill[1], rhill[2]])])
 bound = np.logical_and(np.logical_and(energy < 0, np.isfinite(energy)), dr < rhill_largest)       # bodies are bound if their energy is less than zero and they are closer together than the Hill radius
-
-angles = -omegak*times
 
 sp = (s-p)/rhill1
 ip = (imp-p)/rhill1
@@ -184,11 +180,11 @@ sinspxdot, sinspydot = np.sin(angles)*xdot, np.sin(angles)*ydot
 x, y = cosspx-sinspy+rsun, sinspx+cosspy
 vx, vy = cosspxdot-sinspydot, sinspxdot+cosspydot
 
-plt.plot(ecc[:,0])
+# plt.plot(ecc[:,0])
 
 # cj = n**2*(x**2+y**2) + 2*(mu[:,0]/dr[:,0] + mu[:,1]/dr[:,1]) - vx**2 - vy**2 # jacobian constant
-#%%
-lim = 1
+
+lim = 4
 fig, axes = plt.subplots(1, figsize=(9, 9))
 axes.set_xlabel("$x/R_\mathrm{h}$")
 axes.set_ylabel("$y/R_\mathrm{h}$")
@@ -201,7 +197,7 @@ primarydot, = axes.plot([], [], marker="o", ms=7, c="tab:orange")
 secondarydot, = axes.plot([], [], marker="o", ms=7, c="tab:blue")
 impactordot, = axes.plot([], [], marker="o", ms=7, c="tab:green")
 text = axes.text(-lim+(lim/10), lim-(lim/10), '', fontsize=15)
-# axes.grid()
+axes.grid()
 axes.legend()
 
 ref = np.zeros((noutputs,3))
@@ -231,20 +227,20 @@ def init():
     axes.add_patch(impactorhill)
     return primaryhill, secondaryhill, impactorhill,
 
-def animate(i):
+def animate(i):    
     primaryline.set_data(cospx[0:i]-sinpy[0:i], sinpx[0:i]+cospy[0:i])
     secondaryline.set_data(cossx[0:i]-sinsy[0:i], sinsx[0:i]+cossy[0:i])
     impactorline.set_data(cosix[0:i]-siniy[0:i], sinix[0:i]+cosiy[0:i])
     primarydot.set_data(cospx[i]-sinpy[i], sinpx[i]+cospy[i])
-    secondarydot.set_data(cossx[i]-sinsy[i], sinsx[i]+cossy[i])
+    secondarydot.set_data(cossx[i]-sinsy[i], sinsx[i]+cossy[i])    
     impactordot.set_data(cosix[i]-siniy[i], sinix[i]+cosiy[i])    
     primaryhill.center = (cospx[i]-sinpy[i], sinpx[i]+cospy[i])
     secondaryhill.center = (cossx[i]-sinsy[i], sinsx[i]+cossy[i])
     impactorhill.center = (cosix[i]-siniy[i], sinix[i]+cosiy[i])
     text.set_text('{} Years'.format(int(times[i]/(year))))
-    return primarydot, secondarydot, impactordot, primaryline, secondaryline, impactorline, text, primaryhill, secondaryhill, impactorhill
+    return primarydot, secondarydot, impactordot, primaryline, secondaryline, impactorline, primaryhill, secondaryhill, impactorhill, text
 
-anim = animation.FuncAnimation(fig, animate, init_func=init,  frames=noutputs, interval=1, blit=True)
+anim = animation.FuncAnimation(fig, animate, init_func=init, frames=noutputs, interval=1, blit=True)
 # %%
 plt.rcParams['animation.ffmpeg_path'] = '/usr/bin/ffmpeg'
 
@@ -270,7 +266,7 @@ impactordot, = axes.plot([], [], [], marker="o", ms=8, c="tab:green")
 text = axes.text(-lim+(lim/10), lim-(lim/10), lim-(lim/10), '', fontsize=15)
 axes.legend()
 
-angles = -OmegaK*times
+angles = -omegak*times
 cosspx, cosspy = np.cos(angles)*sp[:,0], np.cos(angles)*sp[:,1]
 cosipx, cosipy = np.cos(angles)*ip[:,0], np.cos(angles)*ip[:,1]
 sinspx, sinspy = np.sin(angles)*sp[:,0], np.sin(angles)*sp[:,1]
@@ -292,7 +288,7 @@ def animate(i):
     text.set_text('{} Years'.format(int(times[i]/(year))))
     return primarydot, secondarydot, impactordot, primaryline, secondaryline, impactorline, text
 
-anim = animation.FuncAnimation(fig, animate, frames=Noutputs, interval=1, blit=True)
+anim = animation.FuncAnimation(fig, animate, frames=noutputs, interval=1, blit=True)
 # anim.save(f'{path}/videos/3D.mp4')
 # %%
 lim = 1

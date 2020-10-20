@@ -17,12 +17,13 @@ omegak = np.sqrt(g*msun/rsun**3)       # keplerian frequency at this distance
 rhill = rsun*(m1/msun/3.)**(1./3.)        # Hill radius of primary
 rbin = 0.4*rhill                            # separation of binary
 vorb = np.sqrt(g*(m1+m2)/rbin)              # orbital speed of primary and secondary around each other
-vshear = -1.5*omegak*rbin                   # calculates the change in velocity required to keep a body in a circular orbit
+# vshear = -1.5*omegak*rbin                   # calculates the change in velocity required to keep a body in a circular orbit
 pbin = 2.*np.pi/np.sqrt(g*(m1+m2)/rbin**3)  # orbital period of primary and secondary around each other
 t = 2.*np.pi/np.sqrt(g*msun/rsun**3)         # orbital period of binary around the sun
 n = 2*np.pi/t                               # mean motion of binary around the sun
 mu1 = g*msun                                # mu of a body is G times its mass          
 mu2 = g*m1
+vk = np.sqrt(g*msun/rsun)
 
 binaryi = np.deg2rad(0)     # inclination of binary
 impi = np.deg2rad(0)        # inclination of impactor
@@ -39,10 +40,10 @@ headers = ['time','b','imp radius',
            'mass imp','x imp','y imp','z imp','vx imp','vy imp','vz imp',]
 coll_headers = ['time','body','r','m','x','y','z','vx','vy','vz']
 
-sim_name = "OCT13"
+sim_name = "OCT20"
 
-simp = np.arange(100e3,200e3,10e3) # create range of impactor sizes to loop through
-b = np.arange(2,6.5,0.5)*rhill # create range of impact parameters to loop through
+simp = np.arange(100e3,200e3,50e3) # create range of impactor sizes to loop through
+b = np.arange(2,6.5,1.5)*rhill # create range of impact parameters to loop through
 
 timer = timed() # start timer to time simulations
 
@@ -51,26 +52,20 @@ for j in range(len(b)):             # loop through each impact parameter
         mimp = 4./3.*np.pi*densimp*simp[i]**3   # mass of impactor
         xb1 = -m2/(m1+m2)*rbin                  # slightly adjust initial x position of primary to keep centre of mass of binary at r
         xb2 = m1/(m1+m2)*rbin                   # slightly adjust initial x position of secondary to keep centre of mass of binary at r
-        
-        vshear1 = -1.5*omegak*xb1               # keplerian shear of primary
-        vshear2 = -1.5*omegak*xb2               # keplerian shear of secondary
-        
-        vK1 = np.sqrt(g*msun/(rsun+xb1))      # orbital speed of primary around sun
-        vK2 = np.sqrt(g*msun/(rsun+xb2))      # inital orbital speed of secondary around sun
-        
+
         vorb1 = -m2/(m1+m2)*vorb                # orbital speed of primary around secondary - adjusted to account for offset from COM
         vorb2 = m1/(m1+m2)*vorb                 # orbital speed of secondary around primary - adjusted to account for offset from COM
         sinbin = np.sin(binaryi)                # sin of inclination of binary
         cosbin = np.cos(binaryi)                # cos of inclination of binary
         
         primx = xb1*np.sin(np.pi/2-binaryi)     # x position of primary - accounts for inclination
-        primz = xb1*np.sin(binaryi)             # z position of primary - accounts for inclination
-        primvy = vK1+vorb1*cosbin               # y velocity of primary - vy is keplerian velocity plus vorb
+        primz = xb1*sinbin             # z position of primary - accounts for inclination
+        primvy = vk+vorb1*cosbin               # y velocity of primary - vy is keplerian velocity plus vorb
         primvz = -vorb1*sinbin                  # z velocity of primary - added if i > 0
         
         secx = xb2*np.sin(np.pi/2-binaryi)     # x position of secondary - accounts for inclination
-        secz = xb2*np.sin(binaryi)             # z position of secondary - accounts for inclination
-        secvy = vK2+vorb2*cosbin               # y velocity of secondary - vy is keplerian velocity plus vorb
+        secz = xb2*sinbin             # z position of secondary - accounts for inclination
+        secvy = vk+vorb2*cosbin               # y velocity of secondary - vy is keplerian velocity plus vorb
         secvz = -vorb2*sinbin                  # z velocity of secondary - added if i > 0
         
         y0 = rhill*simp[i]/s1*2.5 * s1/100e3  *b[j]/rhill               # initial y distance of impactor from binary - larger for larger impactors
@@ -124,7 +119,7 @@ for j in range(len(b)):             # loop through each impact parameter
                     collided.append([sim.t, item.index, item.r, item.m, item.x, item.y, item.z, item.vx, item.vy, item.vz])
             collided = np.array(collided)
             df_coll = pd.DataFrame(collided)
-            df_coll.to_csv(f'./results/collision_{sim_name}_b-{np.round(b[j]/rhill, 1)}_r-{np.round(simp[i]/1e3, 1)}.csv', header=coll_headers)
+            df_coll.to_csv(f'./results/collisions/collision_{sim_name}_b-{np.round(b[j]/rhill, 1)}_r-{np.round(simp[i]/1e3, 1)}.csv', header=coll_headers)
  
             sim.collision_resolve = 'merge'
 
@@ -165,6 +160,6 @@ for j in range(len(b)):             # loop through each impact parameter
 print(timed()-timer) # finish timer
 
 df = pd.DataFrame(initial)                              # create dataframe of initial values
-df.to_csv(f'./results/{sim_name}_initial.csv', header=headers)     # write initial values to csv
+df.to_csv(f'./results/sims/{sim_name}_initial.csv', header=headers)     # write initial values to csv
 df = pd.DataFrame(final)                                # create dataframe of final values
-df.to_csv(f'./results/{sim_name}_final.csv', header=headers)       # write final values to csv
+df.to_csv(f'./results/sims/{sim_name}_final.csv', header=headers)       # write final values to csv

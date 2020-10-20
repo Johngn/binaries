@@ -11,7 +11,7 @@ au = 1.496e11
 rsun = 44.*au
 Msun = 1.9891e30
 
-sim_name = 'OCT15_3'
+sim_name = 'OCT20'
 
 data = pd.read_csv(f'./results/{sim_name}_final.csv')
 collisions = glob(f'./results/collision_{sim_name}*')
