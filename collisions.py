@@ -16,11 +16,6 @@ b = '3.2'
 r = '160.0'
 
 coll_data = pd.read_csv(f'./results/collision_{sim_name}__b-{b}__r-{r}.csv')
-data = pd.read_csv(f'./results/{sim_name}_b-{b}_r-{r}.csv')
-noutputs = len(data)
-times = data['time'].to_numpy()
-
-coll_time = coll_data['time'].to_numpy()
 bodies = coll_data['body'].to_numpy()
 radius = coll_data['r'].to_numpy()
 m = coll_data['m'].to_numpy()
@@ -28,13 +23,6 @@ r = coll_data[['x','y','z']].to_numpy()
 v = coll_data[['vx','vy','vz']].to_numpy()
 
 g = 6.67428e-11                             # gravitational constanct in SI units
-au = 1.496e11                               # astronomical unit    
-msun = 1.9891e30                            # mass of sun
-rsun = 44.*au                               # distance of centre of mass of binary from the sun 
-omegak = np.sqrt(g*msun/rsun**3)            # keplerian frequency at this distance
-rhill = rsun*(m/msun/3.)**(1./3.)           # Hill radius of each body
-vk = np.sqrt(g*msun/rsun)                   # keplerian velocity at this distance
-angles = -omegak*times                      # angles of reference point at each time
 
 position_vector = r[0]-r[1]
 velocity_vector = v[0]-v[1]
@@ -61,7 +49,16 @@ fragmentation = collision_speed > escape_speed        # collision causes fragmen
 
 
 # %%
-
+data = pd.read_csv(f'./results/{sim_name}_b-{b}_r-{r}.csv')
+noutputs = len(data)
+times = data['time'].to_numpy()
+coll_time = coll_data['time'].to_numpy()
+au = 1.496e11                               # astronomical unit
+msun = 1.9891e30                            # mass of sun
+rsun = 44.*au                               # distance of centre of mass of binary from the sun
+omegak = np.sqrt(g*msun/rsun**3)            # keplerian frequency at this distance
+vk = np.sqrt(g*msun/rsun)                   # keplerian velocity at this distance
+angles = -omegak*times                      # angles of reference point at each time
 theta = -omegaK*coll_time[0]                # angle at which collision occured
 vref = np.array([np.sin(theta),np.cos(theta),0])*vk
 
