@@ -11,11 +11,11 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-sim_name = 'OCT15_3'
-b = '3.2'
-r = '160.0'
+sim_name = 'OCT24'
+b = '2.0'
+r = '1500.0'
 
-coll_data = pd.read_csv(f'./results/collision_{sim_name}__b-{b}__r-{r}.csv')
+coll_data = pd.read_csv(f'./results/collisions/collision_{sim_name}_b-{b}_r-{r}.csv')
 bodies = coll_data['body'].to_numpy()
 radius = coll_data['r'].to_numpy()
 m = coll_data['m'].to_numpy()
@@ -29,20 +29,30 @@ velocity_vector = v[0]-v[1]
 dr = np.linalg.norm(position_vector)              # distance between bodies
 dv = np.linalg.norm(velocity_vector)              # collision speed
 
+position_unit_vector = position_vector/np.linalg.norm(position_vector)
+
 collision_unit_vector = -position_vector/dr
 collision_speed = np.dot(velocity_vector,collision_unit_vector)
 
 n = velocity_vector/dv
 
-b = np.linalg.norm(position_vector-np.dot(position_vector,n)*n)
-theta = np.arcsin(b/dr)
+B = np.linalg.norm(position_vector-np.dot(position_vector,n)*n)
+theta = np.arcsin(B/dr)
 # theta = np.rad2deg(theta)
 
-collision_energy = 0.5*m*collision_speed**2
+M_tot = m[0]+m[1]
+mu = m[0]*m[1]/M_tot
+v_cm = (m[0]*v[0] + m[1]*v[1])/(m[0]+m[1])
+v_p = np.linalg.norm(v[0]-v_cm)
+v_targ = np.linalg.norm(v[1]-v_cm)
+q_r = (0.5*m[0]*v_p**2 + 0.5*m[1]*v_targ**2)/M_tot
+q_r = 0.5*mu*dv**2/M_tot
 
-gravitational_binding_energy = 3*g*m**2/(5*radius)
+gravitational_binding_energy = 3*g*m/(5*radius)
 
-obliquity = b/dr
+b = B/dr
+
+b_crit = np.amax(radius)/dr
 
 escape_speed = np.sqrt(2*g*m/radius)     # escape speed for each body
 fragmentation = collision_speed > escape_speed        # collision causes fragmentation if speed greater than escape speed

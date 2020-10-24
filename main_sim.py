@@ -9,7 +9,7 @@ g = 6.67428e-11                             # gravitational constanct in SI unit
 au = 1.496e11                               # astronomical unit    
 msun = 1.9891e30                            # mass of sun
 s1, s2 = 100e3, 100e3                         # radius of primary and of secondary
-dens1, dens2, densimp = 1000., 1000., 1000. # density of primary, secondary, and impactor 
+dens1, dens2, densimp = 500., 500., 500. # density of primary, secondary, and impactor 
 m1 = 4./3.*np.pi*dens1*s1**3                # mass of primary calculated from density and radius
 m2 = 4./3.*np.pi*dens2*s2**3                # mass of secondary calculated from density and radius
 rsun = 44.*au                                  # distance of centre of mass of binary from the sun 
@@ -40,10 +40,10 @@ headers = ['time','b','imp radius',
            'mass imp','x imp','y imp','z imp','vx imp','vy imp','vz imp',]
 coll_headers = ['time','body','r','m','x','y','z','vx','vy','vz']
 
-sim_name = "OCT20"
+sim_name = "OCT24"
 
-simp = np.arange(100e3,200e3,50e3) # create range of impactor sizes to loop through
-b = np.arange(2,6.5,1.5)*rhill # create range of impact parameters to loop through
+simp = np.arange(1000e3,2000e3,500e3) # create range of impactor sizes to loop through
+b = np.arange(2,6.5,4.5)*rhill # create range of impact parameters to loop through
 
 timer = timed() # start timer to time simulations
 
@@ -69,7 +69,7 @@ for j in range(len(b)):             # loop through each impact parameter
         secvz = -vorb2*sinbin                  # z velocity of secondary - added if i > 0
         
         y0 = rhill*simp[i]/s1*2.5 * s1/100e3  *b[j]/rhill               # initial y distance of impactor from binary - larger for larger impactors
-        # y0 = rhill
+        y0 = rhill
         
         vorbi = np.sqrt(g*msun/(rsun+b[j]))        # orbital speed of impactor around sun
         theta0 = y0/(rsun+b[j])                    # angle between impactor and line between binary COM and sun
@@ -84,6 +84,7 @@ for j in range(len(b)):             # loop through each impact parameter
         
         print('step ' + str(j + 1) + '-' + str(i+1))
         totaltime = t*y0/rhill/10 # total time of simulation - adjusted for different impactor sizes and distances
+        totaltime = t/100
         print(totaltime/t)
         times = np.reshape(np.linspace(0.,totaltime, noutputs), (noutputs,1)) # create times for integrations - reshape for hstack below
         
@@ -160,6 +161,6 @@ for j in range(len(b)):             # loop through each impact parameter
 print(timed()-timer) # finish timer
 
 df = pd.DataFrame(initial)                              # create dataframe of initial values
-df.to_csv(f'./results/sims/{sim_name}_initial.csv', header=headers)     # write initial values to csv
+# df.to_csv(f'./results/sims/{sim_name}_initial.csv', header=headers)     # write initial values to csv
 df = pd.DataFrame(final)                                # create dataframe of final values
-df.to_csv(f'./results/sims/{sim_name}_final.csv', header=headers)       # write final values to csv
+# df.to_csv(f'./results/sims/{sim_name}_final.csv', header=headers)       # write final values to csv
