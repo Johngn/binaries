@@ -11,7 +11,7 @@ au = 1.496e11
 rsun = 44.*au
 Msun = 1.9891e30
 
-sim_name = 'OCT20'
+sim_name = 'OCT25'
 
 data = pd.read_csv(f'./results/{sim_name}_final.csv')
 collisions = glob(f'./results/collision_{sim_name}*')
@@ -67,16 +67,16 @@ e = np.sqrt(1 + (2*energy*h**2 / mu**2))
 bound = np.logical_and(np.logical_and(energy < 0, np.isfinite(energy)), R < Rhill_largest)
 # collision = R[:,0] == 0
 
-plt.figure(figsize=(8,6))
+plt.figure(figsize=(10,8))
 s = 100
 plt.scatter(simp, b, s=1, marker="x", c="black")
 plt.scatter(simp[bound[:,0]], b[bound[:,0]], label='primary-secondary', s=s, c="tab:blue")
 plt.scatter(simp[bound[:,1]], b[bound[:,1]], label='primary-impactor', s=s, c="tab:orange")
 plt.scatter(simp[bound[:,2]], b[bound[:,2]], label='secondary-impactor', s=s, c="tab:green")
 # plt.scatter(simp[collision], b[collision], label='collision', s=s)
-plt.scatter(coll_params[coll_params[:,2] == 1][:,1], coll_params[coll_params[:,2] == 1][:,0], marker='x', s=s*2, c="tab:blue")
-plt.scatter(coll_params[coll_params[:,2] == 2][:,1], coll_params[coll_params[:,2] == 2][:,0], marker='x', s=s*2, c="tab:orange")
-plt.scatter(coll_params[coll_params[:,2] == 3][:,1], coll_params[coll_params[:,2] == 3][:,0], marker='x', s=s*2, c="tab:green")
+plt.scatter(coll_params[coll_params[:,2] == 1][:,1], coll_params[coll_params[:,2] == 1][:,0], marker='x', s=s, c="tab:blue")
+plt.scatter(coll_params[coll_params[:,2] == 2][:,1], coll_params[coll_params[:,2] == 2][:,0], marker='x', s=s, c="tab:orange")
+plt.scatter(coll_params[coll_params[:,2] == 3][:,1], coll_params[coll_params[:,2] == 3][:,0], marker='x', s=s, c="tab:green")
 plt.xlabel("Impact parameter (Hill radii)")
 plt.ylabel("Impactor radius (km)")
 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=3, fancybox=True, shadow=True)
@@ -86,8 +86,9 @@ plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=3, fancybox=True
 # %%
 binary_e = np.reshape(e[:,0], (len(np.unique(b)), len(np.unique(simp))))
 binary_e[binary_e > 1] = np.nan
+binary_e = np.round(binary_e, 2)
 
-fig, ax = plt.subplots(1, figsize=(11, 6))
+fig, ax = plt.subplots(1, figsize=(20, 10))
 ax = sns.heatmap(binary_e, 
                  annot=True, 
                  linewidths=0.5, 
@@ -103,8 +104,10 @@ plt.xlabel("Impactor radius (km)")
 # %%
 binary_a = np.reshape(a[:,0], (len(np.unique(b)), len(np.unique(simp))))/Rhill[0,0]
 binary_a[binary_a < 0] = np.nan
+binary_a[binary_a > 1] = np.nan
+binary_a = np.round(binary_a, 2)
 
-fig, ax = plt.subplots(1, figsize=(11, 6))
+fig, ax = plt.subplots(1, figsize=(18, 10))
 ax = sns.heatmap(binary_a, 
                  annot=True, 
                  linewidths=0.5, 
