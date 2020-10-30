@@ -13,10 +13,15 @@ Msun = 1.9891e30
 
 sim_name = 'OCT25'
 
-data = pd.read_csv(f'./results/{sim_name}_final.csv')
+# data = pd.read_csv(f'./results/{sim_name}_final.csv')
+data = glob(f'./results/{sim_name}*')
+
+final = np.zeros((len(data), 25))
+for i, sim in enumerate(data):
+    final[i] = np.array(pd.read_csv(sim))[-1]
+
 collisions = glob(f'./results/collision_{sim_name}*')
 coll_params = np.zeros((len(collisions), 3))
-
 for i, collision in enumerate(collisions):
     params = re.findall('[0-9]+\.[0-9]+', collision)
     params = [float(param) for param in params]
@@ -30,18 +35,17 @@ for i, collision in enumerate(collisions):
         params.append(3)
     coll_params[i] = params
 
-times = data['time'].to_numpy()
-b = data['b'].to_numpy()
-simp = data['imp radius'].to_numpy()
-m1 = data['mass prim'].to_numpy()
-m2 = data['mass sec'].to_numpy()
-mimp = data['mass imp'].to_numpy()
-p = data[['x prim','y prim', 'z prim']].to_numpy()
-s = data[['x sec','y sec', 'z sec']].to_numpy()
-imp = data[['x imp','y imp', 'z imp']].to_numpy()
-vp = data[['vx prim','vy prim', 'vz prim']].to_numpy()
-vs = data[['vx sec','vy sec', 'vz sec']].to_numpy()
-vimp = data[['vx imp','vy imp', 'vz imp']].to_numpy()
+b = final[:,2]
+simp = final[:,3]
+m1 = final[:,4]
+p = final[:,5:8]
+vp = final[:,8:11]
+m2 = final[:,11]
+s = final[:,12:15]
+vs = final[:,15:18]
+mimp = final[:,18]
+imp = final[:,19:22]
+vimp = final[:,22:25]
 
 R, V, mu, h = np.zeros((len(data),3)), np.zeros((len(data),3)), np.zeros((len(data),3)), np.zeros((len(data),3))
 R[:,0] = np.linalg.norm(p-s, axis=1)
@@ -66,8 +70,8 @@ e = np.sqrt(1 + (2*energy*h**2 / mu**2))
 
 bound = np.logical_and(np.logical_and(energy < 0, np.isfinite(energy)), R < Rhill_largest)
 # collision = R[:,0] == 0
-
-plt.figure(figsize=(10,8))
+# %%
+plt.figure(figsize=(10,9))
 s = 100
 plt.scatter(simp, b, s=1, marker="x", c="black")
 plt.scatter(simp[bound[:,0]], b[bound[:,0]], label='primary-secondary', s=s, c="tab:blue")
@@ -77,12 +81,13 @@ plt.scatter(simp[bound[:,2]], b[bound[:,2]], label='secondary-impactor', s=s, c=
 plt.scatter(coll_params[coll_params[:,2] == 1][:,1], coll_params[coll_params[:,2] == 1][:,0], marker='x', s=s, c="tab:blue")
 plt.scatter(coll_params[coll_params[:,2] == 2][:,1], coll_params[coll_params[:,2] == 2][:,0], marker='x', s=s, c="tab:orange")
 plt.scatter(coll_params[coll_params[:,2] == 3][:,1], coll_params[coll_params[:,2] == 3][:,0], marker='x', s=s, c="tab:green")
-plt.xlabel("Impact parameter (Hill radii)")
-plt.ylabel("Impactor radius (km)")
+plt.ylabel("Impact parameter (Hill radii)")
+plt.xlabel("Impactor radius (km)")
+plt.title("2:1 mass ratio - wide separation")
 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=3, fancybox=True, shadow=True)
 # plt.yticks(np.arange(0.5,10.6,0.5))
 # plt.yticks(np.arange(0,101,5))
-# plt.savefig(f"./img/final_bound", bbox_inches='tight')
+plt.savefig(f"./img/final_bound_whr_dmr", bbox_inches='tight')
 # %%
 binary_e = np.reshape(e[:,0], (len(np.unique(b)), len(np.unique(simp))))
 binary_e[binary_e > 1] = np.nan

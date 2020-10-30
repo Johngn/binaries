@@ -31,7 +31,6 @@ impi = np.deg2rad(0)        # inclination of impactor
 noutputs = 1000             # number of outputs for plotting
 p, s, imp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3))
 vp, vs, vimp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3))
-initial, final = [], [] # empty arrays for initial and final positions and velocities for each body
 
 # header for pandas dataframe
 headers = ['time','b','imp radius',
@@ -154,13 +153,5 @@ for j in range(len(b)):             # loop through each impact parameter
         df = pd.DataFrame(particles)
         # write to csv with impactor size and impact parameter in title - round values to avoid long file names
         df.to_csv(f'./results/{sim_name}_b-{np.round(b[j]/rhill, 1)}_r-{np.round(simp[i]/1e3, 1)}.csv', header=headers)
-        
-        initial.append(particles[0])    # initial positions and velocities of bodies
-        final.append(particles[-1])     # final positions and velocities of bodies
             
 print(timed()-timer) # finish timer
-
-df = pd.DataFrame(initial)                              # create dataframe of initial values
-# df.to_csv(f'./results/sims/{sim_name}_initial.csv', header=headers)     # write initial values to csv
-df = pd.DataFrame(final)                                # create dataframe of final values
-# df.to_csv(f'./results/sims/{sim_name}_final.csv', header=headers)       # write final values to csv

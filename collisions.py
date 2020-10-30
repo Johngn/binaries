@@ -42,13 +42,13 @@ theta = np.arcsin(B/dr)
 
 M_tot = m[0]+m[1]
 mu = m[0]*m[1]/M_tot
-v_cm = (m[0]*v[0] + m[1]*v[1])/(m[0]+m[1])
-v_p = np.linalg.norm(v[0]-v_cm)
-v_targ = np.linalg.norm(v[1]-v_cm)
-q_r = (0.5*m[0]*v_p**2 + 0.5*m[1]*v_targ**2)/M_tot
-q_r = 0.5*mu*dv**2/M_tot
+# v_cm = (m[0]*v[0] + m[1]*v[1])/(m[0]+m[1])
+# v_p = np.linalg.norm(v[0]-v_cm)
+# v_targ = np.linalg.norm(v[1]-v_cm)
+# q_r = (0.5*m[0]*v_p**2 + 0.5*m[1]*v_targ**2)/M_tot
+q_r = 0.5*mu*dv**2
 
-gravitational_binding_energy = 3*g*m/(5*radius)
+gravitational_binding_energy = 3*g*m**2/(5*radius)
 
 b = B/dr
 
