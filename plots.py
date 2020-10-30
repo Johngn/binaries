@@ -11,7 +11,7 @@ au = 1.496e11
 rsun = 44.*au
 Msun = 1.9891e30
 
-sim_name = 'OCT25'
+sim_name = 'OCT26-2'
 
 # data = pd.read_csv(f'./results/{sim_name}_final.csv')
 data = glob(f'./results/{sim_name}*')
@@ -87,9 +87,27 @@ plt.title("2:1 mass ratio - wide separation")
 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=3, fancybox=True, shadow=True)
 # plt.yticks(np.arange(0.5,10.6,0.5))
 # plt.yticks(np.arange(0,101,5))
-plt.savefig(f"./img/final_bound_whr_dmr", bbox_inches='tight')
+# plt.savefig(f"./img/final_bound_whr_dmr", bbox_inches='tight')
 # %%
-binary_e = np.reshape(e[:,0], (len(np.unique(b)), len(np.unique(simp))))
+binary_e = np.zeros((len(np.unique(b)), len(np.unique(simp))))
+
+for i, item in enumerate(np.unique(b)):
+    for j, jtem in enumerate(np.unique(simp)):
+        # row = final[np.logical_and(final[:,2] == item, final[:,3] == jtem)]
+        ecc = e[np.logical_and(final[:,2] == item, final[:,3] == jtem)][:,0]
+        binary_e[i,j] = ecc[0]
+        # print(binary_e[i,j])
+        
+    # print(item)
+
+# for i, row in enumerate(final):
+#     a, b = row[2:4]
+#     test = e[i,0]
+    
+    # print(row[2:4])
+
+# %%
+# binary_e = np.reshape(e[:,0], (len(np.unique(b)), -1))
 binary_e[binary_e > 1] = np.nan
 binary_e = np.round(binary_e, 2)
 
@@ -98,8 +116,8 @@ ax = sns.heatmap(binary_e,
                  annot=True, 
                  linewidths=0.5, 
                  cmap="YlGnBu",
-                 xticklabels=np.asarray((np.unique(simp)), dtype=int),
-                 yticklabels=np.round(np.unique(b), 2)
+                 # xticklabels=np.asarray((np.unique(simp)), dtype=int),
+                 # yticklabels=np.round(np.unique(b), 2)
                  )
 # ax.invert_xaxis()
 ax.invert_yaxis()
