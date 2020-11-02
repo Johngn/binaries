@@ -11,9 +11,7 @@ au = 1.496e11
 rsun = 44.*au
 Msun = 1.9891e30
 
-sim_name = 'OCT26-2'
-
-# data = pd.read_csv(f'./results/{sim_name}_final.csv')
+sim_name = 'wide_equalmass'
 data = glob(f'./results/{sim_name}*')
 
 final = np.zeros((len(data), 25))
@@ -38,6 +36,7 @@ for i, collision in enumerate(collisions):
 b = final[:,2]
 simp = final[:,3]
 m1 = final[:,4]
+radius1 = final[:,5]
 p = final[:,5:8]
 vp = final[:,8:11]
 m2 = final[:,11]
@@ -67,77 +66,75 @@ Rhill_largest = np.array([np.amax([Rhill[0], Rhill[1]]), np.amax([Rhill[0], Rhil
 a = mu*R/(2*mu - R*V**2)
 energy = -mu/2/a
 e = np.sqrt(1 + (2*energy*h**2 / mu**2))
+apsis = (1-e)*a
+will_collide = apsis/2e5 < 1
 
 bound = np.logical_and(np.logical_and(energy < 0, np.isfinite(energy)), R < Rhill_largest)
-# collision = R[:,0] == 0
 # %%
 plt.figure(figsize=(10,9))
 s = 100
-plt.scatter(simp, b, s=1, marker="x", c="black")
-plt.scatter(simp[bound[:,0]], b[bound[:,0]], label='primary-secondary', s=s, c="tab:blue")
-plt.scatter(simp[bound[:,1]], b[bound[:,1]], label='primary-impactor', s=s, c="tab:orange")
-plt.scatter(simp[bound[:,2]], b[bound[:,2]], label='secondary-impactor', s=s, c="tab:green")
-# plt.scatter(simp[collision], b[collision], label='collision', s=s)
-plt.scatter(coll_params[coll_params[:,2] == 1][:,1], coll_params[coll_params[:,2] == 1][:,0], marker='x', s=s, c="tab:blue")
-plt.scatter(coll_params[coll_params[:,2] == 2][:,1], coll_params[coll_params[:,2] == 2][:,0], marker='x', s=s, c="tab:orange")
-plt.scatter(coll_params[coll_params[:,2] == 3][:,1], coll_params[coll_params[:,2] == 3][:,0], marker='x', s=s, c="tab:green")
-plt.ylabel("Impact parameter (Hill radii)")
-plt.xlabel("Impactor radius (km)")
-plt.title("2:1 mass ratio - wide separation")
+plt.scatter(b, simp, s=1, marker="x", c="black")
+plt.scatter(b[bound[:,0]], simp[bound[:,0]], label='primary-secondary', s=s, c="tab:blue")
+plt.scatter(b[bound[:,1]], simp[bound[:,1]], label='primary-impactor', s=s, c="tab:orange")
+plt.scatter(b[bound[:,2]], simp[bound[:,2]], label='secondary-impactor', s=s, c="tab:green")
+plt.scatter(coll_params[coll_params[:,2] == 1][:,0], coll_params[coll_params[:,2] == 1][:,1], marker='x', s=s, c="tab:blue")
+plt.scatter(coll_params[coll_params[:,2] == 2][:,0], coll_params[coll_params[:,2] == 2][:,1], marker='x', s=s, c="tab:orange")
+plt.scatter(coll_params[coll_params[:,2] == 3][:,0], coll_params[coll_params[:,2] == 3][:,1], marker='x', s=s, c="tab:green")
+plt.xlabel("Impact parameter (Hill radii)")
+plt.ylabel("Impactor radius (km)")
+# plt.title("2:1 mass ratio - wide separation")
 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=3, fancybox=True, shadow=True)
-# plt.yticks(np.arange(0.5,10.6,0.5))
-# plt.yticks(np.arange(0,101,5))
+plt.yticks(np.asarray((np.unique(simp)), dtype=int),)
+# plt.xticks(np.round(np.unique(b), 2))
+# plt.xlim(100,350)simp
 # plt.savefig(f"./img/final_bound_whr_dmr", bbox_inches='tight')
 # %%
-binary_e = np.zeros((len(np.unique(b)), len(np.unique(simp))))
+binary_e = np.ones((len(np.unique(simp)), len(np.unique(b))))
 
-for i, item in enumerate(np.unique(b)):
-    for j, jtem in enumerate(np.unique(simp)):
-        # row = final[np.logical_and(final[:,2] == item, final[:,3] == jtem)]
-        ecc = e[np.logical_and(final[:,2] == item, final[:,3] == jtem)][:,0]
-        binary_e[i,j] = ecc[0]
-        # print(binary_e[i,j])
-        
-    # print(item)
-
-# for i, row in enumerate(final):
-#     a, b = row[2:4]
-#     test = e[i,0]
-    
-    # print(row[2:4])
-
-# %%
-# binary_e = np.reshape(e[:,0], (len(np.unique(b)), -1))
+for i, item in enumerate(np.unique(simp)):
+    for j, jtem in enumerate(np.unique(b)):
+        ecc = e[np.logical_and(final[:,3] == item, final[:,2] == jtem)][:,0]
+        if len(ecc > 0):
+            binary_e[i,j] = ecc
+            
 binary_e[binary_e > 1] = np.nan
 binary_e = np.round(binary_e, 2)
 
-fig, ax = plt.subplots(1, figsize=(20, 10))
+fig, ax = plt.subplots(1, figsize=(12, 9))
 ax = sns.heatmap(binary_e, 
                  annot=True, 
                  linewidths=0.5, 
                  cmap="YlGnBu",
-                 # xticklabels=np.asarray((np.unique(simp)), dtype=int),
-                 # yticklabels=np.round(np.unique(b), 2)
+                 yticklabels=np.asarray((np.unique(simp)), dtype=int),
+                 xticklabels=np.round(np.unique(b), 2),
+                 cbar=False
                  )
-# ax.invert_xaxis()
 ax.invert_yaxis()
 plt.title("Final eccentricity of binary")
-plt.ylabel("Impact parameter (Hill radii)")
-plt.xlabel("Impactor radius (km)")
+plt.xlabel("Impact parameter (Hill radii)")
+plt.ylabel("Impactor radius (km)")
 # %%
-binary_a = np.reshape(a[:,0], (len(np.unique(b)), len(np.unique(simp))))/Rhill[0,0]
-binary_a[binary_a < 0] = np.nan
-binary_a[binary_a > 1] = np.nan
-binary_a = np.round(binary_a, 2)
+binary_a = np.ones((len(np.unique(simp)), len(np.unique(b))))
 
-fig, ax = plt.subplots(1, figsize=(18, 10))
+for i, item in enumerate(np.unique(simp)):
+    for j, jtem in enumerate(np.unique(b)):
+        sma = a[np.logical_and(final[:,3] == item, final[:,2] == jtem)][:,0]
+        if len(sma > 0):
+            binary_a[i,j] = sma
+            
+binary_a = np.round(binary_a/Rhill[0,0], 2)
+binary_a[binary_a <= 0] = np.nan
+binary_a[binary_a > 1] = np.nan
+
+fig, ax = plt.subplots(1, figsize=(12, 9))
 ax = sns.heatmap(binary_a, 
                  annot=True, 
                  linewidths=0.5, 
                  cmap="YlGnBu",
-                 xticklabels=np.asarray((np.unique(simp)), dtype=int),
-                 yticklabels=np.round(np.unique(b), 2))
+                 yticklabels=np.asarray((np.unique(simp)), dtype=int),
+                 xticklabels=np.round(np.unique(b), 2),
+                 cbar=False)
 ax.invert_yaxis()
 plt.title("Final semi-major axis of binary")
-plt.ylabel("Impact parameter (Hill radii)")
-plt.xlabel("Impactor radius (km)")
+plt.xlabel("Impact parameter (Hill radii)")
+plt.ylabel("Impactor radius (km)")

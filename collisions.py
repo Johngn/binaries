@@ -6,16 +6,18 @@ Created on Fri Sep 25 10:51:31 2020
 @author: johngillan
 """
 
+import re
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+from glob import glob
 
-sim_name = 'OCT24'
-b = '2.0'
-r = '1500.0'
+sim_name = 'wide_equalmass'
+b = '4.7'
+r = '210.0'
 
-coll_data = pd.read_csv(f'./results/collisions/collision_{sim_name}_b-{b}_r-{r}.csv')
+coll_data = pd.read_csv(f'./results/collision_{sim_name}_b-{b}_r-{r}.csv')
 bodies = coll_data['body'].to_numpy()
 radius = coll_data['r'].to_numpy()
 m = coll_data['m'].to_numpy()
@@ -56,8 +58,49 @@ b_crit = np.amax(radius)/dr
 
 escape_speed = np.sqrt(2*g*m/radius)     # escape speed for each body
 fragmentation = collision_speed > escape_speed        # collision causes fragmentation if speed greater than escape speed
+fragmentation = q_r > gravitational_binding_energy
+# %%
+collisions = glob(f'./results/collision_{sim_name}*')
+coll_params = np.zeros((len(collisions), 3))
+fragmentation = np.zeros((len(collisions), 2))
+for i, collision in enumerate(collisions):
+    coll_data = pd.read_csv(collision)
+    bodies = coll_data['body'].to_numpy()
+    radius = coll_data['r'].to_numpy()
+    m = coll_data['m'].to_numpy()
+    r = coll_data[['x','y','z']].to_numpy()
+    v = coll_data[['vx','vy','vz']].to_numpy()
+    g = 6.67428e-11                             # gravitational constanct in SI units
 
-
+    position_vector = r[0]-r[1]
+    velocity_vector = v[0]-v[1]
+    dr = np.linalg.norm(position_vector)              # distance between bodies
+    dv = np.linalg.norm(velocity_vector)              # collision speed
+    
+    position_unit_vector = position_vector/np.linalg.norm(position_vector)
+    
+    collision_unit_vector = -position_vector/dr
+    collision_speed = np.dot(velocity_vector,collision_unit_vector)
+    
+    n = velocity_vector/dv
+    
+    B = np.linalg.norm(position_vector-np.dot(position_vector,n)*n)
+    theta = np.arcsin(B/dr)
+    # theta = np.rad2deg(theta)
+    
+    M_tot = m[0]+m[1]
+    mu = m[0]*m[1]/M_tot
+    q_r = 0.5*mu*dv**2
+    
+    gravitational_binding_energy = 3*g*m**2/(5*radius)
+    
+    b = B/dr
+    
+    b_crit = np.amax(radius)/dr
+    
+    escape_speed = np.sqrt(2*g*m/radius)     # escape speed for each body
+    fragmentation[i] = collision_speed > escape_speed     # collision causes fragmentation if speed greater than escape speed
+    fragmentation[i] = q_r > gravitational_binding_energy
 # %%
 data = pd.read_csv(f'./results/{sim_name}_b-{b}_r-{r}.csv')
 noutputs = len(data)
