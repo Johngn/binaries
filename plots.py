@@ -70,7 +70,7 @@ apsis = (1-e)*a
 will_collide = apsis/2e5 < 1
 
 bound = np.logical_and(np.logical_and(energy < 0, np.isfinite(energy)), R < Rhill_largest)
-# %%
+
 plt.figure(figsize=(10,9))
 s = 100
 plt.scatter(b, simp, s=1, marker="x", c="black")
@@ -82,18 +82,19 @@ plt.scatter(coll_params[coll_params[:,2] == 2][:,0], coll_params[coll_params[:,2
 plt.scatter(coll_params[coll_params[:,2] == 3][:,0], coll_params[coll_params[:,2] == 3][:,1], marker='x', s=s, c="tab:green")
 plt.xlabel("Impact parameter (Hill radii)")
 plt.ylabel("Impactor radius (km)")
-# plt.title("2:1 mass ratio - wide separation")
+plt.title(f'{sim_name}')
 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=3, fancybox=True, shadow=True)
 plt.yticks(np.asarray((np.unique(simp)), dtype=int),)
 # plt.xticks(np.round(np.unique(b), 2))
 # plt.xlim(100,350)simp
-# plt.savefig(f"./img/final_bound_whr_dmr", bbox_inches='tight')
+plt.savefig(f"./img/{sim_name}_final_bound_whr_dmr", bbox_inches='tight')
 # %%
+b = np.round(b, 2)
 binary_e = np.ones((len(np.unique(simp)), len(np.unique(b))))
 
 for i, item in enumerate(np.unique(simp)):
     for j, jtem in enumerate(np.unique(b)):
-        ecc = e[np.logical_and(final[:,3] == item, final[:,2] == jtem)][:,0]
+        ecc = e[np.logical_and(final[:,3] == item, np.round(final[:,2],2) == jtem)][:,0]
         if len(ecc > 0):
             binary_e[i,j] = ecc
             
@@ -105,20 +106,21 @@ ax = sns.heatmap(binary_e,
                  annot=True, 
                  linewidths=0.5, 
                  cmap="YlGnBu",
-                 yticklabels=np.asarray((np.unique(simp)), dtype=int),
-                 xticklabels=np.round(np.unique(b), 2),
+                  yticklabels=np.asarray((np.unique(simp)), dtype=int),
+                  xticklabels=np.round(np.unique(b), 2),
                  cbar=False
                  )
 ax.invert_yaxis()
-plt.title("Final eccentricity of binary")
+plt.title(f"Final eccentricity {sim_name}")
 plt.xlabel("Impact parameter (Hill radii)")
 plt.ylabel("Impactor radius (km)")
+plt.savefig(f"./img/{sim_name}_final_eccentricity", bbox_inches='tight')
 # %%
 binary_a = np.ones((len(np.unique(simp)), len(np.unique(b))))
 
 for i, item in enumerate(np.unique(simp)):
     for j, jtem in enumerate(np.unique(b)):
-        sma = a[np.logical_and(final[:,3] == item, final[:,2] == jtem)][:,0]
+        sma = a[np.logical_and(final[:,3] == item, np.round(final[:,2],2) == jtem)][:,0]
         if len(sma > 0):
             binary_a[i,j] = sma
             
@@ -135,6 +137,7 @@ ax = sns.heatmap(binary_a,
                  xticklabels=np.round(np.unique(b), 2),
                  cbar=False)
 ax.invert_yaxis()
-plt.title("Final semi-major axis of binary")
+plt.title(f"Final semi-major {sim_name}")
 plt.xlabel("Impact parameter (Hill radii)")
 plt.ylabel("Impactor radius (km)")
+plt.savefig(f"./img/{sim_name}_final_semimajoraxis", bbox_inches='tight')
