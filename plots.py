@@ -11,7 +11,7 @@ au = 1.496e11
 rsun = 44.*au
 Msun = 1.9891e30
 
-sim_name = 'wide_equalmass'
+sim_name = 'wide_10mass'
 data = glob(f'./results/{sim_name}*')
 
 final = np.zeros((len(data), 25))
@@ -66,8 +66,8 @@ Rhill_largest = np.array([np.amax([Rhill[0], Rhill[1]]), np.amax([Rhill[0], Rhil
 a = mu*R/(2*mu - R*V**2)
 energy = -mu/2/a
 e = np.sqrt(1 + (2*energy*h**2 / mu**2))
-apsis = (1-e)*a
-will_collide = apsis/2e5 < 1
+periapsis = (1-e)*a
+will_collide = periapsis/3e5 < 1
 
 bound = np.logical_and(np.logical_and(energy < 0, np.isfinite(energy)), R < Rhill_largest)
 
@@ -106,12 +106,12 @@ ax = sns.heatmap(binary_e,
                  annot=True, 
                  linewidths=0.5, 
                  cmap="YlGnBu",
-                  yticklabels=np.asarray((np.unique(simp)), dtype=int),
-                  xticklabels=np.round(np.unique(b), 2),
+                 yticklabels=np.asarray((np.unique(simp)), dtype=int),
+                 xticklabels=np.round(np.unique(b), 2),
                  cbar=False
                  )
 ax.invert_yaxis()
-plt.title(f"Final eccentricity {sim_name}")
+plt.title(f"eccentricity ({sim_name})")
 plt.xlabel("Impact parameter (Hill radii)")
 plt.ylabel("Impactor radius (km)")
 plt.savefig(f"./img/{sim_name}_final_eccentricity", bbox_inches='tight')
@@ -137,7 +137,33 @@ ax = sns.heatmap(binary_a,
                  xticklabels=np.round(np.unique(b), 2),
                  cbar=False)
 ax.invert_yaxis()
-plt.title(f"Final semi-major {sim_name}")
+plt.title(f"semi-major axis ({sim_name})")
 plt.xlabel("Impact parameter (Hill radii)")
 plt.ylabel("Impactor radius (km)")
 plt.savefig(f"./img/{sim_name}_final_semimajoraxis", bbox_inches='tight')
+# %%
+binary_a = np.ones((len(np.unique(simp)), len(np.unique(b))))
+
+for i, item in enumerate(np.unique(simp)):
+    for j, jtem in enumerate(np.unique(b)):
+        sma = periapsis[np.logical_and(final[:,3] == item, np.round(final[:,2],2) == jtem)][:,0]
+        if len(sma > 0):
+            binary_a[i,j] = sma
+            
+binary_a = np.round(binary_a/Rhill[0,0], 2)
+binary_a[binary_a <= 0] = np.nan
+binary_a[binary_a > 10] = np.nan
+
+fig, ax = plt.subplots(1, figsize=(12, 9))
+ax = sns.heatmap(binary_a, 
+                 annot=True, 
+                 linewidths=0.5, 
+                 cmap="YlGnBu",
+                 yticklabels=np.asarray((np.unique(simp)), dtype=int),
+                 xticklabels=np.round(np.unique(b), 2),
+                 cbar=False)
+ax.invert_yaxis()
+plt.title(f"periapsis ({sim_name})")
+plt.xlabel("Impact parameter (Hill radii)")
+plt.ylabel("Impactor radius (km)")
+plt.savefig(f"./img/{sim_name}_final_periapsis", bbox_inches='tight')
