@@ -13,13 +13,13 @@ au = 1.496e11                               # astronomical unit
 msun = 1.9891e30                            # mass of sun
 year = 365.25*24.*60.*60.                   # number of seconds in a year
 s1, s2 = 100e3, 100e3                         # radius of primary and of secondary
-dens1, dens2, densimp = 1000., 1000., 0. # density of primary, secondary, and impactor 
+dens1, dens2, densimp = 1000., 1000., 1000. # density of primary, secondary, and impactor 
 m1 = 4./3.*np.pi*dens1*s1**3                # mass of primary calculated from density and radius
 m2 = 4./3.*np.pi*dens2*s2**3                # mass of secondary calculated from density and radius
 rsun = 44.*au                                  # distance of centre of mass of binary from the sun 
 omegak = np.sqrt(g*msun/rsun**3)       # keplerian frequency at this distance
 rhill1 = rsun*(m1/msun/3.)**(1./3.)        # Hill radius of primary
-rbin = 0.3*rhill1                            # separation of binary
+rbin = 0.1*rhill1                            # separation of binary
 vorb = np.sqrt(g*(m1+m2)/rbin)              # orbital speed of primary and secondary around each other
 # vshear = -1.5*omegak*rbin                   # calculates the change in velocity required to keep a body in a circular orbit
 pbin = 2.*np.pi/np.sqrt(g*(m1+m2)/rbin**3)  # orbital period of primary and secondary around each other
@@ -27,10 +27,10 @@ t = 2.*np.pi/np.sqrt(g*msun/rsun**3)         # orbital period of binary around t
 n = 2*np.pi/t                               # mean motion of binary around the sun
 vk = np.sqrt(g*msun/rsun)      # orbital speed of primary around sun
 simp = 100e3 # impactor radius
-b = 15*rhill1 # impact parameter
+b = 3.0*rhill1 # impact parameter
         
 y0 = rhill1*simp/1e3                  # initial y distance of impactor from binary - larger for larger impactors
-y0 = 0
+y0 = 8*rhill1
 mimp = 4./3.*np.pi*densimp*simp**3   # mass of impactor
 
 # vshear1 = -1.5*omegak*xb1               # keplerian shear of primary
@@ -114,6 +114,7 @@ all_ps = [p.hash.value for j, p in enumerate(ps)]
 timer = timed() # start timer to time simulations
 try:
     for k, time in enumerate(times):
+        print(k)
         sim.integrate(time)
         p[k] = [ps["primary"].x, ps["primary"].y, ps["primary"].z]
         s[k] = [ps["secondary"].x, ps["secondary"].y, ps["secondary"].z]
@@ -180,12 +181,10 @@ sinspxdot, sinspydot = np.sin(angles)*xdot, np.sin(angles)*ydot
 x, y = cosspx-sinspy+rsun, sinspx+cosspy
 vx, vy = cosspxdot-sinspydot, sinspxdot+cosspydot
 
-# plt.plot(ecc[:,0])
+cj = n**2*(x**2+y**2) + 2*(mu[:,0]/dr[:,0] + mu[:,1]/dr[:,1]) - vx**2 - vy**2 # jacobian constant
 
-# cj = n**2*(x**2+y**2) + 2*(mu[:,0]/dr[:,0] + mu[:,1]/dr[:,1]) - vx**2 - vy**2 # jacobian constant
-
-lim = 4
-fig, axes = plt.subplots(1, figsize=(9, 9))
+lim = 8
+fig, axes = plt.subplots(1, figsize=(7, 7))
 axes.set_xlabel("$x/R_\mathrm{h}$")
 axes.set_ylabel("$y/R_\mathrm{h}$")
 axes.set_ylim(-lim,lim)
@@ -243,9 +242,8 @@ def animate(i):
 anim = animation.FuncAnimation(fig, animate, init_func=init, frames=noutputs, interval=1, blit=True)
 # %%
 plt.rcParams['animation.ffmpeg_path'] = '/usr/bin/ffmpeg'
-
-f = f'vid/ps_animation.mp4' 
-writervideo = FFMpegWriter(fps=10) # ffmpeg must be installed
+f = f'videos/ps_animation_3.mp4' 
+writervideo = FFMpegWriter(fps=100) # ffmpeg must be installed
 anim.save(f, writer=writervideo)
 # %%
 lim = 10
@@ -289,7 +287,6 @@ def animate(i):
     return primarydot, secondarydot, impactordot, primaryline, secondaryline, impactorline, text
 
 anim = animation.FuncAnimation(fig, animate, frames=noutputs, interval=1, blit=True)
-# anim.save(f'{path}/videos/3D.mp4')
 # %%
 lim = 1
 fig, axes = plt.subplots(1, figsize=(5, 5))
@@ -333,8 +330,8 @@ axes.plot(cosix[-1]-siniy[-1], sinix[-1]+cosiy[-1], c="tab:green", marker='o')
 axes.legend()
 # fig.savefig('./result5.pdf', bbox_inches='tight')
 # %%
-y = Cj
-plt.figure(figsize=(15,8))
+y = cj
+plt.figure(figsize=(9,4))
 # plt.title(f"Integrator={sim.integrator}  Imp radius={simp/1e3} km  b={b/Rhill} Rhill")
 plt.plot(times/year, y, label="Jacobi integral", lw=1.5)
 plt.axhline(y=0, ls="--", color="black", lw=1.5)
@@ -347,7 +344,7 @@ plt.legend()
 # plt.savefig(f"energy_{str(sim.integrator)}", bbox_inches='tight')
 # %%
 y = energy
-plt.figure(figsize=(15,8))
+plt.figure(figsize=(8,4))
 # plt.title(f"Integrator={sim.integrator} -- Impactor radius={simp/1e3} km -- b={b/Rhill} hill radii")
 plt.plot(times/year, y[:,0], label="Primary-Secondary", lw=1.5)
 plt.plot(times/year, y[:,1], label="Primary-Impactor", lw=1.5)
@@ -359,18 +356,32 @@ plt.xlim(0, np.amax(times)/year)
 # plt.ylim(-0.02, 0.02)
 plt.grid('both')
 plt.legend()
-# plt.savefig(f"energy_{str(sim.integrator)}", bbox_inches='tight')
+# plt.savefig(f"energy_2", bbox_inches='tight')
 # %%
-y = R
-plt.figure(figsize=(15,8))
+y = dr
+plt.figure(figsize=(8,4))
 # plt.title(f"Integrator={sim.integrator} -- Impactor radius={simp/1e3} km -- b={b/Rhill} hill radii")
-plt.plot(times/year, y[:,0]/Rhill1, label="Primary-Secondary", lw=1.5)
-plt.plot(times/year, y[:,1]/Rhill1, label="Primary-Impactor", lw=1.5)
-plt.plot(times/year, y[:,2]/Rhill1, label="Secondary-Impactor", lw=1.5)
+plt.plot(times/year, y[:,0]/rhill1, label="Primary-Secondary", lw=1.5)
+plt.plot(times/year, y[:,1]/rhill1, label="Primary-Impactor", lw=1.5)
+plt.plot(times/year, y[:,2]/rhill1, label="Secondary-Impactor", lw=1.5)
 plt.xlabel("Time (years)")
 plt.ylabel("Distance (Hill Radii)")
 plt.xlim(0, np.amax(times)/year)
-plt.ylim(0)
+plt.ylim(0,1)
 plt.grid('both')
 plt.legend()
-# plt.savefig(f"distance_{str(sim.integrator)}", bbox_inches='tight')
+# plt.savefig(f"distance_2", bbox_inches='tight')
+# %%
+y = ecc
+plt.figure(figsize=(8,4))
+# plt.title(f"Integrator={sim.integrator} -- Impactor radius={simp/1e3} km -- b={b/Rhill} hill radii")
+plt.plot(times/year, y[:,0], label="Primary-Secondary", lw=1.5)
+# plt.plot(times/year, y[:,1], label="Primary-Impactor", lw=1.5)
+# plt.plot(times/year, y[:,2], label="Secondary-Impactor", lw=1.5)
+plt.xlabel("Time (years)")
+plt.ylabel("eccentricity")
+plt.xlim(0, np.amax(times)/year)
+plt.ylim(0, 1)
+plt.grid('both')
+plt.legend()
+plt.savefig(f"eccentricity_3", bbox_inches='tight')
