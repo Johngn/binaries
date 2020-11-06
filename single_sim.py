@@ -33,10 +33,6 @@ y0 = rhill1*simp/1e3                  # initial y distance of impactor from bina
 y0 = 8*rhill1
 mimp = 4./3.*np.pi*densimp*simp**3   # mass of impactor
 
-# vshear1 = -1.5*omegak*xb1               # keplerian shear of primary
-# vshear2 = -1.5*omegak*xb2               # keplerian shear of secondary
-
-
 binaryi = np.deg2rad(0)                 # inclination of binary
 sinbin = np.sin(binaryi)                # sin of inclination of binary
 cosbin = np.cos(binaryi)                # cos of inclination of binary
