@@ -19,7 +19,7 @@ m2 = 4./3.*np.pi*dens2*s2**3                # mass of secondary calculated from 
 rsun = 44.*au                                  # distance of centre of mass of binary from the sun 
 omegak = np.sqrt(g*msun/rsun**3)       # keplerian frequency at this distance
 rhill1 = rsun*(m1/msun/3.)**(1./3.)        # Hill radius of primary
-rbin = 0.1*rhill1                            # separation of binary
+rbin = 0.3*rhill1                            # separation of binary
 vorb = np.sqrt(g*(m1+m2)/rbin)              # orbital speed of primary and secondary around each other
 # vshear = -1.5*omegak*rbin                   # calculates the change in velocity required to keep a body in a circular orbit
 pbin = 2.*np.pi/np.sqrt(g*(m1+m2)/rbin**3)  # orbital period of primary and secondary around each other
@@ -27,10 +27,10 @@ t = 2.*np.pi/np.sqrt(g*msun/rsun**3)         # orbital period of binary around t
 n = 2*np.pi/t                               # mean motion of binary around the sun
 vk = np.sqrt(g*msun/rsun)      # orbital speed of primary around sun
 simp = 100e3 # impactor radius
-b = 3.0*rhill1 # impact parameter
+b = 2.0*rhill1 # impact parameter
         
 y0 = rhill1*simp/1e3                  # initial y distance of impactor from binary - larger for larger impactors
-y0 = 8*rhill1
+y0 = 5*rhill1
 mimp = 4./3.*np.pi*densimp*simp**3   # mass of impactor
 
 binaryi = np.deg2rad(0)                 # inclination of binary
@@ -86,8 +86,6 @@ impvy = vorbi*ctheta0                   # y velocity of impactor
 def setupSimulation():
     sim = rebound.Simulation()              # initialize rebound simulation
     sim.G = g                               # set G which sets units of integrator - SI in this case
-    sim.dt = 1e-4*pbin                      # set initial timestep of integrator - IAS15 is adaptive so this will change
-    sim.softening = 0.1*s1                  # softening parameter which modifies potential of each particle to prevent divergences
     sim.collision = 'direct'
     sim.add(m=msun, x=-rsun, hash="sun")
     sim.add(m=m1, r=s1, x=primx, vy=primvy, hash="primary")
@@ -110,7 +108,6 @@ all_ps = [p.hash.value for j, p in enumerate(ps)]
 timer = timed() # start timer to time simulations
 try:
     for k, time in enumerate(times):
-        print(k)
         sim.integrate(time)
         p[k] = [ps["primary"].x, ps["primary"].y, ps["primary"].z]
         s[k] = [ps["secondary"].x, ps["secondary"].y, ps["secondary"].z]
@@ -179,7 +176,7 @@ vx, vy = cosspxdot-sinspydot, sinspxdot+cosspydot
 
 cj = n**2*(x**2+y**2) + 2*(mu[:,0]/dr[:,0] + mu[:,1]/dr[:,1]) - vx**2 - vy**2 # jacobian constant
 
-lim = 8
+lim = 2
 fig, axes = plt.subplots(1, figsize=(7, 7))
 axes.set_xlabel("$x/R_\mathrm{h}$")
 axes.set_ylabel("$y/R_\mathrm{h}$")
@@ -192,7 +189,6 @@ primarydot, = axes.plot([], [], marker="o", ms=7, c="tab:orange")
 secondarydot, = axes.plot([], [], marker="o", ms=7, c="tab:blue")
 impactordot, = axes.plot([], [], marker="o", ms=7, c="tab:green")
 text = axes.text(-lim+(lim/10), lim-(lim/10), '', fontsize=15)
-axes.grid()
 axes.legend()
 
 ref = np.zeros((noutputs,3))

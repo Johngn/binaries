@@ -13,16 +13,11 @@ dens1, dens2, densimp = 500., 500., 500. # density of primary, secondary, and im
 m1 = 4./3.*np.pi*dens1*s1**3                # mass of primary calculated from density and radius
 m2 = 4./3.*np.pi*dens2*s2**3                # mass of secondary calculated from density and radius
 rsun = 44.*au                                  # distance of centre of mass of binary from the sun 
-omegak = np.sqrt(g*msun/rsun**3)       # keplerian frequency at this distance
 rhill = rsun*(m1/msun/3.)**(1./3.)        # Hill radius of primary
 rbin = 0.05*rhill                            # separation of binary
 vorb = np.sqrt(g*(m1+m2)/rbin)              # orbital speed of primary and secondary around each other
-# vshear = -1.5*omegak*rbin                   # calculates the change in velocity required to keep a body in a circular orbit
 pbin = 2.*np.pi/np.sqrt(g*(m1+m2)/rbin**3)  # orbital period of primary and secondary around each other
 t = 2.*np.pi/np.sqrt(g*msun/rsun**3)         # orbital period of binary around the sun
-n = 2*np.pi/t                               # mean motion of binary around the sun
-mu1 = g*msun                                # mu of a body is G times its mass          
-mu2 = g*m1
 vk = np.sqrt(g*msun/rsun)
 
 binaryi = np.deg2rad(0)     # inclination of binary
@@ -90,7 +85,7 @@ for j in range(len(b)):             # loop through each impact parameter
         def setupSimulation():
             sim = rebound.Simulation()              # initialize rebound simulation
             sim.G = g                               # set G which sets units of integrator - SI in this case
-            sim.dt = 1e-4*pbin                      # set initial timestep of integrator - IAS15 is adaptive so this will change
+            sim.dt = 1e3                     # set initial timestep of integrator - IAS15 is adaptive so this will change
             sim.softening = 0.1*s1                  # softening parameter which modifies potential of each particle to prevent divergences
             sim.collision = 'direct'
             sim.add(m=msun, hash="sun")
