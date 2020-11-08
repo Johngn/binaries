@@ -28,24 +28,24 @@ s1, s2 = 100e3, 100e3                         # radius of primary and of seconda
 dens1, dens2, densimp = 1000., 1000., 1000. # density of primary, secondary, and impactor 
 m1 = 4./3.*np.pi*dens1*s1**3
 
-sim_name = 'verywide_equalmass'
-r = '130'
+sim_name = 'test'
+r = '1000'
 b = '1.5'
 
 data = np.loadtxt(f'./rebound/mastersproject/binaries/{sim_name}_{r}_{b}.txt')
 Noutputs = len(data)                             # number of outputs for plotting
 
 times = data[:,0]
-m1 = data[0,1]
-p = data[:,3:6]
-vp = data[:,6:9]
-m2 = data[0,9]
-s = data[:,11:14]
-vs = data[:,14:17]
-mimp = data[0,17]
-simp = data[0,18]
-imp = data[:,19:22]
-vimp = data[:,22:25]
+m1 = data[0,2]
+p = data[:,4:7]
+vp = data[:,7:10]
+m2 = data[0,10]
+s = data[:,12:15]
+vs = data[:,15:18]
+mimp = data[0,18]
+simp = data[0,19]
+imp = data[:,20:23]
+vimp = data[:,23:26]
 
 OmegaK = np.sqrt(G*Msun/rsun**3)      # keplerian frequency at this distance
 angles = -OmegaK*times                        # one full circle divided up into as many angles as there are outputs

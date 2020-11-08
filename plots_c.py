@@ -22,7 +22,7 @@ Msun = 1.9891e30
 sim_name = 'verywide_equalmass'
 data = glob(f'./rebound/mastersproject/binaries/{sim_name}*')
 
-final = np.zeros((len(data), 25))
+final = np.zeros((len(data), 26))
 for i, sim in enumerate(data):
     final[i] = np.loadtxt(sim)[-1]
 
@@ -41,26 +41,17 @@ for i, collision in enumerate(collisions):
         params.append(3)
     coll_params[i] = params
 
-b = final[:,2]
-simp = final[:,3]
-m1 = final[:,4]
-radius1 = final[:,5]
-p = final[:,5:8]
-vp = final[:,8:11]
-m2 = final[:,11]
+b = final[:,1]
+m1 = final[:,2]
+p = final[:,4:7]
+vp = final[:,7:10]
+m2 = final[:,10]
 s = final[:,12:15]
 vs = final[:,15:18]
 mimp = final[:,18]
-imp = final[:,19:22]
-vimp = final[:,22:25]
-
-p = final[:,3:6]
-vp = final[:,6:9]
-s = final[:,11:14]
-vs = final[:,14:17]
-simp = final[0,18]
-imp = final[:,19:22]
-vimp = final[:,22:25]
+simp = final[:,19]
+imp = final[:,20:23]
+vimp = final[:,23:26]
 
 R, V, mu, h = np.zeros((len(data),3)), np.zeros((len(data),3)), np.zeros((len(data),3)), np.zeros((len(data),3))
 R[:,0] = np.linalg.norm(p-s, axis=1)
@@ -103,7 +94,7 @@ plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=3, fancybox=True
 plt.yticks(np.asarray((np.unique(simp)), dtype=int),)
 # plt.xticks(np.round(np.unique(b), 2))
 # plt.xlim(100,350)simp
-plt.savefig(f"./img/{sim_name}_final_bound_whr_dmr", bbox_inches='tight')
+# plt.savefig(f"./img/{sim_name}_final_bound_whr_dmr", bbox_inches='tight')
 # %%
 b = np.round(b, 2)
 binary_e = np.ones((len(np.unique(simp)), len(np.unique(b))))
