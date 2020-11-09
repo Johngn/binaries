@@ -29,8 +29,8 @@ dens1, dens2, densimp = 1000., 1000., 1000. # density of primary, secondary, and
 m1 = 4./3.*np.pi*dens1*s1**3
 
 sim_name = 'test'
-r = '1000'
-b = '1.5'
+r = '140'
+b = '2.4'
 
 data = np.loadtxt(f'./rebound/mastersproject/binaries/{sim_name}_{r}_{b}.txt')
 Noutputs = len(data)                             # number of outputs for plotting
@@ -101,7 +101,8 @@ sinsx, sinsy = np.sin(angles)*sref[:,0], np.sin(angles)*sref[:,1]       # sin of
 sinix, siniy = np.sin(angles)*impref[:,0], np.sin(angles)*impref[:,1]   # sin of reference angles times relative location of impactor
 
 '''2D ANIMATION OF OUTCOME OF SIMULATION'''
-lim = 5
+lim = 10
+
 fig, axes = plt.subplots(1, figsize=(9, 9))
 axes.set_xlabel("$x/R_\mathrm{h}$")
 axes.set_ylabel("$y/R_\mathrm{h}$")
