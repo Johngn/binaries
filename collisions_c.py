@@ -13,16 +13,16 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from glob import glob
 
-sim_name = 'wide_equalmass'
-b = '4.7'
-r = '210.0'
+sim_name = 'verywide_equalmass'
+r = '140'
+b = '1.8'
 
-coll_data = pd.read_csv(f'./results/collision_{sim_name}_b-{b}_r-{r}.csv')
-bodies = coll_data['body'].to_numpy()
-radius = coll_data['r'].to_numpy()
-m = coll_data['m'].to_numpy()
-r = coll_data[['x','y','z']].to_numpy()
-v = coll_data[['vx','vy','vz']].to_numpy()
+coll_data = np.loadtxt(f'./rebound/mastersproject/binaries/collision_{sim_name}_{r}_{b}.txt')
+bodies = coll_data[:,1]
+m = coll_data[:,2]
+radius = coll_data[:,3]
+r = coll_data[:,4:7]
+v = coll_data[:,7:10]
 
 g = 6.67428e-11                             # gravitational constanct in SI units
 

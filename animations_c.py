@@ -28,24 +28,39 @@ s1, s2 = 100e3, 100e3                         # radius of primary and of seconda
 dens1, dens2, densimp = 1000., 1000., 1000. # density of primary, secondary, and impactor 
 m1 = 4./3.*np.pi*dens1*s1**3
 
-sim_name = 'test'
+sim_name = 'verywide_equalmass'
 r = '140'
-b = '2.4'
+b = '2.0'
 
 data = np.loadtxt(f'./rebound/mastersproject/binaries/{sim_name}_{r}_{b}.txt')
 Noutputs = len(data)                             # number of outputs for plotting
 
+# times = data[:,0]
+# m1 = data[0,2]
+# p = data[:,4:7]
+# vp = data[:,7:10]
+# m2 = data[0,10]
+# s = data[:,12:15]
+# vs = data[:,15:18]
+# mimp = data[0,18]
+# simp = data[0,19]
+# imp = data[:,20:23]
+# vimp = data[:,23:26]
+
 times = data[:,0]
-m1 = data[0,2]
-p = data[:,4:7]
-vp = data[:,7:10]
-m2 = data[0,10]
-s = data[:,12:15]
-vs = data[:,15:18]
-mimp = data[0,18]
-simp = data[0,19]
-imp = data[:,20:23]
-vimp = data[:,23:26]
+hash_primary = data[0,2]
+m1 = data[0,3]
+p = data[:,5:8]
+vp = data[:,8:11]
+hash_secondary = data[0,11]
+m2 = data[0,12]
+s = data[:,14:17]
+vs = data[:,17:20]
+hash_impactor = data[0,20]
+mimp = data[0,21]
+simp = data[0,22]
+imp = data[:,23:26]
+vimp = data[:,26:29]
 
 OmegaK = np.sqrt(G*Msun/rsun**3)      # keplerian frequency at this distance
 angles = -OmegaK*times                        # one full circle divided up into as many angles as there are outputs
@@ -101,7 +116,7 @@ sinsx, sinsy = np.sin(angles)*sref[:,0], np.sin(angles)*sref[:,1]       # sin of
 sinix, siniy = np.sin(angles)*impref[:,0], np.sin(angles)*impref[:,1]   # sin of reference angles times relative location of impactor
 
 '''2D ANIMATION OF OUTCOME OF SIMULATION'''
-lim = 10
+lim = 5
 
 fig, axes = plt.subplots(1, figsize=(9, 9))
 axes.set_xlabel("$x/R_\mathrm{h}$")
