@@ -29,7 +29,7 @@ pbin = 2.*np.pi/np.sqrt(g*(m1+m2)/rbin**3)  # orbital period of primary and seco
 t = 2.*np.pi/np.sqrt(g*msun/rsun**3)         # orbital period of binary around the sun
 n = 2*np.pi/t                               # mean motion of binary around the sun
 vk = np.sqrt(g*msun/rsun)      # orbital speed of primary around sun
-simp = 130e3 # impactor radius
+simp = 100e3 # impactor radius
 b = 2.4*rhill1 # impact parameter
         
 y0 = rhill1*simp/1e3                  # initial y distance of impactor from binary - larger for larger impactors

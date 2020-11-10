@@ -29,8 +29,8 @@ dens1, dens2, densimp = 1000., 1000., 1000. # density of primary, secondary, and
 m1 = 4./3.*np.pi*dens1*s1**3
 
 sim_name = 'verywide_equalmass'
-r = '300'
-b = '3.0'
+r = '100'
+b = '2.4'
 
 data = np.loadtxt(f'./rebound/mastersproject/binaries/results/{sim_name}_{r}_{b}.txt')
 Noutputs = len(data)                             # number of outputs for plotting

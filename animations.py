@@ -18,8 +18,8 @@ n = 2*np.pi/T                               # mean motion of binary around the s
 year = 365.25*24.*60.*60.                   # number of seconds in a year
 
 sim_name = 'verywide_doublemass'
-b = '2.5'
-r = '140.0'
+r = '170.0'
+b = '1.7'
 
 data = pd.read_csv(f'./results/{sim_name}_b-{b}_r-{r}.csv')
 Noutputs = len(data)                             # number of outputs for plotting
@@ -91,7 +91,7 @@ sinsx, sinsy = np.sin(angles)*sref[:,0], np.sin(angles)*sref[:,1]       # sin of
 sinix, siniy = np.sin(angles)*impref[:,0], np.sin(angles)*impref[:,1]   # sin of reference angles times relative location of impactor
 
 '''2D ANIMATION OF OUTCOME OF SIMULATION'''
-lim = 5
+lim = 8
 fig, axes = plt.subplots(1, figsize=(9, 9))
 axes.set_xlabel("$x/R_\mathrm{h}$")
 axes.set_ylabel("$y/R_\mathrm{h}$")
