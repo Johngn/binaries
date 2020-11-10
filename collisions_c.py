@@ -17,7 +17,7 @@ sim_name = 'verywide_equalmass'
 r = '140'
 b = '1.8'
 
-coll_data = np.loadtxt(f'./rebound/mastersproject/binaries/collision_{sim_name}_{r}_{b}.txt')
+coll_data = np.loadtxt(f'./rebound/mastersproject/binaries/results/collision_{sim_name}_{r}_{b}.txt')
 bodies = coll_data[:,1]
 m = coll_data[:,2]
 radius = coll_data[:,3]

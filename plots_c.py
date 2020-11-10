@@ -20,7 +20,7 @@ rsun = 44.*au
 Msun = 1.9891e30
 
 sim_name = 'verywide_equalmass'
-data = glob(f'./rebound/mastersproject/binaries/{sim_name}*')
+data = glob(f'./rebound/mastersproject/binaries/results/{sim_name}*')
 
 final = np.zeros((len(data), 26))
 for i, sim in enumerate(data):
