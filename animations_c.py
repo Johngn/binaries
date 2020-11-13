@@ -28,9 +28,9 @@ s1, s2 = 100e3, 100e3                         # radius of primary and of seconda
 dens1, dens2, densimp = 1000., 1000., 1000. # density of primary, secondary, and impactor 
 m1 = 4./3.*np.pi*dens1*s1**3
 
-sim_name = 'verywide_equalmass'
+sim_name = 'ecc_test'
 r = '100'
-b = '2.4'
+b = '9.0'
 
 data = np.loadtxt(f'./rebound/mastersproject/binaries/results/{sim_name}_{r}_{b}.txt')
 Noutputs = len(data)                             # number of outputs for plotting

@@ -16,14 +16,17 @@ from matplotlib.animation import FuncAnimation
 
 g = 6.67428e-11                             # gravitational constanct in SI units
 m1 = 1000                # mass of primary calculated from density and radius
-m2 = 1000                # mass of secondary calculated from density and radius
+m2 = 100
 rbin = 1                            # separation of binary
-vorb = np.sqrt(g*(m1+m2)/rbin)              # orbital speed of primary and secondary around each other
+e = 0.9
+r_a = rbin*(1+e)
 
-xb1 = -m2/(m1+m2)*rbin                  # slightly adjust initial x position of primary to keep centre of mass of binary at r
-xb2 = m1/(m1+m2)*rbin                   # slightly adjust initial x position of secondary to keep centre of mass of binary at r
-vorb1 = -m2/(m1+m2)*vorb                # orbital speed of primary around secondary - adjusted to account for offset from COM
-vorb2 = m1/(m1+m2)*vorb                 # orbital speed of secondary around primary - adjusted to account for offset from COM
+xb1 = -m2/(m1+m2)*r_a
+xb2 = m1/(m1+m2)*r_a
+
+vorb = np.sqrt(g*(m1+m2)*(2/r_a-1/rbin))
+vorb1 = -m2/(m1+m2)*vorb
+vorb2 = m1/(m1+m2)*vorb
 
 def setupSimulation():
     sim = rebound.Simulation()              # initialize rebound simulation
@@ -34,10 +37,10 @@ def setupSimulation():
 
 sim = setupSimulation()
 
-noutputs = 1000             # number of outputs
+noutputs = 3000             # number of outputs
 p, s = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)) # position
 vp, vs = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)) # velocity
-totaltime = 100000    
+totaltime = 1000000    
 times = np.linspace(0.,totaltime, noutputs) # create times for integrations
 ps = sim.particles                      # create variable containing particles in simulation
 
@@ -53,11 +56,11 @@ dv = np.linalg.norm(vp-vs, axis=1)              # relative velocity between prim
 mu = g*(m1+m2)                                 # G times combined mass of primary and secondary
 h = np.cross(p-s,vp-vs)[:,2]                       # angular momentum
 
-semimajoraxis = mu*dr/(2*mu-dr*dv**2)                           # semi-major axis between each pair of bodies
-energy = -mu/2/semimajoraxis                                    # total energy between each pair of bodies 
+semimajoraxis = mu*dr/(2*mu-dr*dv**2)
+energy = -mu/2/semimajoraxis
 ecc = np.sqrt(1+(2*energy*h**2/mu**2))
 
-lim = 2
+lim = 1
 fig, axes = plt.subplots(1, figsize=(9, 9))
 axes.set_ylim(-lim,lim)
 axes.set_xlim(-lim,lim)
@@ -65,6 +68,7 @@ primaryline, = axes.plot([], [], label="primary", c="tab:orange", lw=1.2)
 secondaryline, = axes.plot([], [], label="secondary", c="tab:blue", lw=1.2)
 primarydot, = axes.plot([], [], marker="o", ms=7, c="tab:orange")   
 secondarydot, = axes.plot([], [], marker="o", ms=7, c="tab:blue")
+axes.grid()
 
 def animate(i):
     primaryline.set_data(p[0:i,0], p[0:i,1])

@@ -14,7 +14,9 @@ m1 = 4./3.*np.pi*dens1*s1**3                # mass of primary calculated from de
 m2 = 4./3.*np.pi*dens2*s2**3                # mass of secondary calculated from density and radius
 rsun = 44.*au                                  # distance of centre of mass of binary from the sun 
 rhill = rsun*(m1/msun/3.)**(1./3.)        # Hill radius of primary
-rbin = 0.05*rhill                            # separation of binary
+rbin = 0.4*rhill                            # separation of binary
+e = 0.5
+r_a = rbin*(1+e)
 vorb = np.sqrt(g*(m1+m2)/rbin)              # orbital speed of primary and secondary around each other
 pbin = 2.*np.pi/np.sqrt(g*(m1+m2)/rbin**3)  # orbital period of primary and secondary around each other
 t = 2.*np.pi/np.sqrt(g*msun/rsun**3)         # orbital period of binary around the sun
@@ -34,7 +36,7 @@ headers = ['time','b','imp radius',
            'mass imp','x imp','y imp','z imp','vx imp','vy imp','vz imp',]
 coll_headers = ['time','body','r','m','x','y','z','vx','vy','vz']
 
-sim_name = "tight_equalmass"
+sim_name = "test_ecc"
 
 simp = np.arange(100e3,101e3,10e3) # create range of impactor sizes to loop through
 b = np.arange(3.0,3.1,0.2)*rhill # create range of impact parameters to loop through
@@ -63,7 +65,7 @@ for j in range(len(b)):             # loop through each impact parameter
         secvz = -vorb2*sinbin                  # z velocity of secondary - added if i > 0
         
         y0 = rhill*simp[i]/s1*2.5 * s1/100e3  *b[j]/rhill               # initial y distance of impactor from binary - larger for larger impactors
-        # y0 = rhill
+        y0 = 10*rhill
         
         vorbi = np.sqrt(g*msun/(rsun+b[j]))        # orbital speed of impactor around sun
         theta0 = y0/(rsun+b[j])                    # angle between impactor and line between binary COM and sun
