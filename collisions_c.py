@@ -13,10 +13,14 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from glob import glob
 
-sim_name = 'verywide_equalmass'
-r = '140'
-b = '1.8'
+sim_name = 'coll_test_new'
+r = '50000'
+b = '2.4'
 
+data = np.loadtxt(f'./rebound/mastersproject/binaries/results/{sim_name}_{r}_{b}.txt')
+hash_primary = data[0,2]
+hash_secondary = data[0,11]
+hash_impactor = data[0,20]
 coll_data = np.loadtxt(f'./rebound/mastersproject/binaries/results/collision_{sim_name}_{r}_{b}.txt')
 bodies = coll_data[:,1]
 m = coll_data[:,2]
