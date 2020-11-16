@@ -19,39 +19,43 @@ au = 1.496e11
 rsun = 44.*au
 Msun = 1.9891e30
 
-sim_name = 'coll_test_new'
-data = glob(f'./rebound/mastersproject/binaries/results/{sim_name}*')
+sim_name = 'test_wide_equalmass'
+filenames = glob(f'./rebound/mastersproject/binaries/results/{sim_name}*')
 
-final = np.zeros((len(data), 29))
-for i, sim in enumerate(data):
-    final[i] = np.loadtxt(sim)[-1]
+data = np.zeros((len(filenames), 29))
+for i, sim in enumerate(filenames):
+    data[i] = np.loadtxt(sim)[-1]
 
-collisions = glob(f'./results/collision_{sim_name}*')
+collisions = glob(f'./rebound/mastersproject/binaries/results/collision_{sim_name}*')
 coll_params = np.zeros((len(collisions), 3))
 for i, collision in enumerate(collisions):
     params = re.findall('[0-9]+\.[0-9]+', collision)
     params = [float(param) for param in params]
     
-    collided_bodies = pd.read_csv(collision)['body'].values
-    if collided_bodies[0] == 1 and collided_bodies[1] == 2:
-        params.append(1)
-    if collided_bodies[0] == 1 and collided_bodies[1] == 3:
-        params.append(2)
-    if collided_bodies[0] == 2 and collided_bodies[1] == 3:
-        params.append(3)
-    coll_params[i] = params
+    # collided_bodies = np.loadtxt(collision)
+    # if collided_bodies[0] == 1 and collided_bodies[1] == 2:
+    #     params.append(1)
+    # if collided_bodies[0] == 1 and collided_bodies[1] == 3:
+    #     params.append(2)
+    # if collided_bodies[0] == 2 and collided_bodies[1] == 3:
+    #     params.append(3)
+    # coll_params[i] = params
 
-b = final[:,1]
-m1 = final[:,2]
-p = final[:,4:7]
-vp = final[:,7:10]
-m2 = final[:,10]
-s = final[:,12:15]
-vs = final[:,15:18]
-mimp = final[:,18]
-simp = final[:,19]
-imp = final[:,20:23]
-vimp = final[:,23:26]
+times = data[:,0]
+b = data[:,1]
+hash_primary = data[:,2]
+m1 = data[0,3]
+p = data[:,5:8]
+vp = data[:,8:11]
+# hash_secondary = data[0,11]
+m2 = data[0,12]
+s = data[:,14:17]
+vs = data[:,17:20]
+# hash_impactor = data[0,20]
+mimp = data[0,21]
+simp = data[:,22]/1e3
+imp = data[:,23:26]
+vimp = data[:,26:29]
 
 R, V, mu, h = np.zeros((len(data),3)), np.zeros((len(data),3)), np.zeros((len(data),3)), np.zeros((len(data),3))
 R[:,0] = np.linalg.norm(p-s, axis=1)
@@ -78,7 +82,7 @@ will_collide = periapsis/3e5 < 1
 
 bound = np.logical_and(np.logical_and(energy < 0, np.isfinite(energy)), R < Rhill_largest)
 
-plt.figure(figsize=(10,9))
+plt.figure(figsize=(7,5))
 s = 100
 plt.scatter(b, simp, s=1, marker="x", c="black")
 plt.scatter(b[bound[:,0]], simp[bound[:,0]], label='primary-secondary', s=s, c="tab:blue")
@@ -101,14 +105,14 @@ binary_e = np.ones((len(np.unique(simp)), len(np.unique(b))))
 
 for i, item in enumerate(np.unique(simp)):
     for j, jtem in enumerate(np.unique(b)):
-        ecc = e[np.logical_and(final[:,3] == item, np.round(final[:,2],2) == jtem)][:,0]
+        ecc = e[np.logical_and(np.round(simp,2) == item, b == jtem)][:,0]
         if len(ecc > 0):
             binary_e[i,j] = ecc
             
 binary_e[binary_e > 1] = np.nan
 binary_e = np.round(binary_e, 2)
 
-fig, ax = plt.subplots(1, figsize=(12, 9))
+fig, ax = plt.subplots(1, figsize=(7, 4))
 ax = sns.heatmap(binary_e, 
                  annot=True, 
                  linewidths=0.5, 
@@ -121,7 +125,7 @@ ax.invert_yaxis()
 plt.title(f"eccentricity ({sim_name})")
 plt.xlabel("Impact parameter (Hill radii)")
 plt.ylabel("Impactor radius (km)")
-plt.savefig(f"./img/{sim_name}_final_eccentricity", bbox_inches='tight')
+# plt.savefig(f"./img/{sim_name}_final_eccentricity", bbox_inches='tight')
 # %%
 binary_a = np.ones((len(np.unique(simp)), len(np.unique(b))))
 
