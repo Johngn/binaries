@@ -19,27 +19,12 @@ au = 1.496e11
 rsun = 44.*au
 Msun = 1.9891e30
 
-sim_name = 'test_wide_equalmass'
+sim_name = 'ecc_verywide_equalmass'
 filenames = glob(f'./rebound/mastersproject/binaries/results/{sim_name}*')
 
 data = np.zeros((len(filenames), 29))
 for i, sim in enumerate(filenames):
-    data[i] = np.loadtxt(sim)[-1]
-
-collisions = glob(f'./rebound/mastersproject/binaries/results/collision_{sim_name}*')
-coll_params = np.zeros((len(collisions), 3))
-for i, collision in enumerate(collisions):
-    params = re.findall('[0-9]+\.[0-9]+', collision)
-    params = [float(param) for param in params]
-    
-    # collided_bodies = np.loadtxt(collision)
-    # if collided_bodies[0] == 1 and collided_bodies[1] == 2:
-    #     params.append(1)
-    # if collided_bodies[0] == 1 and collided_bodies[1] == 3:
-    #     params.append(2)
-    # if collided_bodies[0] == 2 and collided_bodies[1] == 3:
-    #     params.append(3)
-    # coll_params[i] = params
+    data[i] = np.loadtxt(sim)[100]
 
 times = data[:,0]
 b = data[:,1]
@@ -47,15 +32,36 @@ hash_primary = data[:,2]
 m1 = data[0,3]
 p = data[:,5:8]
 vp = data[:,8:11]
-# hash_secondary = data[0,11]
+hash_secondary = data[:,11]
 m2 = data[0,12]
 s = data[:,14:17]
 vs = data[:,17:20]
-# hash_impactor = data[0,20]
+hash_impactor = data[:,20]
 mimp = data[0,21]
 simp = data[:,22]/1e3
 imp = data[:,23:26]
 vimp = data[:,26:29]
+
+collisions = glob(f'./rebound/mastersproject/binaries/results/collision_{sim_name}*')
+coll_params = np.zeros((len(collisions), 3))
+for i, collision in enumerate(collisions):
+    params = re.findall('[0-9]+\.[0-9]+', collision)
+    params = [float(param) for param in params]
+    
+    collided_bodies = np.loadtxt(collision)[:,1]
+    # print(collided_bodies[:,1])
+    # print(collided_bodies[0,1] == hash_primary[0] and collided_bodies[1,1] == hash_secondary[0])
+    # print(collided_bodies[0,1] == hash_primary[0] and collided_bodies[1,1] == hash_impactor[0])
+    # print(collided_bodies[0,1] == hash_secondary[0] and collided_bodies[1,1] == hash_impactor[0])
+    
+    if hash_primary[0] in collided_bodies and hash_secondary[0] in collided_bodies:
+        params.append(1)
+    if hash_primary[0] in collided_bodies and hash_impactor[0] in collided_bodies:
+        params.append(2)
+    if hash_secondary[0] in collided_bodies and hash_impactor[0] in collided_bodies:
+        params.append(3)
+    coll_params[i] = params
+    print(params)
 
 R, V, mu, h = np.zeros((len(data),3)), np.zeros((len(data),3)), np.zeros((len(data),3)), np.zeros((len(data),3))
 R[:,0] = np.linalg.norm(p-s, axis=1)
@@ -88,9 +94,9 @@ plt.scatter(b, simp, s=1, marker="x", c="black")
 plt.scatter(b[bound[:,0]], simp[bound[:,0]], label='primary-secondary', s=s, c="tab:blue")
 plt.scatter(b[bound[:,1]], simp[bound[:,1]], label='primary-impactor', s=s, c="tab:orange")
 plt.scatter(b[bound[:,2]], simp[bound[:,2]], label='secondary-impactor', s=s, c="tab:green")
-# plt.scatter(coll_params[coll_params[:,2] == 1][:,0], coll_params[coll_params[:,2] == 1][:,1], marker='x', s=s, c="tab:blue")
-# plt.scatter(coll_params[coll_params[:,2] == 2][:,0], coll_params[coll_params[:,2] == 2][:,1], marker='x', s=s, c="tab:orange")
-# plt.scatter(coll_params[coll_params[:,2] == 3][:,0], coll_params[coll_params[:,2] == 3][:,1], marker='x', s=s, c="tab:green")
+plt.scatter(coll_params[coll_params[:,2] == 1][:,1], coll_params[coll_params[:,2] == 1][:,0], marker='x', s=s, c="tab:blue")
+plt.scatter(coll_params[coll_params[:,2] == 2][:,1], coll_params[coll_params[:,2] == 2][:,0], marker='x', s=s, c="tab:orange")
+plt.scatter(coll_params[coll_params[:,2] == 3][:,1], coll_params[coll_params[:,2] == 3][:,0], marker='x', s=s, c="tab:green")
 plt.xlabel("Impact parameter (Hill radii)")
 plt.ylabel("Impactor radius (km)")
 plt.title(f'{sim_name}')
@@ -112,7 +118,7 @@ for i, item in enumerate(np.unique(simp)):
 binary_e[binary_e > 1] = np.nan
 binary_e = np.round(binary_e, 2)
 
-fig, ax = plt.subplots(1, figsize=(7, 4))
+fig, ax = plt.subplots(1, figsize=(9, 4))
 ax = sns.heatmap(binary_e, 
                  annot=True, 
                  linewidths=0.5, 
@@ -131,7 +137,7 @@ binary_a = np.ones((len(np.unique(simp)), len(np.unique(b))))
 
 for i, item in enumerate(np.unique(simp)):
     for j, jtem in enumerate(np.unique(b)):
-        sma = a[np.logical_and(final[:,3] == item, np.round(final[:,2],2) == jtem)][:,0]
+        sma = a[np.logical_and(data[:,3] == item, np.round(data[:,2],2) == jtem)][:,0]
         if len(sma > 0):
             binary_a[i,j] = sma
             
@@ -151,7 +157,7 @@ ax.invert_yaxis()
 plt.title(f"semi-major axis ({sim_name})")
 plt.xlabel("Impact parameter (Hill radii)")
 plt.ylabel("Impactor radius (km)")
-plt.savefig(f"./img/{sim_name}_final_semimajoraxis", bbox_inches='tight')
+# plt.savefig(f"./img/{sim_name}_final_semimajoraxis", bbox_inches='tight')
 # %%
 binary_a = np.ones((len(np.unique(simp)), len(np.unique(b))))
 
@@ -177,4 +183,4 @@ ax.invert_yaxis()
 plt.title(f"periapsis ({sim_name})")
 plt.xlabel("Impact parameter (Hill radii)")
 plt.ylabel("Impactor radius (km)")
-plt.savefig(f"./img/{sim_name}_final_periapsis", bbox_inches='tight')
+# plt.savefig(f"./img/{sim_name}_final_periapsis", bbox_inches='tight')
