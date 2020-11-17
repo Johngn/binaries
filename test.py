@@ -16,9 +16,9 @@ from matplotlib.animation import FuncAnimation
 
 g = 6.67428e-11                             # gravitational constanct in SI units
 m1 = 1000                # mass of primary calculated from density and radius
-m2 = 100
+m2 = 1000
 rbin = 1                            # separation of binary
-e = 0.9
+e = 0.8
 r_a = rbin*(1+e)
 
 xb1 = -m2/(m1+m2)*r_a
@@ -71,10 +71,10 @@ secondarydot, = axes.plot([], [], marker="o", ms=7, c="tab:blue")
 axes.grid()
 
 def animate(i):
-    primaryline.set_data(p[0:i,0], p[0:i,1])
-    secondaryline.set_data(s[0:i,0], s[0:i,1])
-    primarydot.set_data(p[i,0], p[i,1])
-    secondarydot.set_data(s[i,0], s[i,1])
+    primaryline.set_data(p[0:i,0]-s[0:i,0], p[0:i,1]-s[0:i,1])
+    secondaryline.set_data(0, 0)
+    # primarydot.set_data(p[i,0], p[i,1])
+    # secondarydot.set_data(s[i,0], s[i,1])
     return primarydot, secondarydot, primaryline, secondaryline
 
 anim = animation.FuncAnimation(fig, animate, frames=noutputs, interval=1, blit=True)

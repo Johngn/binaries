@@ -11,9 +11,9 @@ from matplotlib.animation import FuncAnimation, FFMpegWriter
 g = 6.67428e-11                             # gravitational constanct in SI units
 au = 1.496e11                               # astronomical unit    
 msun = 1.9891e30                            # mass of sun
-s1, s2 = 100e3, 45e3                         # radius of primary and of secondary
+s1, s2 = 100e3, 0                         # radius of primary and of secondary
 year = 365.25*24.*60.*60.                   # number of seconds in a year
-dens = 1000.
+dens = 700.
 m1 = 4./3.*np.pi*dens*s1**3                # mass of primary calculated from density and radius
 m2 = 4./3.*np.pi*dens*s2**3                # mass of secondary calculated from density and radius
 rsun = 44.*au                                  # distance of centre of mass of binary from the sun 
@@ -24,14 +24,14 @@ pbin = 2.*np.pi/np.sqrt(g*(m1+m2)/rbin**3)  # orbital period of primary and seco
 t = 2.*np.pi/np.sqrt(g*msun/rsun**3)         # orbital period of binary around the sun
 n = 2*np.pi/t                               # mean motion of binary around the sun
 vk = np.sqrt(g*msun/rsun)      # orbital speed of binary around sun
-simp = 0 # impactor radius
-b = 3.4*rhill1 # impact parameter
+simp = 100e3 # impactor radius
+b = 20*rhill1 # impact parameter
         
 y0 = rhill1*simp/1e3                  # initial y distance of impactor from binary - larger for larger impactors
-y0 = 5*rhill1
+y0 = b*3
 mimp = 4./3.*np.pi*dens*simp**3   # mass of impactor
 
-e = 0.5
+e = 0
 r_a = rbin*(1+e)
 
 xb1 = -m2/(m1+m2)*r_a                  # slightly adjust initial x position of primary to keep centre of mass of binary at r
@@ -58,16 +58,15 @@ def setupSimulation():
     sim.add(m=msun, hash="sun")
     sim.add(m=m1, x=rsun+xb1, vy=vk+vorb1, hash="primary")
     sim.add(m=m2, x=rsun+xb2, vy=vk+vorb2, hash="secondary")
-    sim.add(m=mimp, r=simp, x=impx+rsun, y=impy, vx=impvx, vy=impvy, hash="impactor")
+    sim.add(m=0, r=simp, x=impx+rsun, y=impy, vx=impvx, vy=impvy, hash="impactor")
     return sim
 
 sim = setupSimulation()
 
-noutputs = 3000             # number of outputs
+noutputs = 1000             # number of outputs
 p, s, imp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3)) # position
 vp, vs, vimp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3)) # velocity
-# totaltime = t*simp/10e3*(1/b*rhill1)*3. # total time of simulation - adjusted for different impactor sizes and distances
-totaltime = t
+totaltime = t*2
 times = np.linspace(0.,totaltime, noutputs) # create times for integrations
 ps = sim.particles                      # create variable containing particles in simulation
 
@@ -126,8 +125,9 @@ Rhill_largest = np.array([np.amax([Rhill[0], Rhill[1]]), np.amax([Rhill[0], Rhil
 a = mu*R/(2*mu - R*V**2)
 energy = -mu/2/a
 e = np.sqrt(1 + (2*energy*h**2 / mu**2))
+plt.plot(times/t,e[:,0])
 
-lim = 0.8
+lim = 1
 fig, axes = plt.subplots(1, figsize=(7, 7))
 axes.set_xlabel("$x/R_\mathrm{h}$")
 axes.set_ylabel("$y/R_\mathrm{h}$")
