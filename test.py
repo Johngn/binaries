@@ -15,10 +15,10 @@ from matplotlib import animation
 from matplotlib.animation import FuncAnimation
 
 g = 6.67428e-11                             # gravitational constanct in SI units
-m1 = 1000                # mass of primary calculated from density and radius
-m2 = 1000
+m1 = 1e3                # mass of primary calculated from density and radius
+m2 = 1e3
 rbin = 1                            # separation of binary
-e = 0.8
+e = 0.4
 r_a = rbin*(1+e)
 
 xb1 = -m2/(m1+m2)*r_a
@@ -33,6 +33,7 @@ def setupSimulation():
     sim.G = g                               # set G which sets units of integrator - SI in this case
     sim.add(m=m1, x=xb1, vy=vorb1, hash="primary")
     sim.add(m=m2, x=xb2, vy=vorb2, hash="secondary")
+    # sim.add(m=)
     return sim
 
 sim = setupSimulation()
@@ -71,10 +72,10 @@ secondarydot, = axes.plot([], [], marker="o", ms=7, c="tab:blue")
 axes.grid()
 
 def animate(i):
-    primaryline.set_data(p[0:i,0]-s[0:i,0], p[0:i,1]-s[0:i,1])
-    secondaryline.set_data(0, 0)
-    # primarydot.set_data(p[i,0], p[i,1])
-    # secondarydot.set_data(s[i,0], s[i,1])
+    primaryline.set_data(p[0:i,0], p[0:i,1])
+    secondaryline.set_data(s[0:i,0], s[0:i,1])
+    primarydot.set_data(p[i,0], p[i,1])
+    secondarydot.set_data(s[i,0], s[i,1])
     return primarydot, secondarydot, primaryline, secondaryline
 
 anim = animation.FuncAnimation(fig, animate, frames=noutputs, interval=1, blit=True)

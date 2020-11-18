@@ -11,14 +11,14 @@ from matplotlib.animation import FuncAnimation, FFMpegWriter
 g = 6.67428e-11                             # gravitational constanct in SI units
 au = 1.496e11                               # astronomical unit    
 msun = 1.9891e30                            # mass of sun
-s1, s2 = 100e3, 0                         # radius of primary and of secondary
+s1, s2 = 100e3, 100e3                         # radius of primary and of secondary
 year = 365.25*24.*60.*60.                   # number of seconds in a year
 dens = 700.
 m1 = 4./3.*np.pi*dens*s1**3                # mass of primary calculated from density and radius
 m2 = 4./3.*np.pi*dens*s2**3                # mass of secondary calculated from density and radius
 rsun = 44.*au                                  # distance of centre of mass of binary from the sun 
 rhill1 = rsun*(m1/msun/3.)**(1./3.)        # Hill radius of primary
-rbin = 0.4*rhill1                            # separation of binary
+rbin = 0.5*rhill1                            # separation of binary
 vorb = np.sqrt(g*(m1+m2)/rbin)              # orbital speed of primary and secondary around each other
 pbin = 2.*np.pi/np.sqrt(g*(m1+m2)/rbin**3)  # orbital period of primary and secondary around each other
 t = 2.*np.pi/np.sqrt(g*msun/rsun**3)         # orbital period of binary around the sun
@@ -31,7 +31,7 @@ y0 = rhill1*simp/1e3                  # initial y distance of impactor from bina
 y0 = b*3
 mimp = 4./3.*np.pi*dens*simp**3   # mass of impactor
 
-e = 0
+e = 0.5
 r_a = rbin*(1+e)
 
 xb1 = -m2/(m1+m2)*r_a                  # slightly adjust initial x position of primary to keep centre of mass of binary at r
@@ -66,7 +66,7 @@ sim = setupSimulation()
 noutputs = 1000             # number of outputs
 p, s, imp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3)) # position
 vp, vs, vimp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3)) # velocity
-totaltime = t*2
+totaltime = t*10
 times = np.linspace(0.,totaltime, noutputs) # create times for integrations
 ps = sim.particles                      # create variable containing particles in simulation
 
@@ -76,12 +76,13 @@ timer = timed() # start timer to time simulations
 try:
     for k, time in enumerate(times):
         sim.integrate(time)
+        # print(k)
         p[k] = [ps["primary"].x, ps["primary"].y, ps["primary"].z]
         s[k] = [ps["secondary"].x, ps["secondary"].y, ps["secondary"].z]
         imp[k] = [ps["impactor"].x, ps["impactor"].y, ps["impactor"].z]
         vp[k] = [ps["primary"].vx, ps["primary"].vy, ps["primary"].vz]
         vs[k] = [ps["secondary"].vx, ps["secondary"].vy, ps["secondary"].vz]
-        # vimp[k] = [ps["impactor"].vx, ps["impactor"].vy, ps["impactor"].vz]
+        vimp[k] = [ps["impactor"].vx, ps["impactor"].vy, ps["impactor"].vz]
 except rebound.Collision:
     collided = []
     for item in sim.particles:
@@ -125,8 +126,10 @@ Rhill_largest = np.array([np.amax([Rhill[0], Rhill[1]]), np.amax([Rhill[0], Rhil
 a = mu*R/(2*mu - R*V**2)
 energy = -mu/2/a
 e = np.sqrt(1 + (2*energy*h**2 / mu**2))
-plt.plot(times/t,e[:,0])
-
+# plt.figure()
+# plt.plot(times/t,e[:,0])
+# plt.ylim(0,1)
+# # %%
 lim = 1
 fig, axes = plt.subplots(1, figsize=(7, 7))
 axes.set_xlabel("$x/R_\mathrm{h}$")
@@ -318,7 +321,7 @@ plt.grid('both')
 plt.legend()
 # plt.savefig(f"distance_2", bbox_inches='tight')
 # %%
-y = ecc
+y = e
 plt.figure(figsize=(8,4))
 # plt.title(f"Integrator={sim.integrator} -- Impactor radius={simp/1e3} km -- b={b/Rhill} hill radii")
 plt.plot(times/year, y[:,0], label="Primary-Secondary", lw=1.5)
@@ -330,7 +333,7 @@ plt.xlim(0, np.amax(times)/year)
 plt.ylim(0, 1)
 plt.grid('both')
 plt.legend()
-plt.savefig(f"eccentricity_3", bbox_inches='tight')
+# plt.savefig(f"eccentricity_3", bbox_inches='tight')
 # %%
 # Cd = 2.
 # rho_g = 1e-20
