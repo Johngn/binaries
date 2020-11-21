@@ -16,10 +16,10 @@ from matplotlib.animation import FuncAnimation
 
 g = 6.67428e-11                             # gravitational constanct in SI units
 m1 = 1e3                # mass of primary calculated from density and radius
-m2 = 1e3
+m2 = 0
 rbin = 1                            # separation of binary
-e = 0.4
-r_a = rbin*(1+e)
+e = 0.99
+r_a = rbin*(1-e)
 
 xb1 = -m2/(m1+m2)*r_a
 xb2 = m1/(m1+m2)*r_a
@@ -38,10 +38,10 @@ def setupSimulation():
 
 sim = setupSimulation()
 
-noutputs = 3000             # number of outputs
+noutputs = 1000             # number of outputs
 p, s = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)) # position
 vp, vs = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)) # velocity
-totaltime = 1000000    
+totaltime = 100000    
 times = np.linspace(0.,totaltime, noutputs) # create times for integrations
 ps = sim.particles                      # create variable containing particles in simulation
 
@@ -61,7 +61,7 @@ semimajoraxis = mu*dr/(2*mu-dr*dv**2)
 energy = -mu/2/semimajoraxis
 ecc = np.sqrt(1+(2*energy*h**2/mu**2))
 
-lim = 1
+lim = 2
 fig, axes = plt.subplots(1, figsize=(9, 9))
 axes.set_ylim(-lim,lim)
 axes.set_xlim(-lim,lim)

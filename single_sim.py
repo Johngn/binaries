@@ -11,7 +11,7 @@ from matplotlib.animation import FuncAnimation, FFMpegWriter
 g = 6.67428e-11                             # gravitational constanct in SI units
 au = 1.496e11                               # astronomical unit    
 msun = 1.9891e30                            # mass of sun
-s1, s2 = 100e3, 100e3                         # radius of primary and of secondary
+s1, s2 = 100e3, 0                         # radius of primary and of secondary
 year = 365.25*24.*60.*60.                   # number of seconds in a year
 dens = 700.
 m1 = 4./3.*np.pi*dens*s1**3                # mass of primary calculated from density and radius
@@ -31,8 +31,8 @@ y0 = rhill1*simp/1e3                  # initial y distance of impactor from bina
 y0 = b*3
 mimp = 4./3.*np.pi*dens*simp**3   # mass of impactor
 
-e = 0.5
-r_a = rbin*(1+e)
+e = 0
+r_a = rbin*(1-e)
 
 xb1 = -m2/(m1+m2)*r_a                  # slightly adjust initial x position of primary to keep centre of mass of binary at r
 xb2 = m1/(m1+m2)*r_a                   # slightly adjust initial x position of secondary to keep centre of mass of binary at r
@@ -66,7 +66,7 @@ sim = setupSimulation()
 noutputs = 1000             # number of outputs
 p, s, imp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3)) # position
 vp, vs, vimp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3)) # velocity
-totaltime = t*10
+totaltime = t*100
 times = np.linspace(0.,totaltime, noutputs) # create times for integrations
 ps = sim.particles                      # create variable containing particles in simulation
 
