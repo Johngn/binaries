@@ -15,11 +15,12 @@ from matplotlib import animation
 from matplotlib.animation import FuncAnimation
 
 g = 6.67428e-11                             # gravitational constanct in SI units
-m1 = 1e3                # mass of primary calculated from density and radius
+msun = 1
+m1 = 0.1                # mass of primary calculated from density and radius
 m2 = 0
 rbin = 1                            # separation of binary
-e = 0.99
-r_a = rbin*(1-e)
+e = 0
+r_a = rbin*(1+e)
 
 xb1 = -m2/(m1+m2)*r_a
 xb2 = m1/(m1+m2)*r_a
@@ -31,6 +32,7 @@ vorb2 = m1/(m1+m2)*vorb
 def setupSimulation():
     sim = rebound.Simulation()              # initialize rebound simulation
     sim.G = g                               # set G which sets units of integrator - SI in this case
+    sim.add(m=msun)
     sim.add(m=m1, x=xb1, vy=vorb1, hash="primary")
     sim.add(m=m2, x=xb2, vy=vorb2, hash="secondary")
     # sim.add(m=)
@@ -41,7 +43,7 @@ sim = setupSimulation()
 noutputs = 1000             # number of outputs
 p, s = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)) # position
 vp, vs = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)) # velocity
-totaltime = 100000    
+totaltime = 1e7    
 times = np.linspace(0.,totaltime, noutputs) # create times for integrations
 ps = sim.particles                      # create variable containing particles in simulation
 
