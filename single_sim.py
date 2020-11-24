@@ -8,7 +8,7 @@ from timeit import default_timer as timed
 from matplotlib import animation
 from matplotlib.animation import FuncAnimation, FFMpegWriter
 
-g = 6.67428e-11                             # gravitational constanct in SI units
+g = 6.67428e-11                             # gravitational constant in SI units
 au = 1.496e11                               # astronomical unit    
 msun = 1.9891e30                            # mass of sun
 s1, s2 = 100e3, 0                         # radius of primary and of secondary
@@ -17,20 +17,19 @@ dens = 700.
 m1 = 4./3.*np.pi*dens*s1**3                # mass of primary calculated from density and radius
 m2 = 4./3.*np.pi*dens*s2**3                # mass of secondary calculated from density and radius
 rsun = 44.*au                                  # distance of centre of mass of binary from the sun 
-rhill1 = rsun*(m1/msun/3.)**(1./3.)        # Hill radius of primary
-rbin = 0.5*rhill1                            # separation of binary
+rhill1 = rsun*((m1+m2)/msun/3.)**(1./3.)        # Hill radius of primary
+rbin = 0.3*rhill1                            # separation of binary
 vorb = np.sqrt(g*(m1+m2)/rbin)              # orbital speed of primary and secondary around each other
 pbin = 2.*np.pi/np.sqrt(g*(m1+m2)/rbin**3)  # orbital period of primary and secondary around each other
 t = 2.*np.pi/np.sqrt(g*msun/rsun**3)         # orbital period of binary around the sun
 n = 2*np.pi/t                               # mean motion of binary around the sun
 vk = np.sqrt(g*msun/rsun)      # orbital speed of binary around sun
-simp = 100e3 # impactor radius
-b = 20*rhill1 # impact parameter
+simp = 150e3 # impactor radius
+b = 2*rhill1 # impact parameter
 omegak = np.sqrt(g*msun/rsun**3)
 vshear = -1.5*omegak*rbin
         
-y0 = rhill1*simp/1e3                  # initial y distance of impactor from binary - larger for larger impactors
-y0 = b*3
+y0 = b*2                 # initial y distance of impactor from binary - larger for larger impactors
 mimp = 4./3.*np.pi*dens*simp**3   # mass of impactor
 
 e = 0
@@ -38,6 +37,8 @@ r_a = rbin*(1-e)
 
 xb1 = -m2/(m1+m2)*r_a                  # slightly adjust initial x position of primary to keep centre of mass of binary at r
 xb2 = m1/(m1+m2)*r_a                   # slightly adjust initial x position of secondary to keep centre of mass of binary at r
+vshear1 = -1.5*omegak*xb1
+vshear2 = -1.5*omegak*xb2
 
 vorb = np.sqrt(g*(m1+m2)*(2/r_a-1/rbin))
 vorb1 = -m2/(m1+m2)*vorb                # orbital speed of primary around secondary - adjusted to account for offset from COM
@@ -57,15 +58,18 @@ def setupSimulation():
     sim = rebound.Simulation()              # initialize rebound simulation
     sim.G = g                               # set G which sets units of integrator - SI in this case
     sim.collision = 'direct'
+    # sim.integrator = 'LEAPFROG'
+    # sim.dt = 24*60*60
     sim.add(m=msun, hash="sun")
-    sim.add(m=m1, x=rsun+xb1, vy=vk, hash="primary")
+    sim.add(m=m1, x=rsun+xb1, vy=vk+vorb1, hash="primary")
     sim.add(m=m2, x=rsun+xb2, vy=vk+vorb2, hash="secondary")
     sim.add(m=0, r=simp, x=impx+rsun, y=impy, vx=impvx, vy=impvy, hash="impactor")
+    sim.move_to_com()
     return sim
 
 sim = setupSimulation()
 
-noutputs = 3000             # number of outputs
+noutputs = 1000             # number of outputs
 p, s, imp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3)) # position
 vp, vs, vimp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3)) # velocity
 totaltime = t*1
@@ -116,9 +120,9 @@ mu = g*(m1+m2)
 a = mu*dr/(2*mu - dr*dv**2)
 energy = -mu/2/a
 e = np.sqrt(1 + (2*energy*h**2 / mu**2))
-# plt.figure()
-# plt.plot(times/t,e)
-# plt.ylim(0,1)
+plt.figure()
+plt.plot(times/t,e)
+plt.ylim(0,1)
 
 angles = -omegak*times
 sp = (s-p)/rhill1         # difference between positions of secondary and primary
@@ -136,7 +140,7 @@ vx, vy = cosspxdot-sinspydot, sinspxdot+cosspydot       # vx and vy values for c
 
 cj = n**2*(x**2 + y**2) + 2*(mu/dr + mu/dr) - vx**2 - vy**2 # jacobian constant
 
-lim = 1
+lim = 3
 fig, axes = plt.subplots(1, figsize=(7, 7))
 axes.set_xlabel("$x/R_\mathrm{h}$")
 axes.set_ylabel("$y/R_\mathrm{h}$")
@@ -192,7 +196,7 @@ def animate(i):
     secondaryhill.center = (cossx[i]-sinsy[i], sinsx[i]+cossy[i])
     impactorhill.center = (cosix[i]-siniy[i], sinix[i]+cosiy[i])
     text.set_text('{} Years'.format(int(times[i]/(year))))
-    return primarydot, secondarydot, impactordot, primaryline, secondaryline, impactorline, text
+    return primarydot, secondarydot, impactordot, primaryline, secondaryline, impactorline, primaryhill, secondaryhill, impactorhill, text
 
 anim = animation.FuncAnimation(fig, animate, init_func=init, frames=noutputs, interval=1, blit=True)
 # anim = animation.FuncAnimation(fig, animate, frames=noutputs, interval=1, blit=True)
