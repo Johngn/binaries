@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Fri Sep 25 10:51:31 2020
+Created on Sun Nov  8 20:05:13 2020
 
-@author: johngillan
+@author: john
 """
 
 import re
@@ -13,16 +13,20 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from glob import glob
 
-sim_name = 'wide_equalmass'
-b = '4.7'
-r = '210.0'
+sim_name = 'coll_test_new'
+r = '50000'
+b = '2.4'
 
-coll_data = pd.read_csv(f'./results/collision_{sim_name}_b-{b}_r-{r}.csv')
-bodies = coll_data['body'].to_numpy()
-radius = coll_data['r'].to_numpy()
-m = coll_data['m'].to_numpy()
-r = coll_data[['x','y','z']].to_numpy()
-v = coll_data[['vx','vy','vz']].to_numpy()
+data = np.loadtxt(f'./rebound/mastersproject/binaries/results/{sim_name}_{r}_{b}.txt')
+hash_primary = data[0,2]
+hash_secondary = data[0,11]
+hash_impactor = data[0,20]
+coll_data = np.loadtxt(f'./rebound/mastersproject/binaries/results/collision_{sim_name}_{r}_{b}.txt')
+bodies = coll_data[:,1]
+m = coll_data[:,2]
+radius = coll_data[:,3]
+r = coll_data[:,4:7]
+v = coll_data[:,7:10]
 
 g = 6.67428e-11                             # gravitational constanct in SI units
 

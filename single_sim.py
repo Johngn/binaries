@@ -18,13 +18,13 @@ m1 = 4./3.*np.pi*dens*s1**3                # mass of primary calculated from den
 m2 = 4./3.*np.pi*dens*s2**3                # mass of secondary calculated from density and radius
 rsun = 44.*au                                  # distance of centre of mass of binary from the sun 
 rhill1 = rsun*((m1+m2)/msun/3.)**(1./3.)        # Hill radius of primary
-rbin = 0.3*rhill1                            # separation of binary
+rbin = 0.4*rhill1                            # separation of binary
 vorb = np.sqrt(g*(m1+m2)/rbin)              # orbital speed of primary and secondary around each other
 pbin = 2.*np.pi/np.sqrt(g*(m1+m2)/rbin**3)  # orbital period of primary and secondary around each other
-t = 2.*np.pi/np.sqrt(g*msun/rsun**3)         # orbital period of binary around the sun
+t = 2.*np.pi/np.sqrt(g*msun/rsun**3)            # orbital period of binary around the sun
 n = 2*np.pi/t                               # mean motion of binary around the sun
 vk = np.sqrt(g*msun/rsun)      # orbital speed of binary around sun
-simp = 150e3 # impactor radius
+simp = 10e3 # impactor radius
 b = 2*rhill1 # impact parameter
 omegak = np.sqrt(g*msun/rsun**3)
 vshear = -1.5*omegak*rbin
@@ -32,7 +32,7 @@ vshear = -1.5*omegak*rbin
 y0 = b*2                 # initial y distance of impactor from binary - larger for larger impactors
 mimp = 4./3.*np.pi*dens*simp**3   # mass of impactor
 
-e = 0
+e = 0.2
 r_a = rbin*(1-e)
 
 xb1 = -m2/(m1+m2)*r_a                  # slightly adjust initial x position of primary to keep centre of mass of binary at r
@@ -58,13 +58,10 @@ def setupSimulation():
     sim = rebound.Simulation()              # initialize rebound simulation
     sim.G = g                               # set G which sets units of integrator - SI in this case
     sim.collision = 'direct'
-    # sim.integrator = 'LEAPFROG'
-    # sim.dt = 24*60*60
     sim.add(m=msun, hash="sun")
     sim.add(m=m1, x=rsun+xb1, vy=vk+vorb1, hash="primary")
     sim.add(m=m2, x=rsun+xb2, vy=vk+vorb2, hash="secondary")
     sim.add(m=0, r=simp, x=impx+rsun, y=impy, vx=impvx, vy=impvy, hash="impactor")
-    sim.move_to_com()
     return sim
 
 sim = setupSimulation()
@@ -73,7 +70,7 @@ noutputs = 1000             # number of outputs
 p, s, imp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3)) # position
 vp, vs, vimp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3)) # velocity
 totaltime = t*1
-times = np.linspace(0.,totaltime, noutputs) # create times for integrations
+times = np.linspace(0,totaltime, noutputs) # create times for integrations
 ps = sim.particles                      # create variable containing particles in simulation
 
 all_ps = [p.hash.value for j, p in enumerate(ps)]

@@ -1,3 +1,11 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Nov  7 18:24:11 2020
+
+@author: john
+"""
+
 # %%
 import glob, os, csv, rebound
 import numpy as np
@@ -17,25 +25,27 @@ T = 2.*np.pi/np.sqrt(G*(Msun)/rsun**3)      # orbital period of binary around th
 n = 2*np.pi/T                               # mean motion of binary around the sun
 year = 365.25*24.*60.*60.                   # number of seconds in a year
 
-sim_name = 'verywide_doublemass'
-r = '170.0'
-b = '1.7'
+sim_name = 'drag_test'
+r = '0.0'
+b = '29.6'
 
-data = pd.read_csv(f'./results/{sim_name}_b-{b}_r-{r}.csv')
-Noutputs = len(data)                             # number of outputs for plotting
+data = np.loadtxt(f'./rebound/mastersproject/binaries/results/{sim_name}_{r}_{b}.txt')
+Noutputs = len(data)
 
-times = data['time'].to_numpy()
-b = data['b'].to_numpy()[0]
-simp = data['imp radius'].to_numpy()[0]
-m1 = data['mass prim'].to_numpy()[0]
-m2 = data['mass sec'].to_numpy()[0]
-mimp = data['mass imp'].to_numpy()[0]
-p = data[['x prim','y prim', 'z prim']].to_numpy()
-s = data[['x sec','y sec', 'z sec']].to_numpy()
-imp = data[['x imp','y imp', 'z imp']].to_numpy()
-vp = data[['vx prim','vy prim', 'vz prim']].to_numpy()
-vs = data[['vx sec','vy sec', 'vz sec']].to_numpy()
-vimp = data[['vx imp','vy imp', 'vz imp']].to_numpy()
+times = data[:,0]
+hash_primary = data[0,2]
+m1 = data[0,3]
+p = data[:,5:8]
+vp = data[:,8:11]
+hash_secondary = data[0,11]
+m2 = data[0,12]
+s = data[:,14:17]
+vs = data[:,17:20]
+hash_impactor = data[0,20]
+mimp = data[0,21]
+simp = data[0,22]
+imp = data[:,23:26]
+vimp = data[:,26:29]
 
 OmegaK = np.sqrt(G*Msun/rsun**3)      # keplerian frequency at this distance
 angles = -OmegaK*times                        # one full circle divided up into as many angles as there are outputs
@@ -58,6 +68,9 @@ a = mu*dr/(2*mu-dr*dv**2)                            # semi-major axis between e
 energy = -mu/2/a                                    # total energy between each pair of bodies
 e = np.sqrt(1+(2*energy*h**2/mu**2))
 
+plt.figure()
+plt.plot(times,e[:,0])
+plt.ylim(0,1)
 Rhill = np.array([rsun*(m1/Msun/3.)**(1./3.), rsun*(m2/Msun/3.)**(1./3.), rsun*(mimp/Msun/3.)**(1./3.)])
 Rhill_largest = np.array([np.amax([Rhill[0], Rhill[1]]), np.amax([Rhill[0], Rhill[2]]), np.amax([Rhill[1], Rhill[2]])])
 bound = np.logical_and(np.logical_and(energy < 0, np.isfinite(energy)), dr < Rhill_largest)
@@ -80,9 +93,9 @@ Cj = n**2*(x**2 + y**2) + 2*(mu[:,0]/dr[:,0] + mu[:,1]/dr[:,1]) - vx**2 - vy**2 
 ref = np.zeros((Noutputs,3))            # reference point that keeps binary at centre of animation
 ref[:,0] = 0 + rsun*np.cos(angles)  # x values of reference
 ref[:,1] = 0 - rsun*np.sin(angles)      # y values of reference
-pref = (p-ref)/Rhill[0]                 # difference between primary and reference point
-sref = (s-ref)/Rhill[0]                 # difference between secondary and reference point
-impref = (imp-ref)/Rhill[0]             # difference between impactor and reference point
+pref = (p-ref)/Rhill                 # difference between primary and reference point
+sref = (s-ref)/Rhill                 # difference between secondary and reference point
+impref = (imp-ref)/Rhill             # difference between impactor and reference point
 cospx, cospy = np.cos(angles)*pref[:,0], np.cos(angles)*pref[:,1]       # cos of reference angles times relative location of primary
 cossx, cossy = np.cos(angles)*sref[:,0], np.cos(angles)*sref[:,1]       # cos of reference angles times relative location of secondary
 cosix, cosiy = np.cos(angles)*impref[:,0], np.cos(angles)*impref[:,1]   # cos of reference angles times relative location of impactor
@@ -91,7 +104,8 @@ sinsx, sinsy = np.sin(angles)*sref[:,0], np.sin(angles)*sref[:,1]       # sin of
 sinix, siniy = np.sin(angles)*impref[:,0], np.sin(angles)*impref[:,1]   # sin of reference angles times relative location of impactor
 
 '''2D ANIMATION OF OUTCOME OF SIMULATION'''
-lim = 8
+lim = 5
+
 fig, axes = plt.subplots(1, figsize=(9, 9))
 axes.set_xlabel("$x/R_\mathrm{h}$")
 axes.set_ylabel("$y/R_\mathrm{h}$")
@@ -104,6 +118,7 @@ primarydot, = axes.plot([], [], marker="o", ms=7, c="tab:orange")
 secondarydot, = axes.plot([], [], marker="o", ms=7, c="tab:blue")
 impactordot, = axes.plot([], [], marker="o", ms=7, c="tab:green")
 text = axes.text(-lim+(lim/10), lim-(lim/10), '', fontsize=15)
+axes.grid()
 axes.legend()
 
 primaryhill = plt.Circle((0,0), Rhill[0]/Rhill[0], fc="none", ec="tab:orange") # circle with hill radius of primary - normalized for plotting

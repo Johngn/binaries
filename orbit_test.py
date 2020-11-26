@@ -35,6 +35,7 @@ def setupSimulation():
     # sim.add(m=msun)
     sim.add(m=m1, x=xb1, vy=vorb1, hash="primary")
     sim.add(m=m2, x=xb2, vy=vorb2, hash="secondary")
+    # sim.add(m=m2, a=1, e=0.5, hash="secondary")
     # sim.add(m=)
     return sim
 
