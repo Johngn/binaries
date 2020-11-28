@@ -1,7 +1,6 @@
 # %%
-import glob, os, csv, rebound
+import rebound
 import numpy as np
-import pandas as pd
 import matplotlib.pyplot as plt
 import mpl_toolkits.mplot3d.axes3d as p3
 from timeit import default_timer as timed
@@ -11,61 +10,39 @@ from matplotlib.animation import FuncAnimation, FFMpegWriter
 g = 6.67428e-11                             # gravitational constant in SI units
 au = 1.496e11                               # astronomical unit    
 msun = 1.9891e30                            # mass of sun
-s1, s2 = 100e3, 0                         # radius of primary and of secondary
+rsun = 44.*au                                  # distance of centre of mass of binary from the sun 
 year = 365.25*24.*60.*60.                   # number of seconds in a year
 dens = 700.
+
+s1, s2 = 100e3, 50e3                         # radius of primary and of secondary
 m1 = 4./3.*np.pi*dens*s1**3                # mass of primary calculated from density and radius
 m2 = 4./3.*np.pi*dens*s2**3                # mass of secondary calculated from density and radius
-rsun = 44.*au                                  # distance of centre of mass of binary from the sun 
-rhill1 = rsun*((m1+m2)/msun/3.)**(1./3.)        # Hill radius of primary
-rbin = 0.4*rhill1                            # separation of binary
-vorb = np.sqrt(g*(m1+m2)/rbin)              # orbital speed of primary and secondary around each other
-pbin = 2.*np.pi/np.sqrt(g*(m1+m2)/rbin**3)  # orbital period of primary and secondary around each other
-t = 2.*np.pi/np.sqrt(g*msun/rsun**3)            # orbital period of binary around the sun
-n = 2*np.pi/t                               # mean motion of binary around the sun
-vk = np.sqrt(g*msun/rsun)      # orbital speed of binary around sun
-simp = 10e3 # impactor radius
-b = 2*rhill1 # impact parameter
-omegak = np.sqrt(g*msun/rsun**3)
-vshear = -1.5*omegak*rbin
-        
-y0 = b*2                 # initial y distance of impactor from binary - larger for larger impactors
+rhill = rsun*((m1+m2)/msun/3.)**(1./3.)        # Hill radius of primary
+
+rbin = 0.4*rhill                            # separation of binary
+e = 0
+
+simp = 20e3 # impactor radius
+b = 4
+
 mimp = 4./3.*np.pi*dens*simp**3   # mass of impactor
-
-e = 0.2
-r_a = rbin*(1-e)
-
-xb1 = -m2/(m1+m2)*r_a                  # slightly adjust initial x position of primary to keep centre of mass of binary at r
-xb2 = m1/(m1+m2)*r_a                   # slightly adjust initial x position of secondary to keep centre of mass of binary at r
-vshear1 = -1.5*omegak*xb1
-vshear2 = -1.5*omegak*xb2
-
-vorb = np.sqrt(g*(m1+m2)*(2/r_a-1/rbin))
-vorb1 = -m2/(m1+m2)*vorb                # orbital speed of primary around secondary - adjusted to account for offset from COM
-vorb2 = m1/(m1+m2)*vorb                 # orbital speed of secondary around primary - adjusted to account for offset from COM
-
-
-vorbi = np.sqrt(g*msun/(rsun+b))        # orbital speed of impactor around sun
-theta0 = y0/(rsun+b)                    # angle between impactor and line between binary COM and sun
-stheta0 = np.sin(theta0)                # sin of theta - needed for position of impactor
-ctheta0 = np.cos(theta0)                # cos of theta - needed for position of impactor
-impx = (rsun+b)*ctheta0-rsun  # x position of impactor
-impy = (rsun+b)*stheta0    # y position of impactor
-impvx = -vorbi*stheta0                  # x velocity of impactor
-impvy = vorbi*ctheta0                   # y velocity of impactor
+bhill = b*rhill # impact parameter
+theta = 0.0003*b  # true anomaly of impactor
 
 def setupSimulation():
     sim = rebound.Simulation()              # initialize rebound simulation
     sim.G = g                               # set G which sets units of integrator - SI in this case
     sim.collision = 'direct'
-    sim.add(m=msun, hash="sun")
-    sim.add(m=m1, x=rsun+xb1, vy=vk+vorb1, hash="primary")
-    sim.add(m=m2, x=rsun+xb2, vy=vk+vorb2, hash="secondary")
-    sim.add(m=0, r=simp, x=impx+rsun, y=impy, vx=impvx, vy=impvy, hash="impactor")
+    sim.add(m=m1, r=s1, hash="primary")
+    sim.add(m=m2, r=s2, a=rbin, e=e, hash="secondary")
+    sim.add(m=msun, a=rsun, f=np.pi, hash="sun")
+    sim.move_to_com()
+    sim.add(m=mimp, r=simp, a=rsun+bhill, f=theta, hash="impactor")
     return sim
 
 sim = setupSimulation()
 
+t = 2.*np.pi/np.sqrt(g*msun/rsun**3)            # orbital period of binary around the sun
 noutputs = 1000             # number of outputs
 p, s, imp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3)) # position
 vp, vs, vimp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3)) # velocity
@@ -117,13 +94,15 @@ mu = g*(m1+m2)
 a = mu*dr/(2*mu - dr*dv**2)
 energy = -mu/2/a
 e = np.sqrt(1 + (2*energy*h**2 / mu**2))
-plt.figure()
-plt.plot(times/t,e)
-plt.ylim(0,1)
 
+# plt.figure()
+# plt.plot(times/t,e)
+# plt.ylim(0,1)
+
+omegak = np.sqrt(g*msun/rsun**3)
 angles = -omegak*times
-sp = (s-p)/rhill1         # difference between positions of secondary and primary
-ip = (imp-p)/rhill1       # difference between positions of impactor and primary
+sp = (s-p)/rhill         # difference between positions of secondary and primary
+ip = (imp-p)/rhill       # difference between positions of impactor and primary
 cosspx, cosspy = np.cos(angles)*sp[:,0], np.cos(angles)*sp[:,1] # cos of reference angles times difference between positions of secondary and primary
 sinspx, sinspy = np.sin(angles)*sp[:,0], np.sin(angles)*sp[:,1] # sin of reference angles times difference between positions of secondary and primary
 
@@ -135,9 +114,12 @@ sinspxdot, sinspydot = np.sin(angles)*xdot, np.sin(angles)*ydot # sin of referen
 x, y = cosspx-sinspy+rsun, sinspx+cosspy                # x and y values for calculating jacobian constant
 vx, vy = cosspxdot-sinspydot, sinspxdot+cosspydot       # vx and vy values for calculating jacobian constant
 
+n = 2*np.pi/t                               # mean motion of binary around the sun
+
 cj = n**2*(x**2 + y**2) + 2*(mu/dr + mu/dr) - vx**2 - vy**2 # jacobian constant
 
-lim = 3
+lim = 10
+
 fig, axes = plt.subplots(1, figsize=(7, 7))
 axes.set_xlabel("$x/R_\mathrm{h}$")
 axes.set_ylabel("$y/R_\mathrm{h}$")
@@ -157,9 +139,9 @@ ref = np.zeros((noutputs,3))
 ref[:,0] = rsun*np.cos(angles)
 ref[:,1] = 0 - rsun*np.sin(angles)
 
-pref = (p-ref)/rhill1
-sref = (s-ref)/rhill1
-impref = (imp-ref)/rhill1
+pref = (p-ref)/rhill
+sref = (s-ref)/rhill
+impref = (imp-ref)/rhill
 cospx, cospy = np.cos(angles)*pref[:,0], np.cos(angles)*pref[:,1]
 cossx, cossy = np.cos(angles)*sref[:,0], np.cos(angles)*sref[:,1]
 cosix, cosiy = np.cos(angles)*impref[:,0], np.cos(angles)*impref[:,1]
@@ -167,9 +149,9 @@ sinpx, sinpy = np.sin(angles)*pref[:,0], np.sin(angles)*pref[:,1]
 sinsx, sinsy = np.sin(angles)*sref[:,0], np.sin(angles)*sref[:,1]
 sinix, siniy = np.sin(angles)*impref[:,0], np.sin(angles)*impref[:,1]
 
-rhillprim = rsun*(m1/msun/3.)**(1./3.)/rhill1
-rhillsec = rsun*(m2/msun/3.)**(1./3.)/rhill1
-rhillimp = rsun*(mimp/msun/3.)**(1./3.)/rhill1
+rhillprim = rsun*(m1/msun/3.)**(1./3.)/rhill
+rhillsec = rsun*(m2/msun/3.)**(1./3.)/rhill
+rhillimp = rsun*(mimp/msun/3.)**(1./3.)/rhill
 primaryhill = plt.Circle((0,0), rhillprim, fc="none", ec="tab:orange")
 secondaryhill = plt.Circle((0,0), rhillsec, fc="none", ec="tab:blue")
 impactorhill = plt.Circle((0,0), rhillimp, fc="none", ec="tab:green")
@@ -180,18 +162,17 @@ def init():
     axes.add_patch(impactorhill)
     return primaryhill, secondaryhill, impactorhill,
 
-def animate(i):    
+def animate(i):
     primaryline.set_data(cospx[0:i]-sinpy[0:i], sinpx[0:i]+cospy[0:i])
     secondaryline.set_data(cossx[0:i]-sinsy[0:i], sinsx[0:i]+cossy[0:i])
-    # secondaryline.set_data(s[0:i,0]/rhill1-p[0:i,0]/rhill1, s[0:i,1]/rhill1-p[0:i,1]/rhill1)
     impactorline.set_data(cosix[0:i]-siniy[0:i], sinix[0:i]+cosiy[0:i])
     primarydot.set_data(cospx[i]-sinpy[i], sinpx[i]+cospy[i])
     secondarydot.set_data(cossx[i]-sinsy[i], sinsx[i]+cossy[i])
     impactordot.set_data(cosix[i]-siniy[i], sinix[i]+cosiy[i])
-    # secondarydot.set_data(s[i,0]/rhill1-p[i,0]/rhill1, s[i,1]/rhill1-p[i,1]/rhill1)
     primaryhill.center = (cospx[i]-sinpy[i], sinpx[i]+cospy[i])
     secondaryhill.center = (cossx[i]-sinsy[i], sinsx[i]+cossy[i])
     impactorhill.center = (cosix[i]-siniy[i], sinix[i]+cosiy[i])
+    
     text.set_text('{} Years'.format(int(times[i]/(year))))
     return primarydot, secondarydot, impactordot, primaryline, secondaryline, impactorline, primaryhill, secondaryhill, impactorhill, text
 
@@ -315,16 +296,18 @@ plt.grid('both')
 plt.legend()
 # plt.savefig(f"energy_2", bbox_inches='tight')
 # %%
+
+dr = np.linalg.norm(p-s, axis=1)
 y = dr
 plt.figure(figsize=(8,4))
 # plt.title(f"Integrator={sim.integrator} -- Impactor radius={simp/1e3} km -- b={b/Rhill} hill radii")
-plt.plot(times/year, y[:,0]/rhill1, label="Primary-Secondary", lw=1.5)
-plt.plot(times/year, y[:,1]/rhill1, label="Primary-Impactor", lw=1.5)
-plt.plot(times/year, y[:,2]/rhill1, label="Secondary-Impactor", lw=1.5)
+plt.plot(times/year, np.linalg.norm(p-s, axis=1)/rhill, label="Primary-Secondary", lw=1.5)
+plt.plot(times/year, np.linalg.norm(p-imp, axis=1)/rhill, label="Primary-Impactor", lw=1.5)
+plt.plot(times/year, np.linalg.norm(s-imp, axis=1)/rhill, label="Secondary-Impactor", lw=1.5)
 plt.xlabel("Time (years)")
 plt.ylabel("Distance (Hill Radii)")
 plt.xlim(0, np.amax(times)/year)
-plt.ylim(0,1)
+# plt.ylim(0,1)
 plt.grid('both')
 plt.legend()
 # plt.savefig(f"distance_2", bbox_inches='tight')
@@ -362,3 +345,44 @@ plt.legend()
     
 # sim.additional_forces = dragForce
 # sim.force_is_velocity_dependent = 1
+
+
+# vorb = np.sqrt(g*(m1+m2)/rbin)              # orbital speed of primary and secondary around each other
+# pbin = 2.*np.pi/np.sqrt(g*(m1+m2)/rbin**3)  # orbital period of primary and secondary around each other
+# vk = np.sqrt(g*msun/rsun)      # orbital speed of binary around sun
+
+
+# vshear = -1.5*omegak*rbin
+# y0 = b*2                 # initial y distance of impactor from binary - larger for larger impactors
+# r_a = rbin*(1-e)
+# xb1 = -m2/(m1+m2)*r_a                  # slightly adjust initial x position of primary to keep centre of mass of binary at r
+# xb2 = m1/(m1+m2)*r_a                   # slightly adjust initial x position of secondary to keep centre of mass of binary at r
+# vshear1 = -1.5*omegak*xb1
+# vshear2 = -1.5*omegak*xb2
+# vorb = np.sqrt(g*(m1+m2)*(2/r_a-1/rbin))
+# vorb1 = -m2/(m1+m2)*vorb                # orbital speed of primary around secondary - adjusted to account for offset from COM
+# vorb2 = m1/(m1+m2)*vorb                 # orbital speed of secondary around primary - adjusted to account for offset from COM
+# vorbi = np.sqrt(g*msun/(rsun+b))        # orbital speed of impactor around sun
+# theta0 = y0/(rsun+b)                    # angle between impactor and line between binary COM and sun
+# stheta0 = np.sin(theta0)                # sin of theta - needed for position of impactor
+# ctheta0 = np.cos(theta0)                # cos of theta - needed for position of impactor
+# impx = (rsun+b)*ctheta0-rsun  # x position of impactor
+# impy = (rsun+b)*stheta0    # y position of impactor
+# impvx = -vorbi*stheta0                  # x velocity of impactor
+# impvy = vorbi*ctheta0                   # y velocity of impactor
+
+
+    # sim.add(m=msun, hash="sun")
+    # sim.add(m=m1, x=rsun+xb1, vy=vk+vorb1, hash="primary")
+    # sim.add(m=m2, x=rsun+xb2, vy=vk+vorb2, hash="secondary")
+    # sim.add(m=0, r=simp, x=impx+rsun, y=impy, vx=impvx, vy=impvy, hash="impactor")
+
+    
+    # secondaryline.set_data(s[0:i,0]/rhill-p[0:i,0]/rhill, s[0:i,1]/rhill-p[0:i,1]/rhill)
+    # secondarydot.set_data(s[i,0]-p[i,0], s[i,1]-p[i,1])
+    # impactorline.set_data(imp[0:i,0]-p[0:i,0], imp[0:i,1]-p[0:i,1])
+    # impactordot.set_data(imp[i,0]-p[i,0], imp[i,1]-p[i,1])
+    
+    # primaryline.set_data(p[0:i,0], p[0:i,1])
+    # secondaryline.set_data(s[0:i,0], s[0:i,1])
+    # impactorline.set_data(imp[0:i,0], imp[0:i,1])
