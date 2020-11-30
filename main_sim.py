@@ -16,14 +16,7 @@ rsun = 44.*au                                  # distance of centre of mass of b
 rhill = rsun*(m1/msun/3.)**(1./3.)        # Hill radius of primary
 rbin = 0.4*rhill                            # separation of binary
 e = 0.5
-r_a = rbin*(1+e)
-vorb = np.sqrt(g*(m1+m2)/rbin)              # orbital speed of primary and secondary around each other
-pbin = 2.*np.pi/np.sqrt(g*(m1+m2)/rbin**3)  # orbital period of primary and secondary around each other
 t = 2.*np.pi/np.sqrt(g*msun/rsun**3)         # orbital period of binary around the sun
-vk = np.sqrt(g*msun/rsun)
-
-binaryi = np.deg2rad(0)     # inclination of binary
-impi = np.deg2rad(0)        # inclination of impactor
 
 noutputs = 1000             # number of outputs for plotting
 p, s, imp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3))
@@ -46,37 +39,8 @@ timer = timed() # start timer to time simulations
 for j in range(len(b)):             # loop through each impact parameter
     for i in range(len(simp)):      # loop throught each impactor radius
         mimp = 4./3.*np.pi*densimp*simp[i]**3   # mass of impactor
-        xb1 = -m2/(m1+m2)*rbin                  # slightly adjust initial x position of primary to keep centre of mass of binary at r
-        xb2 = m1/(m1+m2)*rbin                   # slightly adjust initial x position of secondary to keep centre of mass of binary at r
-
-        vorb1 = -m2/(m1+m2)*vorb                # orbital speed of primary around secondary - adjusted to account for offset from COM
-        vorb2 = m1/(m1+m2)*vorb                 # orbital speed of secondary around primary - adjusted to account for offset from COM
-        sinbin = np.sin(binaryi)                # sin of inclination of binary
-        cosbin = np.cos(binaryi)                # cos of inclination of binary
-        
-        primx = xb1*np.sin(np.pi/2-binaryi)     # x position of primary - accounts for inclination
-        primz = xb1*sinbin             # z position of primary - accounts for inclination
-        primvy = vk+vorb1*cosbin               # y velocity of primary - vy is keplerian velocity plus vorb
-        primvz = -vorb1*sinbin                  # z velocity of primary - added if i > 0
-        
-        secx = xb2*np.sin(np.pi/2-binaryi)     # x position of secondary - accounts for inclination
-        secz = xb2*sinbin             # z position of secondary - accounts for inclination
-        secvy = vk+vorb2*cosbin               # y velocity of secondary - vy is keplerian velocity plus vorb
-        secvz = -vorb2*sinbin                  # z velocity of secondary - added if i > 0
         
         y0 = rhill*simp[i]/s1*2.5 * s1/100e3  *b[j]/rhill               # initial y distance of impactor from binary - larger for larger impactors
-        y0 = 10*rhill
-        
-        vorbi = np.sqrt(g*msun/(rsun+b[j]))        # orbital speed of impactor around sun
-        theta0 = y0/(rsun+b[j])                    # angle between impactor and line between binary COM and sun
-        stheta0 = np.sin(theta0)                # sin of theta - needed for position of impactor
-        ctheta0 = np.cos(theta0)                # cos of theta - needed for position of impactor
-        
-        impx = (rsun+b[j])*ctheta0-rsun*np.cos(impi)  # x position of impactor
-        impy = (rsun+b[j])*stheta0*np.cos(impi)    # y position of impactor
-        impz = (rsun+b[j])*np.sin(impi)            # z position of impactor
-        impvx = -vorbi*stheta0                  # x velocity of impactor
-        impvy = vorbi*ctheta0                   # y velocity of impactor
         
         print('step ' + str(j + 1) + '-' + str(i+1))
         totaltime = t*y0/rhill/10 # total time of simulation - adjusted for different impactor sizes and distances
@@ -90,9 +54,9 @@ for j in range(len(b)):             # loop through each impact parameter
             sim.dt = 1e3                     # set initial timestep of integrator - IAS15 is adaptive so this will change
             sim.softening = 0.1*s1                  # softening parameter which modifies potential of each particle to prevent divergences
             sim.collision = 'direct'
+            sim.add(m=m1, r=s1, hash="primary")
+            sim.add(m=m2, r=s2, a=rbin, e=e, hash="secondary")
             sim.add(m=msun, hash="sun")
-            sim.add(m=m1, r=s1, x=rsun+primx, z=primz, vy=primvy, vz=primvz, hash="primary")
-            sim.add(m=m2, r=s2, x=rsun+secx, z=secz, vy=secvy, vz=secvz, hash="secondary")
             sim.add(m=mimp, r=simp[i], x=rsun+impx, y=impy, z=impz, vx=impvx, vy=impvy, hash="impactor")
             return sim
         

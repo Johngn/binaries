@@ -14,17 +14,17 @@ rsun = 44.*au                                  # distance of centre of mass of b
 year = 365.25*24.*60.*60.                   # number of seconds in a year
 dens = 700.
 
-s1, s2 = 100e3, 50e3                         # radius of primary and of secondary
+s1, s2 = 100e3, 100e3                         # radius of primary and of secondary
 m1 = 4./3.*np.pi*dens*s1**3                # mass of primary calculated from density and radius
 m2 = 4./3.*np.pi*dens*s2**3                # mass of secondary calculated from density and radius
 rhill = rsun*((m1+m2)/msun/3.)**(1./3.)        # Hill radius of primary
 
-rbin = 0.4*rhill                            # separation of binary
-e = 0
+rbin = 0.2*rhill                            # separation of binary
+e = 0.7
+i = np.deg2rad(0)
 
-simp = 20e3 # impactor radius
-b = 4
-
+simp = 100e3 # impactor radius
+b = 3
 mimp = 4./3.*np.pi*dens*simp**3   # mass of impactor
 bhill = b*rhill # impact parameter
 theta = 0.0003*b  # true anomaly of impactor
@@ -34,10 +34,10 @@ def setupSimulation():
     sim.G = g                               # set G which sets units of integrator - SI in this case
     sim.collision = 'direct'
     sim.add(m=m1, r=s1, hash="primary")
-    sim.add(m=m2, r=s2, a=rbin, e=e, hash="secondary")
+    sim.add(m=m2, r=s2, a=rbin, e=e, inc=i, hash="secondary")
     sim.add(m=msun, a=rsun, f=np.pi, hash="sun")
     sim.move_to_com()
-    sim.add(m=mimp, r=simp, a=rsun+bhill, f=theta, hash="impactor")
+    sim.add(m=0, r=simp, a=rsun+bhill, f=theta, hash="impactor")
     return sim
 
 sim = setupSimulation()
@@ -118,7 +118,7 @@ n = 2*np.pi/t                               # mean motion of binary around the s
 
 cj = n**2*(x**2 + y**2) + 2*(mu/dr + mu/dr) - vx**2 - vy**2 # jacobian constant
 
-lim = 10
+lim = 1
 
 fig, axes = plt.subplots(1, figsize=(7, 7))
 axes.set_xlabel("$x/R_\mathrm{h}$")
@@ -184,7 +184,7 @@ f = f'videos/ps_animation_3.mp4'
 writervideo = FFMpegWriter(fps=100) # ffmpeg must be installed
 anim.save(f, writer=writervideo)
 # %%
-lim = 10
+lim = 1
 fig = plt.figure(figsize=(12,12))
 axes = fig.add_subplot(111, projection='3d')
 axes.set_xlabel("$x/R_\mathrm{h}$")
@@ -224,49 +224,40 @@ def animate(i):
     text.set_text('{} Years'.format(int(times[i]/(year))))
     return primarydot, secondarydot, impactordot, primaryline, secondaryline, impactorline, text
 
-anim = animation.FuncAnimation(fig, animate, frames=noutputs, interval=1, blit=True)
+anim = animation.FuncAnimation(fig, animate, frames=noutputs, interval=1)
 # %%
-lim = 1
+lim = 5
 fig, axes = plt.subplots(1, figsize=(5, 5))
 axes.set_xlabel("$x/R_\mathrm{h}$")
 axes.set_ylabel("$y/R_\mathrm{h}$")
 axes.set_ylim(-lim,lim)
 axes.set_xlim(-lim,lim)
+axes.grid()
 
-ref = np.zeros((Noutputs,3))
-ref[:,0] = -rsun + rsun*np.cos(angles)
-ref[:,1] = 0 - rsun*np.sin(angles)
+i = 688
 
-pref = (p-ref)/Rhill1
-sref = (s-ref)/Rhill1
-impref = (imp-ref)/Rhill1
-cospx, cospy = np.cos(angles)*pref[:,0], np.cos(angles)*pref[:,1]
-cossx, cossy = np.cos(angles)*sref[:,0], np.cos(angles)*sref[:,1]
-cosix, cosiy = np.cos(angles)*impref[:,0], np.cos(angles)*impref[:,1]
-sinpx, sinpy = np.sin(angles)*pref[:,0], np.sin(angles)*pref[:,1]
-sinsx, sinsy = np.sin(angles)*sref[:,0], np.sin(angles)*sref[:,1]
-sinix, siniy = np.sin(angles)*impref[:,0], np.sin(angles)*impref[:,1]
+Rhillprim = rsun*(m1/msun/3.)**(1./3.)/rhill
+Rhillsec = rsun*(m2/msun/3.)**(1./3.)/rhill
+Rhillimp = rsun*(mimp/msun/3.)**(1./3.)/rhill
 
-Rhillprim = rsun*(m1/Msun/3.)**(1./3.)/Rhill1
-Rhillsec = rsun*(m2/Msun/3.)**(1./3.)/Rhill1
-Rhillimp = rsun*(mimp/Msun/3.)**(1./3.)/Rhill1
-primaryhill = plt.Circle((cospx[-1]-sinpy[-1], sinpx[-1]+cospy[-1]), Rhillprim, fc="none", ec="tab:orange")
+primaryhill = plt.Circle((cospx[i]-sinpy[i], sinpx[i]+cospy[i]), Rhillprim, fc="none", ec="tab:orange")
 axes.add_artist(primaryhill)
-secondaryhill = plt.Circle((cossx[-1]-sinsy[-1], sinsx[-1]+cossy[-1]), Rhillsec, fc="none", ec="tab:blue")
+secondaryhill = plt.Circle((cossx[i]-sinsy[i], sinsx[i]+cossy[i]), Rhillsec, fc="none", ec="tab:blue")
 axes.add_artist(secondaryhill)
-impactorhill = plt.Circle((cosix[-1]-siniy[-1], sinix[-1]+cosiy[-1]), Rhillimp, fc="none", ec="tab:green")
+impactorhill = plt.Circle((cosix[i]-siniy[i], sinix[i]+cosiy[i]), Rhillimp, fc="none", ec="tab:green")
 axes.add_artist(impactorhill)
 
-axes.plot(cospx-sinpy, sinpx+cospy, label="primary", c="tab:orange", lw=1.5)
-axes.plot(cossx-sinsy, sinsx+cossy, label="secondary", c="tab:blue", lw=1.5)
-axes.plot(cosix-siniy, sinix+cosiy, label="impactor", c="tab:green", lw=1.5)
+axes.plot(cospx[0:i]-sinpy[0:i], sinpx[0:i]+cospy[0:i], label="primary", c="tab:orange", lw=1.5)
+axes.plot(cossx[0:i]-sinsy[0:i], sinsx[0:i]+cossy[0:i], label="secondary", c="tab:blue", lw=1.5)
+axes.plot(cosix[0:i]-siniy[0:i], sinix[0:i]+cosiy[0:i], label="impactor", c="tab:green", lw=1.5)
 
-axes.plot(cospx[-1]-sinpy[-1], sinpx[-1]+cospy[-1], c="tab:orange", marker='o')
-axes.plot(cossx[-1]-sinsy[-1], sinsx[-1]+cossy[-1], c="tab:blue", marker='o')
-axes.plot(cosix[-1]-siniy[-1], sinix[-1]+cosiy[-1], c="tab:green", marker='o')
+axes.plot(cospx[i]-sinpy[i], sinpx[i]+cospy[i], c="tab:orange", marker='o')
+axes.plot(cossx[i]-sinsy[i], sinsx[i]+cossy[i], c="tab:blue", marker='o')
+axes.plot(cosix[i]-siniy[i], sinix[i]+cosiy[i], c="tab:green", marker='o')
+axes.text(-4.5, -4.5, 't = {} Years'.format(int(times[i]/(year))), fontsize=12)
 
 axes.legend()
-# fig.savefig('./result5.pdf', bbox_inches='tight')
+fig.savefig('./img/result5.pdf', bbox_inches='tight')
 # %%
 y = cj
 plt.figure(figsize=(9,4))
@@ -315,7 +306,7 @@ plt.legend()
 y = e
 plt.figure(figsize=(8,4))
 # plt.title(f"Integrator={sim.integrator} -- Impactor radius={simp/1e3} km -- b={b/Rhill} hill radii")
-plt.plot(times/year, y[:,0], label="Primary-Secondary", lw=1.5)
+plt.plot(times/year, y, label="Primary-Secondary", lw=1.5)
 # plt.plot(times/year, y[:,1], label="Primary-Impactor", lw=1.5)
 # plt.plot(times/year, y[:,2], label="Secondary-Impactor", lw=1.5)
 plt.xlabel("Time (years)")
