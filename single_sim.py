@@ -19,28 +19,15 @@ m1 = 4./3.*np.pi*dens*s1**3                # mass of primary calculated from den
 m2 = 4./3.*np.pi*dens*s2**3                # mass of secondary calculated from density and radius
 rhill = rsun*((m1+m2)/msun/3.)**(1./3.)        # Hill radius of primary
 
-rbin = 0.2*rhill                            # separation of binary
-e = 0.7
+a = 0.3*rhill                            # separation of binary
+e = 0
 i = np.deg2rad(0)
 
 simp = 100e3 # impactor radius
-b = 3
+b = 2.5
 mimp = 4./3.*np.pi*dens*simp**3   # mass of impactor
 bhill = b*rhill # impact parameter
 theta = 0.0003*b  # true anomaly of impactor
-
-def setupSimulation():
-    sim = rebound.Simulation()              # initialize rebound simulation
-    sim.G = g                               # set G which sets units of integrator - SI in this case
-    sim.collision = 'direct'
-    sim.add(m=m1, r=s1, hash="primary")
-    sim.add(m=m2, r=s2, a=rbin, e=e, inc=i, hash="secondary")
-    sim.add(m=msun, a=rsun, f=np.pi, hash="sun")
-    sim.move_to_com()
-    sim.add(m=0, r=simp, a=rsun+bhill, f=theta, hash="impactor")
-    return sim
-
-sim = setupSimulation()
 
 t = 2.*np.pi/np.sqrt(g*msun/rsun**3)            # orbital period of binary around the sun
 noutputs = 1000             # number of outputs
@@ -48,55 +35,80 @@ p, s, imp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs
 vp, vs, vimp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3)) # velocity
 totaltime = t*1
 times = np.linspace(0,totaltime, noutputs) # create times for integrations
-ps = sim.particles                      # create variable containing particles in simulation
 
-all_ps = [p.hash.value for j, p in enumerate(ps)]
-
-timer = timed() # start timer to time simulations
-try:
-    for k, time in enumerate(times):
-        sim.integrate(time)
-        print(k)
-        p[k] = [ps["primary"].x, ps["primary"].y, ps["primary"].z]
-        s[k] = [ps["secondary"].x, ps["secondary"].y, ps["secondary"].z]
-        imp[k] = [ps["impactor"].x, ps["impactor"].y, ps["impactor"].z]
-        vp[k] = [ps["primary"].vx, ps["primary"].vy, ps["primary"].vz]
-        vs[k] = [ps["secondary"].vx, ps["secondary"].vy, ps["secondary"].vz]
-        vimp[k] = [ps["impactor"].vx, ps["impactor"].vy, ps["impactor"].vz]
-except rebound.Collision:
-    collided = []
-    for item in sim.particles:
-        if item.lastcollision == sim.t:
-            collided.append([sim.t, item.index, item.r, item.m, item.x, item.y, item.z, item.vx, item.vy, item.vz])
-    collided = np.array(collided) 
+for j in range(100):
+    def setupSimulation():
+        sim = rebound.Simulation()              # initialize rebound simulation
+        sim.G = g                               # set G which sets units of integrator - SI in this case
+        sim.collision = 'direct'
+        sim.add(m=m1, r=s1, hash="primary")
+        sim.add(m=m2, r=s2, a=a, e=e, inc=i, hash="secondary")
+        sim.add(m=msun, a=rsun, f=np.pi, hash="sun")
+        sim.move_to_com()
+        sim.add(m=0, r=simp, a=rsun+bhill, f=theta, hash="impactor")
+        return sim
     
-    sim.collision_resolve = 'merge'
-
-    for k, time in enumerate(times):
-        sim.integrate(time)
-        existing_ps = [p.hash.value for j, p in enumerate(ps)]
-        if all_ps[1] in existing_ps:
+    sim = setupSimulation()
+    ps = sim.particles                      # create variable containing particles in simulation
+    
+    all_ps = [p.hash.value for j, p in enumerate(ps)]
+    
+    timer = timed() # start timer to time simulations
+    try:
+        for k, time in enumerate(times):
+            sim.integrate(time)
+            # print(k)
             p[k] = [ps["primary"].x, ps["primary"].y, ps["primary"].z]
-            vp[k] = [ps["primary"].vx, ps["primary"].vy, ps["primary"].vz]
-        if all_ps[2] in existing_ps:
             s[k] = [ps["secondary"].x, ps["secondary"].y, ps["secondary"].z]
-            vs[k] = [ps["secondary"].vx, ps["secondary"].vy, ps["secondary"].vz]
-        if all_ps[3] in existing_ps:
             imp[k] = [ps["impactor"].x, ps["impactor"].y, ps["impactor"].z]
+            vp[k] = [ps["primary"].vx, ps["primary"].vy, ps["primary"].vz]
+            vs[k] = [ps["secondary"].vx, ps["secondary"].vy, ps["secondary"].vz]
             vimp[k] = [ps["impactor"].vx, ps["impactor"].vy, ps["impactor"].vz]
-print(timed()-timer) # finish timer
+    except rebound.Collision:
+        collided = []
+        for item in sim.particles:
+            if item.lastcollision == sim.t:
+                collided.append([sim.t, item.index, item.r, item.m, item.x, item.y, item.z, item.vx, item.vy, item.vz])
+        collided = np.array(collided) 
+        
+        sim.collision_resolve = 'merge'
+    
+        for k, time in enumerate(times):
+            sim.integrate(time)
+            existing_ps = [p.hash.value for j, p in enumerate(ps)]
+            if all_ps[1] in existing_ps:
+                p[k] = [ps["primary"].x, ps["primary"].y, ps["primary"].z]
+                vp[k] = [ps["primary"].vx, ps["primary"].vy, ps["primary"].vz]
+            if all_ps[2] in existing_ps:
+                s[k] = [ps["secondary"].x, ps["secondary"].y, ps["secondary"].z]
+                vs[k] = [ps["secondary"].vx, ps["secondary"].vy, ps["secondary"].vz]
+            if all_ps[3] in existing_ps:
+                imp[k] = [ps["impactor"].x, ps["impactor"].y, ps["impactor"].z]
+                vimp[k] = [ps["impactor"].vx, ps["impactor"].vy, ps["impactor"].vz]
+    # print(timed()-timer) # finish timer
+    
+    dr = np.linalg.norm(p-s, axis=1)
+    dv = np.linalg.norm(vp-vs, axis=1)
+    h = np.cross(p-s,vp-vs)[:,2]
+    mu = g*(m1+m2)
+    
+    a = mu*dr/(2*mu - dr*dv**2)
+    energy = -mu/2/a
+    e = np.sqrt(1 + (2*energy*h**2 / mu**2))
+    e = np.sqrt(np.mean(e**2))
+    print("e = " + str(e))
+    a = a[-1]
+    # print("a = " + str(a/rhill))
+    # print("final eccentricity = " + str(e[-1]))
 
-dr = np.linalg.norm(p-s, axis=1)
-dv = np.linalg.norm(vp-vs, axis=1)
-h = np.cross(p-s,vp-vs)[:,2]
-mu = g*(m1+m2)
 
-a = mu*dr/(2*mu - dr*dv**2)
-energy = -mu/2/a
-e = np.sqrt(1 + (2*energy*h**2 / mu**2))
-
+# %%
 # plt.figure()
 # plt.plot(times/t,e)
+# plt.ylim(0,1)
+
+# plt.figure()
+# plt.plot(dr/rhill)
 # plt.ylim(0,1)
 
 omegak = np.sqrt(g*msun/rsun**3)
@@ -118,7 +130,7 @@ n = 2*np.pi/t                               # mean motion of binary around the s
 
 cj = n**2*(x**2 + y**2) + 2*(mu/dr + mu/dr) - vx**2 - vy**2 # jacobian constant
 
-lim = 1
+lim = 5
 
 fig, axes = plt.subplots(1, figsize=(7, 7))
 axes.set_xlabel("$x/R_\mathrm{h}$")

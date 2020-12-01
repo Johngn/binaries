@@ -19,16 +19,17 @@ au = 1.496e11
 rsun = 44.*au
 Msun = 1.9891e30
 
-sim_name = 'verywide_doublemass'
+sim_name = 'verywide_equalmass'
 filenames = glob(f'./rebound/mastersproject/binaries/results/{sim_name}*')
 
 b_all = np.zeros(len(filenames))
 simp_all = np.zeros(len(filenames))
 e_mean = np.zeros(len(filenames))
+e_final = np.zeros(len(filenames))
 bound = np.zeros((len(filenames), 3))
 
 for i, sim in enumerate(filenames):
-    print(sim)
+    # print(sim)
     data = np.loadtxt(sim)
 
     times = data[:,0]
@@ -70,49 +71,52 @@ for i, sim in enumerate(filenames):
     a = mu*R/(2*mu - R*V**2)
     energy = -mu/2/a
     e = np.sqrt(1 + (2*energy*h**2 / mu**2))
-    periapsis = a*(1-e)
-    will_collide = periapsis/3e5 < 1
+    # periapsis = a*(1-e)
+    # will_collide = periapsis/3e5 < 1
     
     bound[i] = np.logical_and(np.logical_and(energy < 0, np.isfinite(energy)), R < Rhill_largest)[-1]
-    # print(bound[i])
     
     e[np.isnan(e)] = 0
     e_mean[i] = np.sqrt(np.mean(e[:,0]**2))
+    e_final[i] = e[-1,0]
+    
     # plt.figure()
     # plt.plot(times,e)
     # plt.ylim(0,1)
+    
+bound = np.array(bound, dtype='bool')
 
-# collisions = glob(f'./rebound/mastersproject/binaries/results/collision_{sim_name}*')
-# coll_params = np.zeros((len(collisions), 3))
-# for i, collision in enumerate(collisions):
-#     params = re.findall('[0-9]+\.[0-9]+', collision)
-#     params = [float(param) for param in params]
+collisions = glob(f'./rebound/mastersproject/binaries/results/collision_{sim_name}*')
+coll_params = np.zeros((len(collisions), 3))
+for i, collision in enumerate(collisions):
+    params = re.findall('[0-9]+\.[0-9]+', collision)
+    params = [float(param) for param in params]
     
-#     collided_bodies = np.loadtxt(collision)[:,1]
+    collided_bodies = np.loadtxt(collision)[:,1]
     
-#     if hash_primary[0] in collided_bodies and hash_secondary[0] in collided_bodies:
-#         params.append(1)
-#     if hash_primary[0] in collided_bodies and hash_impactor[0] in collided_bodies:
-#         params.append(2)
-#     if hash_secondary[0] in collided_bodies and hash_impactor[0] in collided_bodies:
-#         params.append(3)
-#     coll_params[i] = params
-# %%
+    if hash_primary[0] in collided_bodies and hash_secondary[0] in collided_bodies:
+        params.append(1)
+    if hash_primary[0] in collided_bodies and hash_impactor[0] in collided_bodies:
+        params.append(2)
+    if hash_secondary[0] in collided_bodies and hash_impactor[0] in collided_bodies:
+        params.append(3)
+    coll_params[i] = params
+
 plt.figure(figsize=(7,5))
 s = 100
-plt.scatter(b, simp, s=1, marker="x", c="black")
-plt.scatter(b[bound[:,0]], simp[bound[:,0]], label='primary-secondary', s=s, c="tab:blue")
-# plt.scatter(b[bound[:,1]], simp[bound[:,1]], label='primary-impactor', s=s, c="tab:orange")
-# plt.scatter(b[bound[:,2]], simp[bound[:,2]], label='secondary-impactor', s=s, c="tab:green")
-# plt.scatter(coll_params[coll_params[:,2] == 1][:,1], coll_params[coll_params[:,2] == 1][:,0], marker='x', s=s, c="tab:blue")
-# plt.scatter(coll_params[coll_params[:,2] == 2][:,1], coll_params[coll_params[:,2] == 2][:,0], marker='x', s=s, c="tab:orange")
-# plt.scatter(coll_params[coll_params[:,2] == 3][:,1], coll_params[coll_params[:,2] == 3][:,0], marker='x', s=s, c="tab:green")
+plt.scatter(b_all, simp_all, s=1, marker="x", c="black")
+plt.scatter(b_all[bound[:,0]], simp_all[bound[:,0]], label='primary-secondary', s=s, c="tab:blue")
+plt.scatter(b_all[bound[:,1]], simp_all[bound[:,1]], label='primary-impactor', s=s, c="tab:orange")
+plt.scatter(b_all[bound[:,2]], simp_all[bound[:,2]], label='secondary-impactor', s=s, c="tab:green")
+plt.scatter(coll_params[coll_params[:,2] == 1][:,1], coll_params[coll_params[:,2] == 1][:,0], marker='x', s=s, c="tab:blue")
+plt.scatter(coll_params[coll_params[:,2] == 2][:,1], coll_params[coll_params[:,2] == 2][:,0], marker='x', s=s, c="tab:orange")
+plt.scatter(coll_params[coll_params[:,2] == 3][:,1], coll_params[coll_params[:,2] == 3][:,0], marker='x', s=s, c="tab:green")
 plt.xlabel("Impact parameter (Hill radii)")
 plt.ylabel("Impactor radius (km)")
 plt.title(f'{sim_name}')
 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=3, fancybox=True, shadow=True)
-plt.yticks(np.asarray((np.unique(simp)), dtype=int),)
-# plt.xticks(np.round(np.unique(b), 2))
+plt.yticks(np.asarray((np.unique(simp_all)), dtype=int),)
+plt.xticks(np.round(np.unique(b_all), 2))
 # plt.xlim(100,350)simp
 # plt.savefig(f"./img/{sim_name}_final_bound_whr_dmr", bbox_inches='tight')
 # %%
@@ -141,7 +145,7 @@ ax.invert_yaxis()
 plt.title(f"Final eccentricity - {sim_name}")
 plt.xlabel("Impact parameter (Hill radii)")
 plt.ylabel("Impactor radius (km)")
-plt.savefig(f"./img/{sim_name}_final_eccentricity", bbox_inches='tight')
+# plt.savefig(f"./img/{sim_name}_final_eccentricity", bbox_inches='tight')
 # %%
 binary_a = np.ones((len(np.unique(simp)), len(np.unique(b))))
 
