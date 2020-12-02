@@ -23,12 +23,6 @@ a = 0.3*rhill                            # separation of binary
 e = 0
 i = np.deg2rad(0)
 
-simp = 100e3 # impactor radius
-b = 2.5
-mimp = 4./3.*np.pi*dens*simp**3   # mass of impactor
-bhill = b*rhill # impact parameter
-theta = 0.0003*b  # true anomaly of impactor
-
 t = 2.*np.pi/np.sqrt(g*msun/rsun**3)            # orbital period of binary around the sun
 noutputs = 1000             # number of outputs
 p, s, imp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3)) # position
@@ -36,7 +30,14 @@ vp, vs, vimp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutp
 totaltime = t*1
 times = np.linspace(0,totaltime, noutputs) # create times for integrations
 
-for j in range(100):
+for j in range(1):
+    # simp = np.random.uniform(10,200)*1e3 # impactor radius
+    simp = 100e3
+    b = np.random.uniform(3,6)
+    mimp = 4./3.*np.pi*dens*simp**3   # mass of impactor
+    bhill = b*rhill # impact parameter
+    theta = 0.001  # true anomaly of impactor
+    
     def setupSimulation():
         sim = rebound.Simulation()              # initialize rebound simulation
         sim.G = g                               # set G which sets units of integrator - SI in this case
@@ -45,7 +46,7 @@ for j in range(100):
         sim.add(m=m2, r=s2, a=a, e=e, inc=i, hash="secondary")
         sim.add(m=msun, a=rsun, f=np.pi, hash="sun")
         sim.move_to_com()
-        sim.add(m=0, r=simp, a=rsun+bhill, f=theta, hash="impactor")
+        sim.add(m=mimp, r=simp, a=rsun+bhill, f=theta, hash="impactor")
         return sim
     
     sim = setupSimulation()
@@ -94,17 +95,15 @@ for j in range(100):
     
     a = mu*dr/(2*mu - dr*dv**2)
     energy = -mu/2/a
-    e = np.sqrt(1 + (2*energy*h**2 / mu**2))
-    e = np.sqrt(np.mean(e**2))
-    print("e = " + str(e))
+    e_all = np.sqrt(1 + (2*energy*h**2 / mu**2))
+    e = np.sqrt(np.mean(e_all**2))
     a = a[-1]
+    print("e = " + str(e) + "\t" + "a = " + str(a/rhill))
     # print("a = " + str(a/rhill))
     # print("final eccentricity = " + str(e[-1]))
 
-
-# %%
 # plt.figure()
-# plt.plot(times/t,e)
+# plt.plot(times/t,e_all)
 # plt.ylim(0,1)
 
 # plt.figure()
@@ -130,7 +129,7 @@ n = 2*np.pi/t                               # mean motion of binary around the s
 
 cj = n**2*(x**2 + y**2) + 2*(mu/dr + mu/dr) - vx**2 - vy**2 # jacobian constant
 
-lim = 5
+lim = 10
 
 fig, axes = plt.subplots(1, figsize=(7, 7))
 axes.set_xlabel("$x/R_\mathrm{h}$")

@@ -19,13 +19,14 @@ au = 1.496e11
 rsun = 44.*au
 Msun = 1.9891e30
 
-sim_name = 'verywide_equalmass'
+sim_name = 'ecc3'
 filenames = glob(f'./rebound/mastersproject/binaries/results/{sim_name}*')
 
 b_all = np.zeros(len(filenames))
 simp_all = np.zeros(len(filenames))
 e_mean = np.zeros(len(filenames))
 e_final = np.zeros(len(filenames))
+a_all = np.zeros(len(filenames))
 bound = np.zeros((len(filenames), 3))
 
 for i, sim in enumerate(filenames):
@@ -74,15 +75,19 @@ for i, sim in enumerate(filenames):
     # periapsis = a*(1-e)
     # will_collide = periapsis/3e5 < 1
     
+    a_all[i] = a[-1,0]
+    
     bound[i] = np.logical_and(np.logical_and(energy < 0, np.isfinite(energy)), R < Rhill_largest)[-1]
     
     e[np.isnan(e)] = 0
     e_mean[i] = np.sqrt(np.mean(e[:,0]**2))
+    # print(e_mean[i])
+    # print(np.mean(e[:,0]))
     e_final[i] = e[-1,0]
     
-    # plt.figure()
-    # plt.plot(times,e)
-    # plt.ylim(0,1)
+    plt.figure()
+    plt.plot(times,e)
+    plt.ylim(0,1)
     
 bound = np.array(bound, dtype='bool')
 
@@ -147,11 +152,11 @@ plt.xlabel("Impact parameter (Hill radii)")
 plt.ylabel("Impactor radius (km)")
 # plt.savefig(f"./img/{sim_name}_final_eccentricity", bbox_inches='tight')
 # %%
-binary_a = np.ones((len(np.unique(simp)), len(np.unique(b))))
+binary_a = np.ones((len(np.unique(simp_all)), len(np.unique(b_all))))
 
-for i, item in enumerate(np.unique(simp)):
-    for j, jtem in enumerate(np.unique(b)):
-        sma = a[np.logical_and(np.round(simp,2) == item, b == jtem)][:,0]
+for i, item in enumerate(np.unique(simp_all)):
+    for j, jtem in enumerate(np.unique(b_all)):
+        sma = a_all[np.logical_and(np.round(simp_all,2) == item, b_all == jtem)]
         if len(sma > 0):
             binary_a[i,j] = sma
             
@@ -159,13 +164,13 @@ binary_a = np.round(binary_a/Rhill[0], 2)
 binary_a[binary_a <= 0] = np.nan
 binary_a[binary_a > 1] = np.nan
 
-fig, ax = plt.subplots(1, figsize=(12, 9))
+fig, ax = plt.subplots(1, figsize=(17, 6))
 ax = sns.heatmap(binary_a, 
                  annot=True, 
                  linewidths=0.5, 
                  cmap="YlGnBu",
-                 yticklabels=np.asarray((np.unique(simp)), dtype=int),
-                 xticklabels=np.round(np.unique(b), 2),
+                 yticklabels=np.asarray((np.unique(simp_all)), dtype=int),
+                 xticklabels=np.round(np.unique(b_all), 2),
                  cbar=False)
 ax.invert_yaxis()
 plt.title(f"semi-major axis ({sim_name})")
