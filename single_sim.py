@@ -96,15 +96,22 @@ for j in range(1):
     a = mu*dr/(2*mu - dr*dv**2)
     energy = -mu/2/a
     e_all = np.sqrt(1 + (2*energy*h**2 / mu**2))
+    
+    e_movingavg = [np.mean(e_all[ii-300:ii]) for ii in range(noutputs)]
+    
+    for ii in range(noutputs):
+        e_cumsum = np.mean(e_all[ii-300:ii])
+        print(e_cumsum)
+        
     e = np.sqrt(np.mean(e_all**2))
     a = a[-1]
     print("e = " + str(e) + "\t" + "a = " + str(a/rhill))
     # print("a = " + str(a/rhill))
     # print("final eccentricity = " + str(e[-1]))
 
-# plt.figure()
-# plt.plot(times/t,e_all)
-# plt.ylim(0,1)
+plt.figure()
+plt.plot(times/t,e_movingavg)
+plt.ylim(0,0.1)
 
 # plt.figure()
 # plt.plot(dr/rhill)
