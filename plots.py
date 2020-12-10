@@ -19,7 +19,7 @@ au = 1.496e11
 rsun = 44.*au
 Msun = 1.9891e30
 
-sim_name = 'ecc3'
+sim_name = 'wide_equalmass_0ecc'
 filenames = glob(f'./rebound/mastersproject/binaries/results/{sim_name}*')
 
 b_all = np.zeros(len(filenames))
@@ -85,9 +85,9 @@ for i, sim in enumerate(filenames):
     # print(np.mean(e[:,0]))
     e_final[i] = e[-1,0]
     
-    plt.figure()
-    plt.plot(times,e)
-    plt.ylim(0,1)
+    # plt.figure()
+    # plt.plot(times,e)
+    # plt.ylim(0,1)
     
 bound = np.array(bound, dtype='bool')
 
@@ -106,38 +106,38 @@ for i, collision in enumerate(collisions):
     if hash_secondary[0] in collided_bodies and hash_impactor[0] in collided_bodies:
         params.append(3)
     coll_params[i] = params
-
-plt.figure(figsize=(7,5))
+# %%
+fig, ax = plt.subplots(1, figsize=(5,5))
 s = 100
-plt.scatter(b_all, simp_all, s=1, marker="x", c="black")
-plt.scatter(b_all[bound[:,0]], simp_all[bound[:,0]], label='primary-secondary', s=s, c="tab:blue")
-plt.scatter(b_all[bound[:,1]], simp_all[bound[:,1]], label='primary-impactor', s=s, c="tab:orange")
-plt.scatter(b_all[bound[:,2]], simp_all[bound[:,2]], label='secondary-impactor', s=s, c="tab:green")
-plt.scatter(coll_params[coll_params[:,2] == 1][:,1], coll_params[coll_params[:,2] == 1][:,0], marker='x', s=s, c="tab:blue")
-plt.scatter(coll_params[coll_params[:,2] == 2][:,1], coll_params[coll_params[:,2] == 2][:,0], marker='x', s=s, c="tab:orange")
-plt.scatter(coll_params[coll_params[:,2] == 3][:,1], coll_params[coll_params[:,2] == 3][:,0], marker='x', s=s, c="tab:green")
-plt.xlabel("Impact parameter (Hill radii)")
-plt.ylabel("Impactor radius (km)")
-plt.title(f'{sim_name}')
-plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=3, fancybox=True, shadow=True)
-plt.yticks(np.asarray((np.unique(simp_all)), dtype=int),)
-plt.xticks(np.round(np.unique(b_all), 2))
+ax.scatter(b_all, simp_all, s=1, marker="x", c="black")
+ax.scatter(b_all[bound[:,0]], simp_all[bound[:,0]], label='prim-sec', s=s, c="tab:blue")
+ax.scatter(b_all[bound[:,1]], simp_all[bound[:,1]], label='prim-imp', s=s, c="tab:orange")
+ax.scatter(b_all[bound[:,2]], simp_all[bound[:,2]], label='sec-imp', s=s, c="tab:green")
+ax.scatter(coll_params[coll_params[:,2] == 1][:,1], coll_params[coll_params[:,2] == 1][:,0], marker='x', s=s, c="tab:blue")
+ax.scatter(coll_params[coll_params[:,2] == 2][:,1], coll_params[coll_params[:,2] == 2][:,0], marker='x', s=s, c="tab:orange")
+ax.scatter(coll_params[coll_params[:,2] == 3][:,1], coll_params[coll_params[:,2] == 3][:,0], marker='x', s=s, c="tab:green")
+ax.set_xlabel("Impact parameter (R$_H$)")
+ax.set_ylabel("Impactor radius (km)")
+ax.set_title(f'initial semi-major axis = 0.2 R$_H$', y=1, pad=15, fontdict={'fontsize': 14})
+ax.legend(loc='upper center', bbox_to_anchor=(0.5, 1.06), ncol=3, fancybox=True, shadow=True)
+ax.set_yticks(np.asarray((np.unique(simp_all)), dtype=int),)
+ax.set_xticks(np.round(np.unique(b_all), 2))
 # plt.xlim(100,350)simp
-# plt.savefig(f"./img/{sim_name}_final_bound_whr_dmr", bbox_inches='tight')
+plt.savefig(f"./img/{sim_name}_final_bound", bbox_inches='tight')
 # %%
 b_all = np.round(b_all, 2)
 binary_e = np.ones((len(np.unique(simp_all)), len(np.unique(b_all))))
 
 for i, item in enumerate(np.unique(simp_all)):
     for j, jtem in enumerate(np.unique(b_all)):
-        ecc = e_mean[np.logical_and(np.round(simp_all,2) == item, b_all == jtem)]
+        ecc = e_final[np.logical_and(np.round(simp_all,2) == item, b_all == jtem)]
         if len(ecc > 0):
             binary_e[i,j] = ecc
             
 binary_e[binary_e > 1] = np.nan
 binary_e = np.round(binary_e, 2)
 
-fig, ax = plt.subplots(1, figsize=(17, 6))
+fig, ax = plt.subplots(1, figsize=(10, 6))
 ax = sns.heatmap(binary_e, 
                  annot=True, 
                  linewidths=0.5, 

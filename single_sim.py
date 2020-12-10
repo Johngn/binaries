@@ -1,8 +1,10 @@
 # %%
-import rebound
 import numpy as np
+import rebound
 import matplotlib.pyplot as plt
 import mpl_toolkits.mplot3d.axes3d as p3
+from powerlaw import rndm
+from scipy.stats import powerlaw
 from timeit import default_timer as timed
 from matplotlib import animation
 from matplotlib.animation import FuncAnimation, FFMpegWriter
@@ -30,10 +32,11 @@ vp, vs, vimp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutp
 totaltime = t*1
 times = np.linspace(0,totaltime, noutputs) # create times for integrations
 
-for j in range(1):
-    # simp = np.random.uniform(10,200)*1e3 # impactor radius
-    simp = 100e3
-    b = np.random.uniform(3,6)
+for j in range(100):
+    simp = rndm(10, 200, g=-1.6, size=1)*1e3 # impactor radius
+    # simp = 100e3
+    print(simp)
+    b = np.random.uniform(2,8)
     mimp = 4./3.*np.pi*dens*simp**3   # mass of impactor
     bhill = b*rhill # impact parameter
     theta = 0.001  # true anomaly of impactor
@@ -101,7 +104,7 @@ for j in range(1):
     
     for ii in range(noutputs):
         e_cumsum = np.mean(e_all[ii-300:ii])
-        print(e_cumsum)
+        # print(e_cumsum)
         
     e = np.sqrt(np.mean(e_all**2))
     a = a[-1]
@@ -109,9 +112,9 @@ for j in range(1):
     # print("a = " + str(a/rhill))
     # print("final eccentricity = " + str(e[-1]))
 
-plt.figure()
-plt.plot(times/t,e_movingavg)
-plt.ylim(0,0.1)
+# plt.figure()
+# plt.plot(times/t,e_movingavg)
+# plt.ylim(0,0.1)
 
 # plt.figure()
 # plt.plot(dr/rhill)

@@ -7,7 +7,7 @@ Created on Sat Nov  7 18:24:11 2020
 """
 
 # %%
-import glob, os, csv, rebound
+import glob, os, rebound
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -25,9 +25,9 @@ T = 2.*np.pi/np.sqrt(G*(Msun)/rsun**3)      # orbital period of binary around th
 n = 2*np.pi/T                               # mean motion of binary around the sun
 year = 365.25*24.*60.*60.                   # number of seconds in a year
 
-sim_name = 'drag_test'
-r = '0.0'
-b = '29.6'
+sim_name = 'verytight_equalmass_0ecc'
+r = '10.0'
+b = '2.0'
 
 data = np.loadtxt(f'./rebound/mastersproject/binaries/results/{sim_name}_{r}_{b}.txt')
 Noutputs = len(data)
