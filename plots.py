@@ -19,7 +19,7 @@ au = 1.496e11
 rsun = 44.*au
 Msun = 1.9891e30
 
-sim_name = 'verywide_3mass_0ecc'
+sim_name = 'verywide_equalmass_0ecc'
 filenames = glob(f'./rebound/mastersproject/binaries/results/{sim_name}*')
 
 b_all = np.zeros(len(filenames))
@@ -87,6 +87,10 @@ for i, sim in enumerate(filenames):
     
     # plt.figure()
     # plt.plot(times,e)
+    # plt.ylim(0,1)
+        
+    # plt.figure()
+    # plt.plot(a/Rhill[0])
     # plt.ylim(0,1)
     
 bound = np.array(bound, dtype='bool')

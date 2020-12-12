@@ -29,14 +29,16 @@ t = 2.*np.pi/np.sqrt(g*msun/rsun**3)            # orbital period of binary aroun
 noutputs = 1000             # number of outputs
 p, s, imp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3)) # position
 vp, vs, vimp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3)) # velocity
+dr, dv, h = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3))
 totaltime = t*1
 times = np.linspace(0,totaltime, noutputs) # create times for integrations
 
-for j in range(100):
+for j in range(1):
     simp = rndm(10, 200, g=-1.6, size=1)*1e3 # impactor radius
-    # simp = 100e3
-    print(simp)
+    simp = 100e3
+    # print(simp)
     b = np.random.uniform(2,8)
+    b = 2.6
     mimp = 4./3.*np.pi*dens*simp**3   # mass of impactor
     bhill = b*rhill # impact parameter
     theta = 0.001  # true anomaly of impactor
@@ -91,9 +93,15 @@ for j in range(100):
                 vimp[k] = [ps["impactor"].vx, ps["impactor"].vy, ps["impactor"].vz]
     # print(timed()-timer) # finish timer
     
-    dr = np.linalg.norm(p-s, axis=1)
-    dv = np.linalg.norm(vp-vs, axis=1)
-    h = np.cross(p-s,vp-vs)[:,2]
+    dr[:,0] = np.linalg.norm(p-s, axis=1)
+    dr[:,1] = np.linalg.norm(p-imp, axis=1)
+    dr[:,2] = np.linalg.norm(s-imp, axis=1)    
+    dv[:,0] = np.linalg.norm(vp-vs, axis=1)
+    dv[:,1] = np.linalg.norm(vp-vimp, axis=1)
+    dv[:,2] = np.linalg.norm(vs-vimp, axis=1)
+    h[:,0] = np.cross(p-s,vp-vs)[:,2]
+    h[:,1] = np.cross(p-imp,vp-vimp)[:,2]
+    h[:,2] = np.cross(s-imp,vs-vimp)[:,2]
     mu = g*(m1+m2)
     
     a = mu*dr/(2*mu - dr*dv**2)
@@ -122,23 +130,126 @@ for j in range(100):
 
 omegak = np.sqrt(g*msun/rsun**3)
 angles = -omegak*times
-sp = (s-p)/rhill         # difference between positions of secondary and primary
-ip = (imp-p)/rhill       # difference between positions of impactor and primary
-cosspx, cosspy = np.cos(angles)*sp[:,0], np.cos(angles)*sp[:,1] # cos of reference angles times difference between positions of secondary and primary
-sinspx, sinspy = np.sin(angles)*sp[:,0], np.sin(angles)*sp[:,1] # sin of reference angles times difference between positions of secondary and primary
+# sp = (s-p)/rhill         # difference between positions of secondary and primary
+# ip = (imp-p)/rhill       # difference between positions of impactor and primary
+# cosspx, cosspy = np.cos(angles)*sp[:,0], np.cos(angles)*sp[:,1] # cos of reference angles times difference between positions of secondary and primary
+# sinspx, sinspy = np.sin(angles)*sp[:,0], np.sin(angles)*sp[:,1] # sin of reference angles times difference between positions of secondary and primary
 
-xdot = vs[:,0] - vp[:,0]        # x component of difference in velocities between secondary and primary
-ydot = vs[:,1] - vp[:,1]        # y component of difference in velocities between secondary and primary
-cosspxdot, cosspydot = np.cos(angles)*xdot, np.cos(angles)*ydot # cos of reference angles times difference between velocities of secondary and primary
-sinspxdot, sinspydot = np.sin(angles)*xdot, np.sin(angles)*ydot # sin of reference angles times difference between velocities of secondary and primary
+# xdot = vs[:,0] - vp[:,0]        # x component of difference in velocities between secondary and primary
+# ydot = vs[:,1] - vp[:,1]        # y component of difference in velocities between secondary and primary
+# cosspxdot, cosspydot = np.cos(angles)*xdot, np.cos(angles)*ydot # cos of reference angles times difference between velocities of secondary and primary
+# sinspxdot, sinspydot = np.sin(angles)*xdot, np.sin(angles)*ydot # sin of reference angles times difference between velocities of secondary and primary
 
-x, y = cosspx-sinspy+rsun, sinspx+cosspy                # x and y values for calculating jacobian constant
-vx, vy = cosspxdot-sinspydot, sinspxdot+cosspydot       # vx and vy values for calculating jacobian constant
+# x, y = cosspx-sinspy+rsun, sinspx+cosspy                # x and y values for calculating jacobian constant
+# vx, vy = cosspxdot-sinspydot, sinspxdot+cosspydot       # vx and vy values for calculating jacobian constant
 
-n = 2*np.pi/t                               # mean motion of binary around the sun
+# n = 2*np.pi/t                               # mean motion of binary around the sun
 
-cj = n**2*(x**2 + y**2) + 2*(mu/dr + mu/dr) - vx**2 - vy**2 # jacobian constant
+# cj = n**2*(x**2 + y**2) + 2*(mu/dr + mu/dr) - vx**2 - vy**2 # jacobian constant
 
+ref = np.zeros((noutputs,3))
+ref[:,0] = rsun*np.cos(angles)
+ref[:,1] = 0 - rsun*np.sin(angles)
+
+pref = (p-ref)/rhill
+sref = (s-ref)/rhill
+impref = (imp-ref)/rhill
+cospx, cospy = np.cos(angles)*pref[:,0], np.cos(angles)*pref[:,1]
+cossx, cossy = np.cos(angles)*sref[:,0], np.cos(angles)*sref[:,1]
+cosix, cosiy = np.cos(angles)*impref[:,0], np.cos(angles)*impref[:,1]
+sinpx, sinpy = np.sin(angles)*pref[:,0], np.sin(angles)*pref[:,1]
+sinsx, sinsy = np.sin(angles)*sref[:,0], np.sin(angles)*sref[:,1]
+sinix, siniy = np.sin(angles)*impref[:,0], np.sin(angles)*impref[:,1]
+# %%
+lim = 10
+fig, axes = plt.subplots(1, figsize=(5, 5))
+axes.set_xlabel("$x/R_\mathrm{H}$")
+axes.set_ylabel("$y/R_\mathrm{H}$")
+axes.set_ylim(-lim,lim)
+axes.set_xlim(-lim,lim)
+
+i = 950
+
+Rhillprim = rsun*(m1/msun/3.)**(1./3.)/rhill
+Rhillsec = rsun*(m2/msun/3.)**(1./3.)/rhill
+Rhillimp = rsun*(mimp/msun/3.)**(1./3.)/rhill
+# axes.grid()
+primaryhill = plt.Circle((cospx[i]-sinpy[i], sinpx[i]+cospy[i]), Rhillprim, fc="none", ec="tab:orange", zorder=100)
+axes.add_artist(primaryhill)
+secondaryhill = plt.Circle((cossx[i]-sinsy[i], sinsx[i]+cossy[i]), Rhillsec, fc="none", ec="tab:blue")
+axes.add_artist(secondaryhill)
+impactorhill = plt.Circle((cosix[i]-siniy[i], sinix[i]+cosiy[i]), Rhillimp, fc="none", ec="tab:green")
+axes.add_artist(impactorhill)
+ms = 5
+lw = 1
+axes.plot(cospx[0:i]-sinpy[0:i], sinpx[0:i]+cospy[0:i], c="tab:orange", lw=lw)
+axes.plot(cossx[0:i]-sinsy[0:i], sinsx[0:i]+cossy[0:i], c="tab:blue", lw=lw)
+axes.plot(cosix[0:i]-siniy[0:i], sinix[0:i]+cosiy[0:i], c="tab:green", lw=lw)
+
+axes.plot(cospx[i]-sinpy[i], sinpx[i]+cospy[i], c="tab:orange", marker='o', ms=ms, label="primary")
+axes.plot(cossx[i]-sinsy[i], sinsx[i]+cossy[i], c="tab:blue", marker='o', ms=ms, label="secondary")
+axes.plot(cosix[i]-siniy[i], sinix[i]+cosiy[i], c="tab:green", marker='o', ms=ms, label="impactor")
+# axes.text(-4.5, -4.5, 't = {} Years'.format(int(times[i]/(year))), fontsize=12)
+
+axes.legend()
+fig.savefig('./img/changes_test.pdf', bbox_inches='tight')
+# %%
+y = energy
+plt.figure(figsize=(8,4))
+# plt.title(f"Integrator={sim.integrator} -- Impactor radius={simp/1e3} km -- b={b/Rhill} hill radii")
+plt.plot(times/year, y[:,0], label="prim-sec", lw=1.5)
+plt.plot(times/year, y[:,1], label="prim-imp", lw=1.5)
+plt.plot(times/year, y[:,2], label="sec-imp", lw=1.5)
+plt.axhline(y=0, ls="--", color="black", lw=1.5)
+plt.xlabel("Time (years)")
+plt.ylabel("Energy (J/kg)")
+plt.xlim(0, np.amax(times)/year)
+# plt.ylim(-0.02, 0.02)
+plt.grid('both')
+plt.legend()
+plt.savefig(f"./img/single_energy.pdf", bbox_inches='tight')
+# %%
+y = dr
+plt.figure(figsize=(8,4))
+# plt.title(f"Integrator={sim.integrator} -- Impactor radius={simp/1e3} km -- b={b/Rhill} hill radii")
+plt.plot(times/year, y[:,0]/rhill, label="prim-sec", lw=1.5)
+plt.plot(times/year, y[:,1]/rhill, label="prim-imp", lw=1.5)
+plt.plot(times/year, y[:,2]/rhill, label="sec-imp", lw=1.5)
+plt.xlabel("Time (years)")
+plt.ylabel("Distance (Hill Radii)")
+plt.xlim(0, np.amax(times)/year)
+# plt.ylim(0,1)
+plt.grid('both')
+plt.legend()
+plt.savefig("./img/single_dr.pdf", bbox_inches='tight')
+# %%
+y = e_all
+plt.figure(figsize=(8,4))
+# plt.title(f"Integrator={sim.integrator} -- Impactor radius={simp/1e3} km -- b={b/Rhill} hill radii")
+plt.plot(times/year, y[:,0], label="prim-sec", lw=1.5)
+# plt.plot(times/year, y[:,1], label="prim-imp", lw=1.5)
+# plt.plot(times/year, y[:,2], label="sec-imp", lw=1.5)
+plt.xlabel("Time (years)")
+plt.ylabel("eccentricity")
+plt.xlim(0, np.amax(times)/year)
+plt.ylim(0, 1)
+plt.grid('both')
+plt.legend()
+plt.savefig(f"./img/single_eccentricity.pdf", bbox_inches='tight')
+# %%
+y = cj
+plt.figure(figsize=(9,4))
+# plt.title(f"Integrator={sim.integrator}  Imp radius={simp/1e3} km  b={b/Rhill} Rhill")
+plt.plot(times/year, y, label="Jacobi integral", lw=1.5)
+plt.axhline(y=0, ls="--", color="black", lw=1.5)
+plt.xlabel("Time (years)")
+plt.ylabel("Energy (J/kg)")
+plt.xlim(0, np.amax(times)/year)
+# plt.ylim(-0.02, 0.02)
+plt.grid('both')
+plt.legend()
+# plt.savefig(f"energy_{str(sim.integrator)}", bbox_inches='tight')
+# %%
 lim = 10
 
 fig, axes = plt.subplots(1, figsize=(7, 7))
@@ -155,20 +266,6 @@ impactordot, = axes.plot([], [], marker="o", ms=7, c="tab:green")
 text = axes.text(-lim+(lim/10), lim-(lim/10), '', fontsize=15)
 axes.legend()
 axes.grid()
-
-ref = np.zeros((noutputs,3))
-ref[:,0] = rsun*np.cos(angles)
-ref[:,1] = 0 - rsun*np.sin(angles)
-
-pref = (p-ref)/rhill
-sref = (s-ref)/rhill
-impref = (imp-ref)/rhill
-cospx, cospy = np.cos(angles)*pref[:,0], np.cos(angles)*pref[:,1]
-cossx, cossy = np.cos(angles)*sref[:,0], np.cos(angles)*sref[:,1]
-cosix, cosiy = np.cos(angles)*impref[:,0], np.cos(angles)*impref[:,1]
-sinpx, sinpy = np.sin(angles)*pref[:,0], np.sin(angles)*pref[:,1]
-sinsx, sinsy = np.sin(angles)*sref[:,0], np.sin(angles)*sref[:,1]
-sinix, siniy = np.sin(angles)*impref[:,0], np.sin(angles)*impref[:,1]
 
 rhillprim = rsun*(m1/msun/3.)**(1./3.)/rhill
 rhillsec = rsun*(m2/msun/3.)**(1./3.)/rhill
@@ -198,7 +295,6 @@ def animate(i):
     return primarydot, secondarydot, impactordot, primaryline, secondaryline, impactorline, primaryhill, secondaryhill, impactorhill, text
 
 anim = animation.FuncAnimation(fig, animate, init_func=init, frames=noutputs, interval=1, blit=True)
-# anim = animation.FuncAnimation(fig, animate, frames=noutputs, interval=1, blit=True)
 # %%
 plt.rcParams['animation.ffmpeg_path'] = '/usr/bin/ffmpeg'
 f = f'videos/ps_animation_3.mp4' 
@@ -223,12 +319,6 @@ impactordot, = axes.plot([], [], [], marker="o", ms=8, c="tab:green")
 text = axes.text(-lim+(lim/10), lim-(lim/10), lim-(lim/10), '', fontsize=15)
 axes.legend()
 
-angles = -omegak*times
-cosspx, cosspy = np.cos(angles)*sp[:,0], np.cos(angles)*sp[:,1]
-cosipx, cosipy = np.cos(angles)*ip[:,0], np.cos(angles)*ip[:,1]
-sinspx, sinspy = np.sin(angles)*sp[:,0], np.sin(angles)*sp[:,1]
-sinipx, sinipy = np.sin(angles)*ip[:,0], np.sin(angles)*ip[:,1]
-
 def animate(i):
     primaryline.set_data(cospx[0:i]-sinpy[0:i], sinpx[0:i]+cospy[0:i])
     secondaryline.set_data(cossx[0:i]-sinsy[0:i], sinsx[0:i]+cossy[0:i])
@@ -246,97 +336,7 @@ def animate(i):
     return primarydot, secondarydot, impactordot, primaryline, secondaryline, impactorline, text
 
 anim = animation.FuncAnimation(fig, animate, frames=noutputs, interval=1)
-# %%
-lim = 5
-fig, axes = plt.subplots(1, figsize=(5, 5))
-axes.set_xlabel("$x/R_\mathrm{h}$")
-axes.set_ylabel("$y/R_\mathrm{h}$")
-axes.set_ylim(-lim,lim)
-axes.set_xlim(-lim,lim)
-axes.grid()
 
-i = 688
-
-Rhillprim = rsun*(m1/msun/3.)**(1./3.)/rhill
-Rhillsec = rsun*(m2/msun/3.)**(1./3.)/rhill
-Rhillimp = rsun*(mimp/msun/3.)**(1./3.)/rhill
-
-primaryhill = plt.Circle((cospx[i]-sinpy[i], sinpx[i]+cospy[i]), Rhillprim, fc="none", ec="tab:orange")
-axes.add_artist(primaryhill)
-secondaryhill = plt.Circle((cossx[i]-sinsy[i], sinsx[i]+cossy[i]), Rhillsec, fc="none", ec="tab:blue")
-axes.add_artist(secondaryhill)
-impactorhill = plt.Circle((cosix[i]-siniy[i], sinix[i]+cosiy[i]), Rhillimp, fc="none", ec="tab:green")
-axes.add_artist(impactorhill)
-
-axes.plot(cospx[0:i]-sinpy[0:i], sinpx[0:i]+cospy[0:i], label="primary", c="tab:orange", lw=1.5)
-axes.plot(cossx[0:i]-sinsy[0:i], sinsx[0:i]+cossy[0:i], label="secondary", c="tab:blue", lw=1.5)
-axes.plot(cosix[0:i]-siniy[0:i], sinix[0:i]+cosiy[0:i], label="impactor", c="tab:green", lw=1.5)
-
-axes.plot(cospx[i]-sinpy[i], sinpx[i]+cospy[i], c="tab:orange", marker='o')
-axes.plot(cossx[i]-sinsy[i], sinsx[i]+cossy[i], c="tab:blue", marker='o')
-axes.plot(cosix[i]-siniy[i], sinix[i]+cosiy[i], c="tab:green", marker='o')
-axes.text(-4.5, -4.5, 't = {} Years'.format(int(times[i]/(year))), fontsize=12)
-
-axes.legend()
-fig.savefig('./img/result5.pdf', bbox_inches='tight')
-# %%
-y = cj
-plt.figure(figsize=(9,4))
-# plt.title(f"Integrator={sim.integrator}  Imp radius={simp/1e3} km  b={b/Rhill} Rhill")
-plt.plot(times/year, y, label="Jacobi integral", lw=1.5)
-plt.axhline(y=0, ls="--", color="black", lw=1.5)
-plt.xlabel("Time (years)")
-plt.ylabel("Energy (J/kg)")
-plt.xlim(0, np.amax(times)/year)
-# plt.ylim(-0.02, 0.02)
-plt.grid('both')
-plt.legend()
-# plt.savefig(f"energy_{str(sim.integrator)}", bbox_inches='tight')
-# %%
-y = energy
-plt.figure(figsize=(8,4))
-# plt.title(f"Integrator={sim.integrator} -- Impactor radius={simp/1e3} km -- b={b/Rhill} hill radii")
-plt.plot(times/year, y[:,0], label="Primary-Secondary", lw=1.5)
-plt.plot(times/year, y[:,1], label="Primary-Impactor", lw=1.5)
-plt.plot(times/year, y[:,2], label="Secondary-Impactor", lw=1.5)
-plt.axhline(y=0, ls="--", color="black", lw=1.5)
-plt.xlabel("Time (years)")
-plt.ylabel("Energy (J/kg)")
-plt.xlim(0, np.amax(times)/year)
-# plt.ylim(-0.02, 0.02)
-plt.grid('both')
-plt.legend()
-# plt.savefig(f"energy_2", bbox_inches='tight')
-# %%
-
-dr = np.linalg.norm(p-s, axis=1)
-y = dr
-plt.figure(figsize=(8,4))
-# plt.title(f"Integrator={sim.integrator} -- Impactor radius={simp/1e3} km -- b={b/Rhill} hill radii")
-plt.plot(times/year, np.linalg.norm(p-s, axis=1)/rhill, label="Primary-Secondary", lw=1.5)
-plt.plot(times/year, np.linalg.norm(p-imp, axis=1)/rhill, label="Primary-Impactor", lw=1.5)
-plt.plot(times/year, np.linalg.norm(s-imp, axis=1)/rhill, label="Secondary-Impactor", lw=1.5)
-plt.xlabel("Time (years)")
-plt.ylabel("Distance (Hill Radii)")
-plt.xlim(0, np.amax(times)/year)
-# plt.ylim(0,1)
-plt.grid('both')
-plt.legend()
-# plt.savefig(f"distance_2", bbox_inches='tight')
-# %%
-y = e
-plt.figure(figsize=(8,4))
-# plt.title(f"Integrator={sim.integrator} -- Impactor radius={simp/1e3} km -- b={b/Rhill} hill radii")
-plt.plot(times/year, y, label="Primary-Secondary", lw=1.5)
-# plt.plot(times/year, y[:,1], label="Primary-Impactor", lw=1.5)
-# plt.plot(times/year, y[:,2], label="Secondary-Impactor", lw=1.5)
-plt.xlabel("Time (years)")
-plt.ylabel("eccentricity")
-plt.xlim(0, np.amax(times)/year)
-plt.ylim(0, 1)
-plt.grid('both')
-plt.legend()
-# plt.savefig(f"eccentricity_3", bbox_inches='tight')
 # %%
 # Cd = 2.
 # rho_g = 1e-20
