@@ -21,11 +21,13 @@ m1 = 4./3.*np.pi*dens*s1**3                # mass of primary calculated from den
 m2 = 4./3.*np.pi*dens*s2**3                # mass of secondary calculated from density and radius
 rhill = rsun*((m1+m2)/msun/3.)**(1./3.)        # Hill radius of primary
 
+
 a = 0.3*rhill                            # separation of binary
 e = 0
 i = np.deg2rad(0)
 
 t = 2.*np.pi/np.sqrt(g*msun/rsun**3)            # orbital period of binary around the sun
+p_bin = 2.*np.pi/np.sqrt(g*(m1+m2)/a**3)            # orbital period of binary around the sun
 noutputs = 1000             # number of outputs
 p, s, imp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3)) # position
 vp, vs, vimp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3)) # velocity
@@ -35,7 +37,7 @@ times = np.linspace(0,totaltime, noutputs) # create times for integrations
 
 for j in range(1):
     simp = rndm(10, 200, g=-1.6, size=1)*1e3 # impactor radius
-    simp = 100e3
+    # simp = 100e3
     # print(simp)
     b = np.random.uniform(2,8)
     b = 2.6
@@ -106,23 +108,30 @@ for j in range(1):
     
     a = mu*dr/(2*mu - dr*dv**2)
     energy = -mu/2/a
-    e_all = np.sqrt(1 + (2*energy*h**2 / mu**2))
-    
-    e_movingavg = [np.mean(e_all[ii-300:ii]) for ii in range(noutputs)]
-    
+    e = np.sqrt(1 + (2*energy*h**2 / mu**2))
+    e_movingavg = np.zeros(noutputs)
     for ii in range(noutputs):
-        e_cumsum = np.mean(e_all[ii-300:ii])
+        if ii > 100:
+            xi = ii - 100
+        else:
+            xi = 0
+        e_movingavg[ii] = np.mean(e[xi:ii,0])
+    
+    # for ii in range(noutputs):
+    #     e_cumsum = np.mean(e[ii-300:ii])
         # print(e_cumsum)
         
-    e = np.sqrt(np.mean(e_all**2))
+    e_rootsquaremean = np.sqrt(np.mean(e**2))
     a = a[-1]
-    print("e = " + str(e) + "\t" + "a = " + str(a/rhill))
+    # print("e = " + str(e) + "\t" + "a = " + str(a/rhill))
     # print("a = " + str(a/rhill))
     # print("final eccentricity = " + str(e[-1]))
 
-# plt.figure()
-# plt.plot(times/t,e_movingavg)
-# plt.ylim(0,0.1)
+plt.figure(figsize=(10,6))
+plt.plot(times/t,e[:,0])
+plt.plot(times/t,e_movingavg)
+plt.ylim(0,1)
+plt.savefig(f"./img/ecc_moving_avg_test2", bbox_inches='tight')
 
 # plt.figure()
 # plt.plot(dr/rhill)
@@ -168,7 +177,7 @@ axes.set_ylabel("$y/R_\mathrm{H}$")
 axes.set_ylim(-lim,lim)
 axes.set_xlim(-lim,lim)
 
-i = 950
+i = 999
 
 Rhillprim = rsun*(m1/msun/3.)**(1./3.)/rhill
 Rhillsec = rsun*(m2/msun/3.)**(1./3.)/rhill
@@ -192,43 +201,43 @@ axes.plot(cosix[i]-siniy[i], sinix[i]+cosiy[i], c="tab:green", marker='o', ms=ms
 # axes.text(-4.5, -4.5, 't = {} Years'.format(int(times[i]/(year))), fontsize=12)
 
 axes.legend()
-fig.savefig('./img/changes_test.pdf', bbox_inches='tight')
+# fig.savefig('./img/changes_test.pdf', bbox_inches='tight')
 # %%
 y = energy
-plt.figure(figsize=(8,4))
+plt.figure(figsize=(5,3))
 # plt.title(f"Integrator={sim.integrator} -- Impactor radius={simp/1e3} km -- b={b/Rhill} hill radii")
-plt.plot(times/year, y[:,0], label="prim-sec", lw=1.5)
-plt.plot(times/year, y[:,1], label="prim-imp", lw=1.5)
-plt.plot(times/year, y[:,2], label="sec-imp", lw=1.5)
-plt.axhline(y=0, ls="--", color="black", lw=1.5)
+plt.plot(times/year, y[:,0], label="prim-sec", lw=1)
+plt.plot(times/year, y[:,1], label="prim-imp", lw=1)
+plt.plot(times/year, y[:,2], label="sec-imp", lw=1)
+plt.axhline(y=0, ls="--", color="black", lw=1)
 plt.xlabel("Time (years)")
 plt.ylabel("Energy (J/kg)")
 plt.xlim(0, np.amax(times)/year)
-# plt.ylim(-0.02, 0.02)
+# plt.ylim(-2, 30)
 plt.grid('both')
 plt.legend()
-plt.savefig(f"./img/single_energy.pdf", bbox_inches='tight')
+# plt.savefig(f"./img/single_energy2.pdf", bbox_inches='tight')
 # %%
 y = dr
-plt.figure(figsize=(8,4))
+plt.figure(figsize=(5,3))
 # plt.title(f"Integrator={sim.integrator} -- Impactor radius={simp/1e3} km -- b={b/Rhill} hill radii")
-plt.plot(times/year, y[:,0]/rhill, label="prim-sec", lw=1.5)
-plt.plot(times/year, y[:,1]/rhill, label="prim-imp", lw=1.5)
-plt.plot(times/year, y[:,2]/rhill, label="sec-imp", lw=1.5)
+plt.plot(times/year, y[:,0]/rhill, label="prim-sec", lw=1)
+plt.plot(times/year, y[:,1]/rhill, label="prim-imp", lw=1)
+plt.plot(times/year, y[:,2]/rhill, label="sec-imp", lw=1)
 plt.xlabel("Time (years)")
 plt.ylabel("Distance (Hill Radii)")
 plt.xlim(0, np.amax(times)/year)
-# plt.ylim(0,1)
+plt.ylim(0)
 plt.grid('both')
 plt.legend()
 plt.savefig("./img/single_dr.pdf", bbox_inches='tight')
 # %%
 y = e_all
-plt.figure(figsize=(8,4))
+plt.figure(figsize=(5,3))
 # plt.title(f"Integrator={sim.integrator} -- Impactor radius={simp/1e3} km -- b={b/Rhill} hill radii")
-plt.plot(times/year, y[:,0], label="prim-sec", lw=1.5)
-# plt.plot(times/year, y[:,1], label="prim-imp", lw=1.5)
-# plt.plot(times/year, y[:,2], label="sec-imp", lw=1.5)
+plt.plot(times/year, y[:,0], label="prim-sec", lw=1)
+plt.plot(times/year, y[:,1], label="prim-imp", lw=1)
+plt.plot(times/year, y[:,2], label="sec-imp", lw=1)
 plt.xlabel("Time (years)")
 plt.ylabel("eccentricity")
 plt.xlim(0, np.amax(times)/year)
