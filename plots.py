@@ -19,7 +19,7 @@ au = 1.496e11
 rsun = 44.*au
 Msun = 1.9891e30
 
-sim_name = 'tight_equalmass_0ecc'
+sim_name = 'showcase_wide_equalmass_0ecc'
 filenames = glob(f'./rebound/mastersproject/binaries/results/{sim_name}*')
 
 b_all = np.zeros(len(filenames))
@@ -111,8 +111,8 @@ for i, collision in enumerate(collisions):
         params.append(2)
     if hash_secondary[0] in collided_bodies and hash_impactor[0] in collided_bodies:
         params.append(3)
-    # if len(params) == 3: # needed if more than one collision per sim
-    coll_params[i] = params
+    if len(params) == 3: # needed if more than one collision per sim
+        coll_params[i] = params
 # %%
 total_space = len(b_all)
 number_of_bound = len(b_all[bound[:,0]])
@@ -120,8 +120,8 @@ number_of_swapped = len(b_all[bound[:,1]]) + len(b_all[bound[:,2]])
 number_of_collisions = len(collisions)
 number_of_disrupted = total_space - (number_of_bound + number_of_swapped + number_of_collisions)
 # %%
-fig, ax = plt.subplots(1, figsize=(5,5))
-s = 100
+fig, ax = plt.subplots(1, figsize=(7,7))
+s = 50
 ax.scatter(b_all, simp_all, s=1, marker="x", c="black")
 ax.scatter(b_all[bound[:,0]], simp_all[bound[:,0]], label='prim-sec', s=s, c="tab:blue")
 ax.scatter(b_all[bound[:,1]], simp_all[bound[:,1]], label='prim-imp', s=s, c="tab:orange")
@@ -132,11 +132,11 @@ ax.scatter(coll_params[coll_params[:,2] == 3][:,1], coll_params[coll_params[:,2]
 ax.set_xlabel("Impact parameter (R$_H$)")
 ax.set_ylabel("Impactor radius (km)")
 # ax.set_title(f'initial semi-major axis = 0.4 R$_H$', y=1, pad=15, fontdict={'fontsize': 14})
-ax.legend(loc='upper center', bbox_to_anchor=(0.5, 1.06), ncol=3, fancybox=True, shadow=True)
-ax.set_yticks(np.asarray((np.unique(simp_all)), dtype=int),)
-ax.set_xticks(np.round(np.unique(b_all), 2))
+ax.legend(loc='upper center', bbox_to_anchor=(0.5, 1.04), ncol=3, fancybox=True, shadow=True)
+# ax.set_yticks(np.asarray((np.unique(simp_all)), dtype=int),)
+# ax.set_xticks(np.round(np.unique(b_all), 2))
 # plt.xlim(100,350)simp
-# plt.savefig(f"./img/{sim_name}_final_bound.pdf", bbox_inches='tight')
+plt.savefig(f"./img/{sim_name}_final_bound.pdf", bbox_inches='tight')
 # %%
 b_all = np.round(b_all, 2)
 binary_e = np.ones((len(np.unique(simp_all)), len(np.unique(b_all))))
@@ -150,20 +150,20 @@ for i, item in enumerate(np.unique(simp_all)):
 binary_e[binary_e > 1] = np.nan
 binary_e = np.round(binary_e, 2)
 
-fig, ax = plt.subplots(1, figsize=(5, 5))
+fig, ax = plt.subplots(1, figsize=(10, 8))
 ax = sns.heatmap(binary_e, 
-                 annot=True, 
+                 # annot=True, 
                  linewidths=0.5, 
                  cmap="YlGnBu",
                  yticklabels=np.asarray((np.unique(simp_all)), dtype=int),
                  xticklabels=np.round(np.unique(b_all), 2),
-                 cbar=False
+                 # cbar=False
                  )
 ax.invert_yaxis()
 # plt.title(f"Final eccentricity - {sim_name}")
 plt.xlabel("Impact parameter (Hill radii)")
 plt.ylabel("Impactor radius (km)")
-# plt.savefig(f"./img/{sim_name}_final_eccentricity.pdf", bbox_inches='tight')
+plt.savefig(f"./img/{sim_name}_final_eccentricity.pdf", bbox_inches='tight')
 # %%
 binary_a = np.ones((len(np.unique(simp_all)), len(np.unique(b_all))))
 

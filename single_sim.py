@@ -32,7 +32,7 @@ noutputs = 1000             # number of outputs
 p, s, imp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3)) # position
 vp, vs, vimp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3)) # velocity
 dr, dv, h = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3))
-totaltime = t*1
+totaltime = t*0.4
 times = np.linspace(0,totaltime, noutputs) # create times for integrations
 
 for j in range(1):
@@ -43,7 +43,7 @@ for j in range(1):
     b = 2.6
     mimp = 4./3.*np.pi*dens*simp**3   # mass of impactor
     bhill = b*rhill # impact parameter
-    theta = 0.001  # true anomaly of impactor
+    theta = 0.0004  # true anomaly of impactor
     
     def setupSimulation():
         sim = rebound.Simulation()              # initialize rebound simulation
