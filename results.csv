@@ -1,0 +1,2909 @@
+a,mass ratio,eccentricity,impactor,b,status
+very wide,3x mass,0,290.0,8.0,bound
+wide,equal mass,0,40.0,2.8,bound
+tight,equal mass,0,110.0,6.0,bound
+very wide,equal mass,0,290.0,7.0,bound
+wide,equal mass,0,400.0,6.8,disrupted
+wide,equal mass,0,140.0,6.2,bound
+very wide,3x mass,0,170.0,7.0,bound
+wide,equal mass,0,260.0,1.4,swapped
+wide,equal mass,0,270.0,2.4,disrupted
+wide,10x mass,0,50.0,2.0,bound
+tight,equal mass,0.2,210.0,5.0,bound
+wide,equal mass,0,80.0,3.2,bound
+wide,10x mass,0,130.0,4.0,bound
+wide,equal mass,0,100.0,5.8,bound
+very wide,equal mass,0.4,230.0,8.0,bound
+tight,10x mass,0,50.0,6.0,bound
+wide,equal mass,0,10.0,5.0,bound
+wide,equal mass,0,40.0,2.0,bound
+very wide,equal mass,0.2,110.0,7.0,bound
+wide,equal mass,0,30.0,1.0,bound
+wide,equal mass,0,210.0,1.2,swapped
+wide,equal mass,0,130.0,8.0,bound
+wide,equal mass,0,270.0,3.8,swapped
+wide,equal mass,0,110.0,4.8,bound
+very wide,equal mass,0.4,170.0,6.0,bound
+very wide,equal mass,0.4,190.0,1.0,swapped
+tight,3x mass,0,290.0,2.0,bound
+wide,10x mass,0,50.0,1.0,bound
+very wide,equal mass,0.4,10.0,6.0,bound
+wide,10x mass,0,10.0,6.0,bound
+wide,equal mass,0,210.0,1.8,bound
+wide,equal mass,0,50.0,7.8,bound
+wide,equal mass,0,230.0,7.0,bound
+wide,equal mass,0,220.0,1.8,disrupted
+wide,equal mass,0,140.0,7.4,bound
+wide,equal mass,0,110.0,2.0,collision
+wide,10x mass,0,90.0,8.0,bound
+wide,equal mass,0,330.0,2.6,disrupted
+tight,equal mass,0.2,250.0,2.0,bound
+wide,10x mass,0,210.0,1.0,swapped
+wide,equal mass,0,140.0,3.0,swapped
+wide,equal mass,0,400.0,4.2,disrupted
+wide,equal mass,0,20.0,4.0,bound
+wide,equal mass,0,200.0,6.6,bound
+wide,equal mass,0,390.0,5.2,disrupted
+very wide,10x mass,0,250.0,2.0,disrupted
+tight,equal mass,0,150.0,5.0,bound
+tight,equal mass,0.4,110.0,5.0,bound
+wide,equal mass,0,20.0,1.2,bound
+wide,equal mass,0,260.0,4.0,swapped
+wide,equal mass,0,90.0,2.8,swapped
+wide,equal mass,0,230.0,7.0,bound
+very wide,equal mass,0.4,150.0,3.0,swapped
+wide,equal mass,0,160.0,7.4,bound
+wide,equal mass,0,370.0,2.8,bound
+very wide,10x mass,0,50.0,8.0,bound
+wide,equal mass,0,320.0,6.6,disrupted
+wide,equal mass,0,90.0,7.4,bound
+wide,equal mass,0,50.0,6.2,bound
+wide,equal mass,0,150.0,6.0,bound
+very wide,10x mass,0,110.0,8.0,bound
+tight,equal mass,0.4,290.0,5.0,collision
+wide,equal mass,0,160.0,5.6,bound
+wide,equal mass,0,330.0,2.4,bound
+wide,equal mass,0,110.0,5.8,bound
+tight,3x mass,0,170.0,1.0,bound
+wide,equal mass,0,380.0,7.2,bound
+wide,equal mass,0,320.0,7.8,bound
+tight,3x mass,0,210.0,2.0,bound
+wide,equal mass,0,20.0,5.2,bound
+wide,equal mass,0,390.0,5.4,disrupted
+wide,equal mass,0,280.0,2.4,bound
+wide,equal mass,0,110.0,8.0,bound
+wide,10x mass,0,270.0,5.0,collision
+very wide,equal mass,0,50.0,3.0,bound
+tight,3x mass,0,70.0,8.0,bound
+very wide,10x mass,0,90.0,7.0,bound
+tight,10x mass,0,150.0,8.0,bound
+wide,equal mass,0,330.0,6.8,swapped
+wide,equal mass,0,160.0,1.0,swapped
+wide,equal mass,0,130.0,5.0,bound
+wide,10x mass,0,50.0,8.0,bound
+wide,equal mass,0,190.0,5.0,bound
+very wide,3x mass,0,110.0,5.0,bound
+wide,equal mass,0,110.0,3.8,bound
+wide,equal mass,0,160.0,3.0,swapped
+tight,equal mass,0.4,290.0,1.0,swapped
+wide,equal mass,0,220.0,6.6,bound
+wide,equal mass,0,320.0,6.2,swapped
+very wide,equal mass,0.4,210.0,5.0,bound
+wide,equal mass,0,240.0,2.4,swapped
+tight,3x mass,0,10.0,1.0,bound
+wide,equal mass,0,90.0,6.0,bound
+wide,equal mass,0,190.0,7.2,bound
+wide,equal mass,0,50.0,2.6,bound
+wide,equal mass,0,190.0,5.6,bound
+tight,3x mass,0,190.0,6.0,bound
+wide,equal mass,0,390.0,1.0,swapped
+very wide,3x mass,0,230.0,7.0,bound
+wide,equal mass,0,160.0,5.0,bound
+wide,equal mass,0,60.0,7.2,bound
+very wide,equal mass,0,110.0,4.0,bound
+wide,equal mass,0,110.0,4.6,bound
+very wide,equal mass,0,290.0,5.0,swapped
+wide,equal mass,0,390.0,4.0,bound
+wide,10x mass,0,30.0,3.0,bound
+very wide,10x mass,0,110.0,6.0,bound
+very wide,equal mass,0,50.0,4.0,bound
+wide,equal mass,0,130.0,7.2,bound
+tight,equal mass,0.4,90.0,6.0,bound
+wide,equal mass,0,400.0,1.6,swapped
+very wide,10x mass,0,10.0,6.0,bound
+wide,equal mass,0,340.0,6.6,swapped
+wide,equal mass,0,20.0,5.6,bound
+wide,equal mass,0,220.0,4.0,swapped
+wide,equal mass,0,60.0,1.2,bound
+very wide,3x mass,0,190.0,4.0,disrupted
+very wide,equal mass,0.2,250.0,6.0,bound
+wide,equal mass,0,340.0,2.8,bound
+very wide,equal mass,0.4,150.0,4.0,bound
+wide,equal mass,0,230.0,4.2,swapped
+wide,equal mass,0,80.0,5.0,bound
+wide,equal mass,0,110.0,7.6,bound
+tight,equal mass,0,90.0,1.0,bound
+very wide,equal mass,0,170.0,6.0,bound
+very wide,equal mass,0,210.0,3.0,collision
+wide,equal mass,0,300.0,7.4,bound
+very wide,equal mass,0.4,290.0,3.0,disrupted
+wide,equal mass,0,150.0,3.8,bound
+very wide,equal mass,0,290.0,3.0,disrupted
+tight,10x mass,0,90.0,1.0,bound
+tight,equal mass,0,250.0,5.0,collision
+wide,equal mass,0,20.0,6.2,bound
+very wide,equal mass,0,230.0,6.0,bound
+wide,equal mass,0,60.0,4.6,bound
+very wide,10x mass,0,50.0,7.0,bound
+wide,equal mass,0,40.0,7.4,bound
+tight,10x mass,0,270.0,6.0,bound
+wide,equal mass,0,160.0,6.6,bound
+wide,10x mass,0,250.0,6.0,bound
+tight,equal mass,0.4,130.0,4.0,bound
+wide,equal mass,0,90.0,8.0,bound
+wide,equal mass,0,380.0,6.6,disrupted
+wide,equal mass,0,370.0,3.0,bound
+wide,equal mass,0,340.0,5.0,collision
+wide,equal mass,0,120.0,2.4,swapped
+very wide,3x mass,0,290.0,1.0,disrupted
+wide,10x mass,0,50.0,6.0,bound
+tight,equal mass,0.4,250.0,3.0,swapped
+wide,equal mass,0,250.0,6.0,bound
+very wide,equal mass,0.2,270.0,3.0,disrupted
+wide,equal mass,0,170.0,4.8,bound
+wide,equal mass,0,210.0,7.8,bound
+very wide,equal mass,0.2,190.0,8.0,bound
+very wide,3x mass,0,130.0,5.0,bound
+wide,10x mass,0,110.0,2.0,swapped
+wide,equal mass,0,170.0,6.4,bound
+tight,equal mass,0,130.0,6.0,bound
+wide,equal mass,0,400.0,7.4,bound
+wide,equal mass,0,110.0,2.0,collision
+tight,10x mass,0,130.0,2.0,swapped
+tight,3x mass,0,150.0,6.0,bound
+wide,equal mass,0,30.0,7.4,bound
+wide,equal mass,0,220.0,5.4,bound
+wide,equal mass,0,200.0,2.0,bound
+wide,equal mass,0,310.0,5.8,bound
+tight,equal mass,0,270.0,7.0,bound
+wide,equal mass,0,330.0,5.6,swapped
+wide,equal mass,0,50.0,4.0,bound
+very wide,10x mass,0,290.0,3.0,disrupted
+very wide,3x mass,0,10.0,7.0,bound
+wide,equal mass,0,140.0,1.8,swapped
+wide,equal mass,0,130.0,5.2,bound
+wide,equal mass,0,390.0,2.6,bound
+wide,equal mass,0,310.0,5.0,collision
+wide,equal mass,0,290.0,3.8,swapped
+tight,equal mass,0.2,130.0,8.0,bound
+wide,equal mass,0,400.0,7.2,bound
+wide,equal mass,0,20.0,6.0,bound
+wide,equal mass,0,380.0,2.4,swapped
+wide,equal mass,0,170.0,2.0,swapped
+tight,equal mass,0.4,270.0,6.0,bound
+wide,equal mass,0,320.0,8.0,bound
+wide,equal mass,0,120.0,4.2,bound
+wide,equal mass,0,290.0,7.0,bound
+wide,equal mass,0,210.0,7.2,bound
+wide,equal mass,0,390.0,4.4,swapped
+wide,equal mass,0,370.0,2.2,disrupted
+wide,equal mass,0,90.0,5.6,bound
+wide,equal mass,0,330.0,3.8,swapped
+wide,equal mass,0,140.0,3.8,bound
+tight,equal mass,0,270.0,6.0,bound
+wide,equal mass,0,300.0,4.8,disrupted
+wide,equal mass,0,350.0,1.0,swapped
+wide,equal mass,0,120.0,3.0,swapped
+wide,equal mass,0,370.0,1.8,swapped
+tight,equal mass,0.4,30.0,4.0,bound
+wide,equal mass,0,60.0,3.4,bound
+tight,equal mass,0,30.0,4.0,bound
+tight,3x mass,0,250.0,8.0,bound
+wide,equal mass,0,130.0,7.0,bound
+very wide,equal mass,0.2,170.0,5.0,bound
+tight,equal mass,0.2,50.0,2.0,bound
+tight,equal mass,0.4,130.0,8.0,bound
+wide,equal mass,0,330.0,4.0,swapped
+wide,equal mass,0,20.0,4.8,bound
+wide,equal mass,0,50.0,4.6,bound
+tight,equal mass,0.2,170.0,2.0,bound
+very wide,equal mass,0,190.0,2.0,disrupted
+very wide,3x mass,0,270.0,1.0,swapped
+wide,equal mass,0,60.0,4.4,bound
+very wide,10x mass,0,290.0,5.0,disrupted
+wide,equal mass,0,120.0,2.8,swapped
+tight,10x mass,0,190.0,1.0,swapped
+wide,equal mass,0,290.0,5.4,disrupted
+wide,equal mass,0,70.0,7.4,bound
+wide,equal mass,0,150.0,6.0,bound
+wide,equal mass,0,250.0,7.2,bound
+wide,equal mass,0,380.0,4.0,disrupted
+wide,equal mass,0,150.0,3.6,swapped
+wide,equal mass,0,10.0,2.0,bound
+very wide,3x mass,0,90.0,8.0,bound
+wide,equal mass,0,110.0,5.0,bound
+wide,equal mass,0,260.0,6.8,bound
+tight,equal mass,0.2,130.0,5.0,bound
+wide,equal mass,0,90.0,1.0,bound
+very wide,10x mass,0,210.0,7.0,bound
+wide,equal mass,0,140.0,6.6,bound
+very wide,10x mass,0,250.0,4.0,disrupted
+tight,10x mass,0,250.0,4.0,disrupted
+wide,equal mass,0,400.0,4.8,swapped
+wide,equal mass,0,60.0,6.0,bound
+very wide,equal mass,0,170.0,8.0,bound
+wide,equal mass,0,160.0,3.6,collision
+wide,equal mass,0,360.0,5.2,disrupted
+very wide,10x mass,0,10.0,2.0,bound
+wide,equal mass,0,160.0,4.8,bound
+tight,equal mass,0.4,170.0,8.0,bound
+tight,10x mass,0,90.0,2.0,swapped
+wide,equal mass,0,350.0,1.8,swapped
+wide,equal mass,0,370.0,6.4,disrupted
+wide,equal mass,0,170.0,6.8,bound
+wide,equal mass,0,340.0,4.4,collision
+very wide,equal mass,0.4,130.0,6.0,bound
+wide,equal mass,0,140.0,6.4,bound
+very wide,equal mass,0.2,150.0,4.0,bound
+wide,equal mass,0,190.0,6.6,bound
+tight,equal mass,0.2,90.0,4.0,bound
+wide,equal mass,0,40.0,3.4,bound
+wide,equal mass,0,150.0,7.0,bound
+very wide,equal mass,0.4,110.0,8.0,bound
+tight,10x mass,0,270.0,8.0,bound
+tight,3x mass,0,110.0,3.0,bound
+wide,equal mass,0,50.0,1.2,bound
+very wide,10x mass,0,30.0,1.0,
+wide,equal mass,0,70.0,2.0,bound
+wide,equal mass,0,340.0,6.0,swapped
+very wide,equal mass,0,150.0,3.0,collision
+wide,equal mass,0,70.0,6.6,bound
+wide,equal mass,0,10.0,5.0,bound
+wide,equal mass,0,60.0,1.8,collision
+very wide,equal mass,0.2,10.0,1.0,bound
+wide,equal mass,0,180.0,5.4,bound
+wide,10x mass,0,210.0,5.0,bound
+wide,equal mass,0,100.0,7.8,bound
+wide,equal mass,0,70.0,4.4,bound
+tight,3x mass,0,70.0,6.0,bound
+wide,equal mass,0,330.0,7.8,bound
+very wide,equal mass,0.2,50.0,1.0,bound
+tight,3x mass,0,270.0,7.0,bound
+wide,10x mass,0,90.0,2.0,collision
+tight,equal mass,0.4,70.0,4.0,bound
+very wide,3x mass,0,130.0,2.0,swapped
+wide,equal mass,0,30.0,7.0,bound
+very wide,10x mass,0,210.0,5.0,bound
+tight,10x mass,0,150.0,2.0,disrupted
+wide,equal mass,0,270.0,4.0,disrupted
+wide,equal mass,0,150.0,2.8,swapped
+wide,equal mass,0,50.0,4.2,bound
+very wide,10x mass,0,90.0,5.0,bound
+wide,equal mass,0,80.0,6.6,bound
+wide,equal mass,0,230.0,2.8,swapped
+wide,equal mass,0,270.0,3.0,swapped
+wide,equal mass,0,280.0,7.0,bound
+wide,equal mass,0,60.0,5.0,bound
+very wide,equal mass,0.4,10.0,1.0,bound
+wide,equal mass,0,160.0,4.0,bound
+wide,equal mass,0,250.0,1.8,disrupted
+very wide,equal mass,0,150.0,5.0,bound
+wide,equal mass,0,360.0,1.4,swapped
+wide,equal mass,0,30.0,2.0,bound
+very wide,equal mass,0,270.0,8.0,bound
+wide,equal mass,0,210.0,6.0,bound
+very wide,equal mass,0,150.0,6.0,bound
+very wide,equal mass,0,230.0,5.0,disrupted
+very wide,10x mass,0,50.0,5.0,bound
+wide,equal mass,0,180.0,5.0,bound
+wide,10x mass,0,150.0,8.0,bound
+tight,3x mass,0,90.0,6.0,bound
+wide,equal mass,0,210.0,3.4,swapped
+very wide,equal mass,0,250.0,8.0,bound
+very wide,10x mass,0,30.0,6.0,bound
+very wide,equal mass,0.2,290.0,6.0,disrupted
+wide,equal mass,0,300.0,1.6,swapped
+very wide,3x mass,0,170.0,2.0,disrupted
+wide,equal mass,0,170.0,1.2,swapped
+tight,equal mass,0,150.0,8.0,bound
+wide,equal mass,0,400.0,6.6,disrupted
+wide,equal mass,0,220.0,2.6,swapped
+wide,equal mass,0,50.0,6.8,bound
+wide,equal mass,0,190.0,1.0,swapped
+wide,equal mass,0,300.0,3.6,swapped
+very wide,equal mass,0.2,150.0,5.0,bound
+wide,equal mass,0,210.0,1.4,swapped
+wide,equal mass,0,290.0,5.0,swapped
+very wide,10x mass,0,50.0,4.0,bound
+wide,equal mass,0,290.0,6.2,swapped
+wide,equal mass,0,150.0,7.2,bound
+very wide,10x mass,0,170.0,4.0,bound
+wide,equal mass,0,190.0,3.0,swapped
+very wide,equal mass,0,270.0,7.0,bound
+very wide,10x mass,0,70.0,3.0,bound
+tight,3x mass,0,150.0,5.0,bound
+tight,equal mass,0.4,250.0,2.0,bound
+tight,equal mass,0.2,210.0,2.0,bound
+wide,equal mass,0,330.0,2.8,bound
+tight,3x mass,0,290.0,5.0,collision
+tight,3x mass,0,270.0,5.0,bound
+wide,equal mass,0,200.0,3.8,swapped
+wide,equal mass,0,160.0,6.0,bound
+wide,equal mass,0,390.0,3.8,swapped
+wide,equal mass,0,70.0,7.6,bound
+wide,equal mass,0,140.0,4.8,bound
+tight,equal mass,0.2,110.0,2.0,collision
+tight,equal mass,0,130.0,7.0,bound
+very wide,10x mass,0,230.0,4.0,collision
+tight,3x mass,0,10.0,6.0,bound
+wide,equal mass,0,260.0,5.0,swapped
+wide,equal mass,0,30.0,3.2,bound
+wide,equal mass,0,120.0,2.2,collision
+wide,equal mass,0,400.0,3.4,bound
+very wide,equal mass,0,250.0,2.0,disrupted
+wide,equal mass,0,150.0,3.0,swapped
+tight,3x mass,0,150.0,3.0,swapped
+very wide,3x mass,0,30.0,8.0,bound
+wide,equal mass,0,30.0,6.4,bound
+very wide,10x mass,0,150.0,3.0,swapped
+wide,equal mass,0,250.0,2.4,bound
+tight,equal mass,0.4,130.0,1.0,bound
+tight,equal mass,0.4,270.0,3.0,swapped
+wide,equal mass,0,220.0,5.2,bound
+wide,equal mass,0,210.0,5.6,bound
+tight,3x mass,0,90.0,1.0,bound
+wide,equal mass,0,160.0,3.4,swapped
+very wide,equal mass,0,10.0,6.0,bound
+wide,10x mass,0,30.0,2.0,bound
+very wide,equal mass,0,30.0,5.0,bound
+wide,equal mass,0,180.0,3.0,swapped
+wide,equal mass,0,180.0,2.2,swapped
+very wide,equal mass,0.4,50.0,8.0,bound
+very wide,3x mass,0,70.0,1.0,disrupted
+wide,equal mass,0,210.0,5.8,bound
+very wide,3x mass,0,190.0,5.0,bound
+wide,equal mass,0,290.0,7.2,bound
+tight,equal mass,0,30.0,8.0,bound
+very wide,3x mass,0,90.0,4.0,bound
+wide,equal mass,0,290.0,1.6,swapped
+tight,equal mass,0.2,290.0,7.0,bound
+wide,equal mass,0,60.0,6.2,bound
+wide,equal mass,0,210.0,3.0,collision
+very wide,equal mass,0,150.0,4.0,bound
+very wide,equal mass,0.4,250.0,5.0,swapped
+wide,equal mass,0,120.0,7.2,bound
+very wide,3x mass,0,210.0,2.0,disrupted
+wide,equal mass,0,10.0,8.0,bound
+wide,equal mass,0,20.0,7.0,bound
+wide,equal mass,0,260.0,7.8,bound
+wide,equal mass,0,10.0,7.2,bound
+tight,10x mass,0,230.0,2.0,bound
+wide,equal mass,0,250.0,5.0,swapped
+very wide,equal mass,0.4,290.0,2.0,disrupted
+very wide,equal mass,0.2,30.0,3.0,bound
+wide,equal mass,0,10.0,4.0,bound
+tight,equal mass,0,190.0,8.0,bound
+wide,equal mass,0,110.0,7.0,bound
+very wide,3x mass,0,190.0,2.0,disrupted
+wide,equal mass,0,220.0,6.2,bound
+wide,equal mass,0,270.0,2.8,bound
+wide,equal mass,0,390.0,6.2,collision
+wide,equal mass,0,210.0,4.0,swapped
+wide,equal mass,0,350.0,3.6,bound
+very wide,10x mass,0,190.0,8.0,bound
+wide,equal mass,0,270.0,1.8,swapped
+wide,equal mass,0,60.0,6.4,bound
+wide,equal mass,0,240.0,4.0,collision
+wide,equal mass,0,130.0,1.6,bound
+wide,equal mass,0,90.0,6.4,bound
+very wide,equal mass,0.2,30.0,4.0,bound
+tight,3x mass,0,50.0,2.0,collision
+wide,equal mass,0,50.0,5.6,bound
+wide,10x mass,0,190.0,6.0,bound
+tight,equal mass,0.2,230.0,5.0,collision
+very wide,equal mass,0,110.0,6.0,bound
+tight,10x mass,0,130.0,4.0,bound
+wide,equal mass,0,170.0,2.0,swapped
+tight,equal mass,0.4,30.0,6.0,bound
+very wide,equal mass,0.2,210.0,3.0,collision
+very wide,equal mass,0.2,270.0,4.0,collision
+tight,equal mass,0.4,150.0,8.0,bound
+wide,equal mass,0,20.0,6.4,bound
+wide,equal mass,0,150.0,1.0,swapped
+wide,10x mass,0,30.0,1.0,bound
+wide,equal mass,0,300.0,5.6,bound
+tight,10x mass,0,170.0,3.0,collision
+wide,equal mass,0,300.0,1.8,swapped
+tight,equal mass,0,290.0,2.0,bound
+tight,equal mass,0.4,250.0,6.0,bound
+wide,equal mass,0,120.0,1.6,swapped
+wide,equal mass,0,390.0,2.2,swapped
+very wide,equal mass,0.2,130.0,1.0,swapped
+tight,equal mass,0,210.0,8.0,bound
+tight,10x mass,0,250.0,2.0,bound
+wide,equal mass,0,100.0,5.6,bound
+tight,equal mass,0.4,290.0,6.0,swapped
+tight,equal mass,0.4,30.0,1.0,bound
+wide,equal mass,0,150.0,3.4,swapped
+wide,equal mass,0,30.0,5.6,bound
+wide,equal mass,0,170.0,1.0,swapped
+wide,equal mass,0,150.0,4.4,bound
+wide,equal mass,0,350.0,2.6,bound
+very wide,equal mass,0,130.0,3.0,collision
+very wide,equal mass,0.2,230.0,6.0,bound
+very wide,equal mass,0,30.0,4.0,bound
+wide,equal mass,0,70.0,2.8,swapped
+wide,equal mass,0,70.0,6.8,bound
+wide,equal mass,0,350.0,5.2,disrupted
+wide,equal mass,0,150.0,2.6,swapped
+tight,equal mass,0,250.0,1.0,swapped
+wide,equal mass,0,90.0,4.8,bound
+very wide,equal mass,0.4,290.0,7.0,bound
+wide,equal mass,0,250.0,5.2,swapped
+wide,equal mass,0,90.0,4.6,bound
+very wide,equal mass,0,230.0,7.0,bound
+wide,equal mass,0,50.0,1.0,bound
+wide,equal mass,0,140.0,7.0,bound
+wide,equal mass,0,110.0,5.0,bound
+tight,equal mass,0,270.0,5.0,bound
+very wide,equal mass,0.2,150.0,6.0,bound
+tight,equal mass,0,250.0,4.0,collision
+wide,equal mass,0,80.0,6.8,bound
+wide,equal mass,0,10.0,2.0,bound
+tight,10x mass,0,130.0,8.0,bound
+wide,equal mass,0,220.0,4.8,swapped
+wide,equal mass,0,90.0,1.8,bound
+wide,equal mass,0,360.0,4.4,swapped
+wide,equal mass,0,320.0,5.2,swapped
+very wide,equal mass,0.2,270.0,1.0,swapped
+tight,equal mass,0.2,190.0,7.0,bound
+very wide,equal mass,0.2,230.0,8.0,bound
+wide,equal mass,0,140.0,8.0,bound
+wide,equal mass,0,240.0,7.6,bound
+very wide,3x mass,0,210.0,6.0,bound
+very wide,10x mass,0,230.0,5.0,disrupted
+wide,equal mass,0,360.0,1.2,swapped
+wide,equal mass,0,210.0,7.0,bound
+very wide,10x mass,0,190.0,5.0,bound
+wide,equal mass,0,40.0,4.4,bound
+wide,equal mass,0,80.0,3.8,bound
+tight,3x mass,0,130.0,8.0,bound
+wide,equal mass,0,40.0,7.8,bound
+tight,3x mass,0,130.0,2.0,swapped
+wide,equal mass,0,130.0,6.4,bound
+very wide,3x mass,0,230.0,6.0,bound
+wide,equal mass,0,370.0,3.4,bound
+wide,equal mass,0,400.0,4.0,disrupted
+wide,equal mass,0,20.0,8.0,bound
+wide,equal mass,0,160.0,8.0,bound
+wide,10x mass,0,30.0,5.0,bound
+wide,equal mass,0,70.0,4.8,bound
+tight,equal mass,0,110.0,7.0,bound
+very wide,equal mass,0.2,70.0,8.0,bound
+wide,equal mass,0,70.0,5.2,bound
+wide,equal mass,0,380.0,7.8,swapped
+wide,10x mass,0,250.0,1.0,disrupted
+wide,equal mass,0,130.0,4.6,bound
+tight,3x mass,0,170.0,6.0,bound
+wide,equal mass,0,350.0,7.2,swapped
+wide,equal mass,0,220.0,1.6,bound
+wide,equal mass,0,10.0,7.0,bound
+wide,equal mass,0,230.0,4.0,swapped
+tight,3x mass,0,290.0,4.0,swapped
+very wide,equal mass,0.2,210.0,4.0,swapped
+wide,equal mass,0,190.0,1.2,swapped
+tight,equal mass,0.4,110.0,8.0,bound
+wide,equal mass,0,280.0,1.6,swapped
+very wide,equal mass,0.4,30.0,2.0,bound
+wide,equal mass,0,150.0,2.4,collision
+tight,equal mass,0.4,150.0,4.0,bound
+very wide,3x mass,0,150.0,2.0,disrupted
+wide,equal mass,0,210.0,4.6,swapped
+wide,equal mass,0,70.0,8.0,bound
+wide,equal mass,0,130.0,2.0,swapped
+wide,equal mass,0,10.0,7.8,bound
+wide,equal mass,0,60.0,6.8,bound
+wide,equal mass,0,210.0,8.0,bound
+wide,10x mass,0,170.0,5.0,bound
+very wide,equal mass,0.2,190.0,4.0,collision
+wide,equal mass,0,370.0,8.0,swapped
+very wide,equal mass,0,10.0,8.0,bound
+wide,equal mass,0,20.0,1.0,bound
+tight,equal mass,0.4,290.0,7.0,bound
+wide,equal mass,0,330.0,7.2,bound
+tight,equal mass,0,250.0,7.0,bound
+very wide,equal mass,0,290.0,4.0,disrupted
+very wide,equal mass,0.2,150.0,7.0,bound
+wide,equal mass,0,180.0,4.2,swapped
+tight,equal mass,0.4,290.0,8.0,bound
+tight,equal mass,0,250.0,2.0,bound
+very wide,equal mass,0,130.0,1.0,bound
+wide,equal mass,0,300.0,4.2,collision
+wide,equal mass,0,260.0,2.6,swapped
+wide,equal mass,0,230.0,3.0,swapped
+wide,equal mass,0,90.0,8.0,bound
+wide,equal mass,0,320.0,6.0,disrupted
+wide,equal mass,0,270.0,1.4,swapped
+very wide,equal mass,0.4,10.0,3.0,bound
+very wide,10x mass,0,30.0,7.0,bound
+wide,equal mass,0,130.0,1.0,swapped
+wide,equal mass,0,80.0,7.2,bound
+tight,3x mass,0,50.0,2.0,
+tight,10x mass,0,170.0,5.0,bound
+wide,equal mass,0,110.0,6.0,bound
+tight,equal mass,0.4,30.0,2.0,bound
+very wide,equal mass,0,270.0,5.0,swapped
+tight,10x mass,0,110.0,3.0,bound
+tight,10x mass,0,50.0,8.0,bound
+wide,equal mass,0,190.0,6.4,bound
+tight,equal mass,0.2,110.0,6.0,bound
+wide,equal mass,0,190.0,2.2,swapped
+wide,equal mass,0,30.0,3.0,bound
+wide,equal mass,0,270.0,5.0,swapped
+wide,equal mass,0,340.0,2.6,bound
+very wide,equal mass,0.2,90.0,4.0,bound
+very tight,equal mass,0,30.0,3.0,bound
+wide,equal mass,0,240.0,2.0,bound
+tight,equal mass,0.2,230.0,8.0,bound
+wide,equal mass,0,120.0,4.8,bound
+wide,10x mass,0,250.0,7.0,bound
+wide,equal mass,0,130.0,7.4,bound
+wide,equal mass,0,360.0,5.8,swapped
+very wide,equal mass,0.2,270.0,2.0,disrupted
+very wide,10x mass,0,10.0,4.0,bound
+wide,equal mass,0,170.0,3.0,swapped
+wide,equal mass,0,130.0,6.2,bound
+wide,equal mass,0,20.0,2.6,
+wide,equal mass,0,10.0,5.4,bound
+wide,equal mass,0,330.0,5.4,disrupted
+very wide,equal mass,0,170.0,2.0,disrupted
+very wide,equal mass,0.4,190.0,3.0,bound
+wide,equal mass,0,40.0,4.6,bound
+wide,equal mass,0,390.0,7.6,disrupted
+wide,equal mass,0,130.0,4.2,bound
+wide,equal mass,0,180.0,2.0,bound
+very wide,equal mass,0.2,210.0,7.0,bound
+wide,equal mass,0,90.0,1.2,bound
+very wide,equal mass,0.4,290.0,1.0,disrupted
+wide,equal mass,0,100.0,1.8,bound
+very wide,equal mass,0.4,90.0,3.0,disrupted
+wide,equal mass,0,40.0,3.8,bound
+wide,equal mass,0,110.0,5.2,bound
+tight,10x mass,0,210.0,6.0,bound
+wide,equal mass,0,230.0,5.8,bound
+tight,3x mass,0,250.0,7.0,bound
+wide,equal mass,0,150.0,7.6,bound
+tight,equal mass,0.2,50.0,5.0,bound
+wide,equal mass,0,400.0,6.4,swapped
+wide,equal mass,0,120.0,1.2,bound
+wide,equal mass,0,90.0,5.4,bound
+very tight,equal mass,0,10.0,1.0,bound
+wide,equal mass,0,140.0,3.2,swapped
+wide,equal mass,0,360.0,6.4,bound
+tight,equal mass,0,170.0,6.0,bound
+very wide,equal mass,0.4,210.0,4.0,swapped
+very wide,10x mass,0,290.0,1.0,collision
+wide,equal mass,0,170.0,5.6,bound
+wide,equal mass,0,220.0,7.0,bound
+tight,equal mass,0.2,250.0,4.0,swapped
+tight,equal mass,0.2,30.0,5.0,bound
+wide,equal mass,0,70.0,3.8,bound
+very wide,3x mass,0,210.0,5.0,bound
+very wide,10x mass,0,270.0,6.0,disrupted
+very wide,10x mass,0,210.0,4.0,collision
+wide,equal mass,0,70.0,7.0,bound
+wide,equal mass,0,130.0,6.6,bound
+wide,equal mass,0,350.0,3.4,swapped
+wide,equal mass,0,310.0,3.0,swapped
+tight,equal mass,0.2,270.0,1.0,swapped
+tight,10x mass,0,250.0,3.0,swapped
+wide,equal mass,0,380.0,2.6,bound
+wide,equal mass,0,140.0,7.8,bound
+wide,equal mass,0,290.0,5.2,swapped
+tight,equal mass,0.2,90.0,8.0,bound
+wide,equal mass,0,70.0,5.4,bound
+very wide,equal mass,0.2,210.0,6.0,bound
+wide,equal mass,0,360.0,2.6,disrupted
+wide,equal mass,0,370.0,7.2,collision
+very wide,3x mass,0,90.0,1.0,bound
+wide,equal mass,0,330.0,7.6,bound
+wide,equal mass,0,90.0,5.2,bound
+wide,equal mass,0,120.0,6.0,bound
+wide,equal mass,0,250.0,4.0,swapped
+wide,equal mass,0,180.0,5.6,bound
+wide,equal mass,0,40.0,7.2,bound
+wide,equal mass,0,270.0,3.2,swapped
+wide,equal mass,0,150.0,8.0,bound
+tight,3x mass,0,210.0,7.0,bound
+tight,equal mass,0,230.0,2.0,bound
+wide,equal mass,0,80.0,5.8,bound
+wide,equal mass,0,170.0,2.8,collision
+wide,equal mass,0,90.0,3.4,bound
+very wide,3x mass,0,210.0,7.0,bound
+wide,equal mass,0,370.0,2.6,disrupted
+wide,equal mass,0,110.0,2.8,swapped
+wide,10x mass,0,130.0,2.0,bound
+wide,10x mass,0,150.0,6.0,bound
+tight,equal mass,0.2,90.0,6.0,bound
+wide,equal mass,0,380.0,1.0,swapped
+wide,equal mass,0,120.0,6.8,bound
+tight,10x mass,0,110.0,2.0,collision
+wide,equal mass,0,400.0,5.0,swapped
+tight,equal mass,0.4,70.0,3.0,bound
+tight,equal mass,0.2,290.0,2.0,bound
+wide,equal mass,0,150.0,3.0,swapped
+wide,equal mass,0,190.0,2.0,swapped
+very wide,3x mass,0,90.0,5.0,bound
+very wide,equal mass,0.2,170.0,1.0,swapped
+wide,equal mass,0,370.0,1.4,swapped
+wide,equal mass,0,200.0,4.4,swapped
+tight,10x mass,0,250.0,6.0,bound
+wide,equal mass,0,50.0,5.4,bound
+tight,equal mass,0.2,290.0,5.0,swapped
+very wide,equal mass,0.4,190.0,6.0,bound
+tight,equal mass,0,190.0,3.0,swapped
+tight,equal mass,0,150.0,3.0,swapped
+wide,equal mass,0,300.0,6.0,swapped
+wide,equal mass,0,360.0,3.2,disrupted
+wide,equal mass,0,250.0,5.8,bound
+wide,equal mass,0,30.0,2.6,bound
+very wide,10x mass,0,170.0,8.0,bound
+tight,10x mass,0,210.0,5.0,bound
+wide,equal mass,0,80.0,4.0,bound
+tight,equal mass,0,10.0,3.0,bound
+wide,equal mass,0,170.0,5.8,bound
+wide,equal mass,0,40.0,1.8,bound
+very wide,equal mass,0,210.0,5.0,bound
+tight,equal mass,0.2,130.0,2.0,swapped
+tight,equal mass,0,210.0,4.0,bound
+very wide,equal mass,0,90.0,2.0,swapped
+tight,equal mass,0,10.0,8.0,bound
+wide,equal mass,0,130.0,1.4,bound
+wide,10x mass,0,230.0,3.0,disrupted
+tight,10x mass,0,190.0,3.0,collision
+wide,equal mass,0,200.0,2.4,swapped
+wide,equal mass,0,60.0,1.4,bound
+very wide,equal mass,0.2,30.0,6.0,bound
+tight,10x mass,0,270.0,2.0,bound
+tight,3x mass,0,250.0,3.0,bound
+wide,equal mass,0,70.0,8.0,bound
+wide,equal mass,0,230.0,2.0,bound
+very wide,10x mass,0,70.0,7.0,bound
+wide,equal mass,0,270.0,6.0,bound
+wide,equal mass,0,250.0,4.8,swapped
+tight,10x mass,0,10.0,5.0,bound
+wide,equal mass,0,20.0,3.4,bound
+very wide,10x mass,0,130.0,6.0,bound
+very wide,10x mass,0,250.0,3.0,disrupted
+tight,equal mass,0,210.0,6.0,bound
+wide,equal mass,0,240.0,5.8,bound
+wide,equal mass,0,210.0,5.4,bound
+wide,equal mass,0,350.0,7.4,swapped
+very wide,equal mass,0,270.0,4.0,disrupted
+wide,equal mass,0,180.0,7.2,bound
+tight,3x mass,0,50.0,5.0,bound
+wide,equal mass,0,90.0,7.0,bound
+very wide,10x mass,0,30.0,8.0,bound
+wide,equal mass,0,50.0,1.8,bound
+wide,equal mass,0,70.0,7.0,bound
+wide,equal mass,0,110.0,7.4,bound
+very wide,equal mass,0.4,270.0,3.0,swapped
+wide,equal mass,0,150.0,6.8,bound
+wide,equal mass,0,30.0,6.2,bound
+wide,equal mass,0,220.0,1.0,swapped
+wide,equal mass,0,190.0,5.8,bound
+wide,equal mass,0,40.0,4.8,bound
+wide,equal mass,0,400.0,6.2,collision
+wide,equal mass,0,340.0,2.4,disrupted
+wide,equal mass,0,240.0,5.0,collision
+very wide,3x mass,0,270.0,2.0,disrupted
+wide,equal mass,0,120.0,5.6,bound
+wide,equal mass,0,240.0,3.2,collision
+wide,equal mass,0,40.0,1.6,bound
+very wide,equal mass,0.2,270.0,6.0,swapped
+wide,equal mass,0,140.0,6.0,bound
+wide,10x mass,0,130.0,7.0,bound
+tight,equal mass,0.4,210.0,7.0,bound
+very wide,equal mass,0.2,150.0,8.0,bound
+wide,equal mass,0,50.0,1.6,collision
+wide,equal mass,0,310.0,6.2,swapped
+tight,10x mass,0,70.0,5.0,bound
+wide,equal mass,0,80.0,3.4,bound
+very wide,equal mass,0.2,70.0,2.0,swapped
+wide,equal mass,0,50.0,3.6,bound
+very wide,equal mass,0.2,10.0,8.0,bound
+very wide,equal mass,0,90.0,3.0,bound
+wide,equal mass,0,100.0,7.2,bound
+wide,equal mass,0,200.0,1.0,swapped
+very wide,3x mass,0,70.0,2.0,bound
+tight,3x mass,0,210.0,6.0,bound
+very wide,10x mass,0,190.0,7.0,bound
+wide,equal mass,0,50.0,3.4,bound
+wide,equal mass,0,360.0,4.8,disrupted
+wide,equal mass,0,90.0,1.6,bound
+very wide,equal mass,0.4,70.0,4.0,bound
+very wide,equal mass,0.2,150.0,3.0,disrupted
+tight,equal mass,0,110.0,3.0,collision
+tight,equal mass,0.2,290.0,8.0,bound
+very wide,3x mass,0,50.0,1.0,collision
+wide,10x mass,0,90.0,4.0,bound
+wide,equal mass,0,250.0,6.6,bound
+tight,10x mass,0,70.0,1.0,bound
+wide,10x mass,0,10.0,8.0,bound
+very wide,3x mass,0,150.0,5.0,bound
+very wide,equal mass,0.2,50.0,7.0,bound
+wide,10x mass,0,270.0,8.0,bound
+wide,equal mass,0,400.0,4.4,swapped
+tight,equal mass,0,230.0,6.0,bound
+tight,3x mass,0,90.0,4.0,bound
+wide,equal mass,0,90.0,1.4,bound
+wide,equal mass,0,340.0,8.0,bound
+very wide,10x mass,0,30.0,1.0,collision
+tight,equal mass,0.2,150.0,8.0,bound
+wide,equal mass,0,100.0,2.4,swapped
+wide,equal mass,0,30.0,3.0,bound
+wide,equal mass,0,230.0,3.4,collision
+tight,equal mass,0.2,10.0,7.0,bound
+tight,3x mass,0,230.0,8.0,bound
+wide,equal mass,0,30.0,4.6,bound
+tight,10x mass,0,230.0,7.0,bound
+wide,equal mass,0,200.0,6.8,bound
+tight,3x mass,0,230.0,2.0,bound
+tight,3x mass,0,30.0,3.0,bound
+wide,equal mass,0,200.0,6.2,bound
+tight,3x mass,0,70.0,2.0,swapped
+wide,equal mass,0,360.0,4.6,swapped
+very wide,10x mass,0,290.0,6.0,collision
+wide,equal mass,0,380.0,6.2,disrupted
+wide,equal mass,0,290.0,1.8,bound
+very wide,10x mass,0,50.0,6.0,bound
+very wide,3x mass,0,130.0,7.0,bound
+very wide,equal mass,0.4,250.0,2.0,disrupted
+very wide,equal mass,0.2,110.0,2.0,disrupted
+wide,equal mass,0,120.0,4.6,bound
+wide,equal mass,0,190.0,1.4,bound
+wide,equal mass,0,260.0,3.8,collision
+wide,equal mass,0,250.0,1.4,disrupted
+wide,equal mass,0,270.0,1.2,swapped
+wide,equal mass,0,380.0,5.6,disrupted
+wide,equal mass,0,120.0,2.0,bound
+wide,equal mass,0,30.0,4.8,bound
+very wide,equal mass,0,290.0,1.0,collision
+tight,equal mass,0.4,70.0,6.0,bound
+wide,equal mass,0,260.0,5.2,swapped
+very wide,equal mass,0.2,90.0,6.0,bound
+tight,10x mass,0,110.0,5.0,bound
+wide,equal mass,0,320.0,4.4,collision
+wide,equal mass,0,190.0,6.0,bound
+very wide,equal mass,0.4,130.0,1.0,swapped
+wide,equal mass,0,150.0,3.2,swapped
+wide,equal mass,0,340.0,1.8,swapped
+very wide,10x mass,0,270.0,5.0,disrupted
+wide,10x mass,0,270.0,6.0,bound
+wide,equal mass,0,80.0,5.2,bound
+wide,equal mass,0,260.0,2.8,swapped
+wide,equal mass,0,350.0,6.0,disrupted
+wide,equal mass,0,180.0,6.6,bound
+wide,equal mass,0,390.0,4.6,swapped
+wide,equal mass,0,10.0,7.6,bound
+wide,equal mass,0,390.0,7.0,bound
+wide,equal mass,0,90.0,6.0,bound
+wide,equal mass,0,20.0,3.0,bound
+wide,equal mass,0,320.0,2.8,disrupted
+tight,equal mass,0.4,230.0,4.0,swapped
+very wide,3x mass,0,170.0,1.0,disrupted
+wide,equal mass,0,310.0,7.2,bound
+very wide,equal mass,0.2,70.0,3.0,bound
+tight,equal mass,0.4,50.0,6.0,bound
+very wide,equal mass,0.4,90.0,4.0,bound
+wide,equal mass,0,110.0,1.6,swapped
+wide,equal mass,0,180.0,8.0,bound
+wide,equal mass,0,370.0,6.8,bound
+tight,equal mass,0.2,270.0,5.0,bound
+wide,equal mass,0,340.0,4.2,swapped
+tight,10x mass,0,30.0,7.0,bound
+wide,equal mass,0,200.0,5.2,bound
+wide,equal mass,0,350.0,5.8,disrupted
+tight,equal mass,0.4,10.0,4.0,bound
+wide,equal mass,0,180.0,3.4,swapped
+wide,equal mass,0,360.0,7.6,swapped
+very wide,3x mass,0,150.0,1.0,disrupted
+very wide,10x mass,0,250.0,7.0,bound
+very wide,equal mass,0,70.0,4.0,bound
+wide,equal mass,0,180.0,7.0,bound
+wide,equal mass,0,70.0,1.6,swapped
+very wide,equal mass,0.2,250.0,7.0,bound
+tight,equal mass,0,190.0,5.0,bound
+wide,equal mass,0,330.0,4.4,disrupted
+wide,equal mass,0,190.0,7.8,bound
+very wide,equal mass,0,70.0,8.0,bound
+wide,equal mass,0,400.0,3.6,bound
+wide,equal mass,0,270.0,7.6,bound
+very wide,10x mass,0,130.0,5.0,bound
+tight,equal mass,0,110.0,8.0,bound
+wide,equal mass,0,340.0,5.6,swapped
+wide,equal mass,0,360.0,4.0,swapped
+wide,equal mass,0,210.0,1.0,swapped
+tight,3x mass,0,250.0,4.0,collision
+wide,equal mass,0,350.0,4.0,swapped
+very wide,equal mass,0.4,90.0,8.0,bound
+tight,equal mass,0,170.0,1.0,bound
+tight,3x mass,0,270.0,4.0,collision
+wide,10x mass,0,270.0,3.0,swapped
+wide,equal mass,0,160.0,2.4,swapped
+very wide,3x mass,0,30.0,4.0,bound
+tight,equal mass,0.2,90.0,1.0,bound
+wide,equal mass,0,130.0,5.8,bound
+wide,equal mass,0,380.0,1.6,swapped
+wide,equal mass,0,90.0,4.0,bound
+wide,equal mass,0,290.0,7.6,bound
+very wide,equal mass,0.4,30.0,6.0,bound
+tight,3x mass,0,290.0,6.0,swapped
+very wide,equal mass,0.2,170.0,8.0,bound
+tight,10x mass,0,50.0,3.0,bound
+wide,equal mass,0,130.0,3.2,swapped
+wide,equal mass,0,150.0,6.6,bound
+tight,equal mass,0,210.0,3.0,swapped
+wide,equal mass,0,30.0,1.0,bound
+tight,10x mass,0,190.0,6.0,bound
+very wide,equal mass,0.2,30.0,2.0,bound
+wide,equal mass,0,400.0,3.0,bound
+wide,equal mass,0,40.0,5.2,bound
+tight,10x mass,0,130.0,3.0,swapped
+wide,equal mass,0,140.0,3.4,swapped
+very wide,3x mass,0,130.0,8.0,bound
+wide,equal mass,0,250.0,4.0,swapped
+wide,equal mass,0,350.0,3.8,swapped
+very wide,3x mass,0,50.0,4.0,bound
+wide,equal mass,0,170.0,3.4,swapped
+very wide,equal mass,0.2,190.0,5.0,bound
+wide,equal mass,0,280.0,3.8,swapped
+tight,10x mass,0,110.0,6.0,bound
+tight,equal mass,0,190.0,4.0,collision
+wide,equal mass,0,270.0,7.0,bound
+very wide,10x mass,0,130.0,2.0,bound
+tight,equal mass,0.2,270.0,8.0,bound
+wide,equal mass,0,30.0,1.6,bound
+wide,equal mass,0,400.0,1.8,swapped
+wide,equal mass,0,60.0,5.6,bound
+wide,equal mass,0,400.0,2.4,swapped
+wide,equal mass,0,70.0,5.6,bound
+tight,3x mass,0,150.0,2.0,swapped
+wide,equal mass,0,300.0,6.2,collision
+wide,equal mass,0,260.0,6.4,bound
+wide,equal mass,0,70.0,4.0,bound
+wide,equal mass,0,200.0,5.4,bound
+tight,equal mass,0.2,230.0,4.0,swapped
+wide,equal mass,0,80.0,7.6,bound
+wide,equal mass,0,250.0,8.0,bound
+very wide,equal mass,0,90.0,1.0,swapped
+tight,equal mass,0,210.0,5.0,bound
+wide,equal mass,0,150.0,4.6,bound
+wide,equal mass,0,10.0,3.2,bound
+very wide,3x mass,0,170.0,6.0,bound
+wide,equal mass,0,210.0,4.8,bound
+very wide,equal mass,0,250.0,3.0,collision
+tight,3x mass,0,110.0,7.0,bound
+tight,equal mass,0,50.0,1.0,bound
+wide,equal mass,0,70.0,6.4,bound
+wide,equal mass,0,180.0,6.0,bound
+tight,10x mass,0,190.0,7.0,bound
+very wide,equal mass,0.4,50.0,1.0,collision
+wide,equal mass,0,370.0,7.0,bound
+tight,3x mass,0,130.0,1.0,bound
+wide,equal mass,0,380.0,4.2,swapped
+wide,equal mass,0,60.0,2.2,bound
+very wide,equal mass,0.4,290.0,6.0,disrupted
+wide,equal mass,0,230.0,3.4,
+wide,equal mass,0,230.0,7.6,bound
+wide,equal mass,0,280.0,6.0,disrupted
+wide,10x mass,0,50.0,3.0,bound
+wide,equal mass,0,130.0,5.0,bound
+wide,10x mass,0,210.0,7.0,bound
+wide,equal mass,0,170.0,6.0,bound
+very wide,3x mass,0,210.0,3.0,disrupted
+wide,equal mass,0,10.0,4.8,bound
+tight,3x mass,0,130.0,5.0,bound
+wide,equal mass,0,380.0,3.0,disrupted
+wide,equal mass,0,190.0,3.8,disrupted
+tight,10x mass,0,10.0,3.0,bound
+tight,equal mass,0,190.0,2.0,bound
+very wide,equal mass,0.4,230.0,6.0,bound
+wide,equal mass,0,80.0,2.6,bound
+wide,equal mass,0,340.0,5.8,swapped
+wide,10x mass,0,30.0,6.0,bound
+wide,equal mass,0,250.0,3.4,disrupted
+tight,equal mass,0.4,150.0,5.0,bound
+wide,equal mass,0,10.0,1.0,bound
+tight,10x mass,0,30.0,3.0,bound
+wide,equal mass,0,140.0,2.4,swapped
+wide,equal mass,0,40.0,2.6,bound
+wide,equal mass,0,280.0,5.0,swapped
+very wide,equal mass,0.4,190.0,8.0,bound
+tight,equal mass,0,50.0,8.0,bound
+wide,equal mass,0,170.0,4.4,bound
+wide,equal mass,0,30.0,2.0,bound
+very wide,10x mass,0,10.0,1.0,bound
+wide,equal mass,0,30.0,4.0,bound
+wide,equal mass,0,50.0,5.8,bound
+tight,equal mass,0.4,190.0,1.0,swapped
+wide,equal mass,0,40.0,5.8,bound
+wide,10x mass,0,230.0,1.0,swapped
+very wide,equal mass,0,170.0,3.0,swapped
+tight,equal mass,0.4,290.0,3.0,bound
+very wide,equal mass,0.2,190.0,1.0,swapped
+wide,equal mass,0,130.0,2.8,swapped
+wide,equal mass,0,390.0,4.2,swapped
+wide,equal mass,0,300.0,7.0,bound
+very wide,equal mass,0.2,290.0,8.0,bound
+wide,10x mass,0,150.0,1.0,swapped
+tight,equal mass,0.2,270.0,7.0,bound
+very wide,equal mass,0.4,110.0,2.0,disrupted
+very wide,equal mass,0.2,30.0,1.0,bound
+very wide,10x mass,0,90.0,6.0,bound
+tight,3x mass,0,250.0,2.0,bound
+wide,equal mass,0,280.0,4.0,disrupted
+wide,equal mass,0,220.0,4.2,swapped
+very wide,equal mass,0,130.0,4.0,bound
+very wide,equal mass,0.2,250.0,1.0,disrupted
+wide,equal mass,0,230.0,2.2,bound
+tight,3x mass,0,110.0,2.0,swapped
+very wide,equal mass,0.4,50.0,2.0,bound
+wide,equal mass,0,30.0,6.0,bound
+wide,10x mass,0,30.0,7.0,bound
+wide,equal mass,0,170.0,7.2,bound
+wide,equal mass,0,40.0,3.2,bound
+wide,equal mass,0,100.0,3.0,collision
+wide,equal mass,0,250.0,7.0,bound
+tight,3x mass,0,230.0,6.0,bound
+wide,equal mass,0,100.0,6.8,bound
+wide,equal mass,0,140.0,7.2,bound
+tight,equal mass,0.2,70.0,3.0,bound
+wide,equal mass,0,20.0,4.2,bound
+wide,equal mass,0,190.0,7.0,bound
+very wide,equal mass,0,70.0,5.0,bound
+wide,equal mass,0,90.0,3.8,bound
+wide,equal mass,0,260.0,4.6,swapped
+very wide,equal mass,0.4,110.0,1.0,swapped
+very wide,equal mass,0,150.0,1.0,disrupted
+tight,10x mass,0,230.0,8.0,bound
+wide,equal mass,0,100.0,2.2,swapped
+tight,equal mass,0.2,70.0,8.0,bound
+wide,equal mass,0,280.0,1.0,swapped
+very wide,3x mass,0,50.0,8.0,bound
+wide,equal mass,0,80.0,4.4,bound
+wide,equal mass,0,290.0,2.8,swapped
+tight,3x mass,0,50.0,6.0,bound
+very wide,equal mass,0.2,90.0,2.0,bound
+wide,equal mass,0,190.0,4.0,swapped
+very wide,equal mass,0.4,50.0,4.0,bound
+wide,equal mass,0,320.0,2.4,bound
+wide,equal mass,0,20.0,7.2,bound
+wide,equal mass,0,270.0,1.6,swapped
+tight,equal mass,0.4,30.0,3.0,bound
+very wide,equal mass,0.4,210.0,1.0,swapped
+tight,10x mass,0,10.0,8.0,bound
+tight,equal mass,0.2,10.0,3.0,bound
+wide,equal mass,0,200.0,4.8,bound
+tight,10x mass,0,10.0,6.0,bound
+wide,equal mass,0,170.0,7.6,bound
+wide,equal mass,0,10.0,1.4,bound
+tight,10x mass,0,150.0,3.0,bound
+very wide,3x mass,0,250.0,8.0,bound
+wide,equal mass,0,50.0,5.0,bound
+very wide,equal mass,0,170.0,7.0,bound
+wide,10x mass,0,270.0,2.0,bound
+tight,equal mass,0.2,70.0,2.0,bound
+wide,equal mass,0,160.0,7.0,bound
+wide,equal mass,0,240.0,2.2,swapped
+very wide,3x mass,0,110.0,2.0,swapped
+very wide,10x mass,0,90.0,2.0,disrupted
+very wide,equal mass,0,50.0,8.0,bound
+wide,equal mass,0,330.0,5.2,disrupted
+very wide,equal mass,0.2,10.0,3.0,bound
+tight,3x mass,0,10.0,8.0,bound
+wide,equal mass,0,270.0,2.0,bound
+very wide,10x mass,0,110.0,1.0,swapped
+very wide,equal mass,0.2,250.0,4.0,disrupted
+very wide,3x mass,0,210.0,4.0,disrupted
+very wide,10x mass,0,270.0,4.0,disrupted
+tight,10x mass,0,230.0,4.0,bound
+tight,10x mass,0,110.0,8.0,bound
+wide,equal mass,0,210.0,3.2,swapped
+very wide,equal mass,0.2,50.0,5.0,bound
+wide,equal mass,0,40.0,1.4,bound
+wide,equal mass,0,90.0,4.2,bound
+wide,equal mass,0,160.0,5.2,bound
+very wide,equal mass,0.2,290.0,4.0,disrupted
+wide,equal mass,0,50.0,4.0,bound
+wide,equal mass,0,110.0,7.0,bound
+wide,equal mass,0,260.0,8.0,bound
+tight,10x mass,0,70.0,4.0,bound
+wide,equal mass,0,100.0,5.4,bound
+wide,equal mass,0,250.0,4.4,swapped
+tight,equal mass,0,110.0,5.0,bound
+wide,equal mass,0,290.0,4.0,swapped
+wide,equal mass,0,110.0,6.6,bound
+very wide,equal mass,0.4,230.0,2.0,disrupted
+wide,equal mass,0,350.0,6.6,disrupted
+tight,equal mass,0,30.0,3.0,bound
+tight,equal mass,0.2,90.0,7.0,bound
+wide,equal mass,0,340.0,4.8,disrupted
+very wide,equal mass,0.4,70.0,6.0,bound
+tight,3x mass,0,70.0,7.0,bound
+very wide,3x mass,0,90.0,2.0,disrupted
+tight,equal mass,0.2,150.0,3.0,swapped
+very wide,equal mass,0,90.0,4.0,bound
+wide,equal mass,0,90.0,2.0,swapped
+very wide,3x mass,0,110.0,4.0,bound
+very tight,equal mass,0,10.0,8.0,bound
+wide,equal mass,0,40.0,7.0,bound
+tight,equal mass,0.4,50.0,5.0,bound
+wide,equal mass,0,30.0,6.6,bound
+wide,equal mass,0,110.0,1.4,swapped
+wide,equal mass,0,310.0,8.0,bound
+very wide,equal mass,0.2,10.0,2.0,bound
+very wide,equal mass,0.2,270.0,8.0,bound
+wide,equal mass,0,30.0,5.8,bound
+wide,equal mass,0,370.0,6.2,disrupted
+tight,3x mass,0,290.0,3.0,bound
+very wide,10x mass,0,70.0,2.0,disrupted
+very wide,equal mass,0,50.0,5.0,bound
+very wide,10x mass,0,250.0,8.0,bound
+very wide,equal mass,0.4,190.0,5.0,bound
+tight,equal mass,0.2,130.0,6.0,bound
+tight,3x mass,0,270.0,8.0,bound
+wide,equal mass,0,40.0,5.0,bound
+very wide,3x mass,0,30.0,3.0,bound
+tight,equal mass,0.2,30.0,7.0,bound
+very wide,10x mass,0,110.0,2.0,disrupted
+very wide,equal mass,0.2,210.0,1.0,collision
+wide,equal mass,0,180.0,6.8,bound
+wide,equal mass,0,210.0,6.0,bound
+wide,equal mass,0,220.0,5.0,bound
+wide,equal mass,0,380.0,6.0,collision
+wide,equal mass,0,250.0,4.6,disrupted
+wide,equal mass,0,170.0,1.0,swapped
+wide,equal mass,0,10.0,6.4,bound
+very wide,equal mass,0.2,170.0,4.0,swapped
+tight,3x mass,0,170.0,5.0,bound
+wide,equal mass,0,80.0,6.2,bound
+very wide,3x mass,0,290.0,4.0,disrupted
+very wide,3x mass,0,210.0,8.0,bound
+tight,equal mass,0.2,190.0,6.0,bound
+wide,equal mass,0,210.0,2.0,bound
+wide,equal mass,0,340.0,7.4,bound
+tight,equal mass,0,70.0,3.0,bound
+wide,equal mass,0,220.0,4.6,swapped
+tight,3x mass,0,130.0,7.0,bound
+very wide,3x mass,0,250.0,3.0,swapped
+wide,equal mass,0,400.0,7.6,disrupted
+very wide,equal mass,0,70.0,1.0,swapped
+tight,equal mass,0,50.0,5.0,bound
+wide,equal mass,0,10.0,6.8,bound
+wide,equal mass,0,230.0,3.8,swapped
+wide,equal mass,0,260.0,6.0,bound
+wide,equal mass,0,110.0,7.2,bound
+wide,equal mass,0,10.0,1.2,bound
+wide,10x mass,0,210.0,6.0,bound
+tight,equal mass,0,50.0,2.0,collision
+wide,equal mass,0,60.0,7.4,bound
+wide,equal mass,0,270.0,6.4,bound
+tight,equal mass,0.4,190.0,2.0,bound
+wide,equal mass,0,370.0,2.4,swapped
+wide,equal mass,0,280.0,2.8,swapped
+very wide,equal mass,0.4,90.0,7.0,bound
+very wide,10x mass,0,90.0,1.0,disrupted
+wide,equal mass,0,380.0,5.8,collision
+tight,10x mass,0,50.0,2.0,bound
+wide,equal mass,0,210.0,4.4,swapped
+wide,equal mass,0,390.0,2.4,bound
+wide,equal mass,0,300.0,5.4,disrupted
+tight,equal mass,0,110.0,1.0,bound
+very wide,equal mass,0.4,150.0,6.0,bound
+wide,equal mass,0,180.0,7.4,bound
+wide,equal mass,0,360.0,3.4,bound
+tight,10x mass,0,170.0,6.0,bound
+wide,equal mass,0,400.0,8.0,disrupted
+wide,equal mass,0,10.0,3.6,bound
+tight,equal mass,0,290.0,3.0,bound
+wide,equal mass,0,300.0,3.2,swapped
+wide,equal mass,0,230.0,8.0,bound
+tight,3x mass,0,30.0,7.0,bound
+wide,equal mass,0,400.0,4.6,collision
+wide,equal mass,0,160.0,3.2,swapped
+tight,equal mass,0.4,130.0,7.0,bound
+wide,equal mass,0,270.0,4.4,swapped
+wide,equal mass,0,180.0,4.0,collision
+very wide,equal mass,0.2,270.0,5.0,swapped
+wide,equal mass,0,30.0,2.8,bound
+wide,equal mass,0,150.0,4.0,bound
+very wide,equal mass,0.2,130.0,5.0,bound
+very wide,10x mass,0,210.0,3.0,disrupted
+wide,equal mass,0,340.0,6.4,swapped
+very wide,10x mass,0,150.0,5.0,bound
+wide,equal mass,0,300.0,8.0,bound
+wide,equal mass,0,30.0,8.0,bound
+wide,equal mass,0,360.0,2.8,bound
+very wide,equal mass,0.2,30.0,8.0,bound
+tight,3x mass,0,50.0,7.0,bound
+wide,equal mass,0,40.0,2.2,bound
+wide,equal mass,0,300.0,1.0,swapped
+tight,equal mass,0.4,50.0,4.0,bound
+wide,equal mass,0,10.0,6.0,bound
+tight,equal mass,0,30.0,7.0,bound
+wide,equal mass,0,200.0,2.2,bound
+wide,equal mass,0,20.0,2.0,bound
+wide,equal mass,0,210.0,2.0,bound
+wide,equal mass,0,50.0,3.0,bound
+wide,equal mass,0,320.0,1.4,swapped
+wide,equal mass,0,80.0,1.4,bound
+wide,equal mass,0,250.0,6.2,bound
+wide,equal mass,0,240.0,7.2,bound
+very wide,equal mass,0,90.0,5.0,bound
+wide,equal mass,0,190.0,1.6,disrupted
+wide,equal mass,0,190.0,7.6,bound
+wide,equal mass,0,200.0,7.4,bound
+tight,equal mass,0.2,250.0,3.0,collision
+tight,equal mass,0.4,210.0,3.0,swapped
+tight,equal mass,0.2,70.0,5.0,bound
+wide,equal mass,0,140.0,3.6,bound
+wide,equal mass,0,150.0,8.0,bound
+wide,equal mass,0,80.0,4.2,bound
+wide,equal mass,0,230.0,4.8,swapped
+wide,equal mass,0,260.0,7.0,bound
+very wide,10x mass,0,70.0,6.0,bound
+very wide,equal mass,0,10.0,1.0,bound
+wide,equal mass,0,100.0,2.6,swapped
+wide,equal mass,0,70.0,1.4,bound
+tight,equal mass,0.2,270.0,2.0,bound
+wide,equal mass,0,290.0,2.2,bound
+tight,equal mass,0.4,270.0,8.0,bound
+wide,equal mass,0,310.0,4.4,disrupted
+tight,3x mass,0,210.0,3.0,disrupted
+tight,equal mass,0.4,10.0,1.0,bound
+very wide,equal mass,0.4,10.0,2.0,bound
+tight,equal mass,0.2,70.0,7.0,bound
+tight,3x mass,0,170.0,8.0,bound
+tight,10x mass,0,290.0,2.0,bound
+wide,equal mass,0,230.0,3.2,disrupted
+wide,equal mass,0,80.0,1.6,swapped
+wide,equal mass,0,110.0,6.8,bound
+wide,equal mass,0,30.0,4.4,bound
+tight,equal mass,0.2,150.0,7.0,bound
+wide,equal mass,0,170.0,2.4,swapped
+wide,equal mass,0,220.0,5.6,bound
+tight,equal mass,0.2,90.0,3.0,bound
+wide,equal mass,0,170.0,8.0,bound
+wide,equal mass,0,30.0,1.4,bound
+wide,equal mass,0,380.0,3.6,bound
+wide,equal mass,0,110.0,5.6,bound
+wide,equal mass,0,280.0,4.8,swapped
+wide,equal mass,0,90.0,7.0,bound
+tight,equal mass,0.2,10.0,4.0,bound
+very wide,equal mass,0.4,170.0,7.0,bound
+wide,10x mass,0,170.0,6.0,bound
+wide,equal mass,0,340.0,1.6,swapped
+wide,equal mass,0,190.0,4.2,swapped
+wide,equal mass,0,300.0,6.8,bound
+very wide,equal mass,0,130.0,5.0,bound
+wide,equal mass,0,140.0,1.6,swapped
+wide,equal mass,0,70.0,7.8,bound
+very wide,3x mass,0,250.0,4.0,disrupted
+tight,equal mass,0,230.0,8.0,bound
+tight,equal mass,0.4,270.0,1.0,swapped
+wide,equal mass,0,280.0,2.2,bound
+wide,equal mass,0,10.0,8.0,bound
+wide,equal mass,0,110.0,6.0,bound
+wide,equal mass,0,190.0,6.8,bound
+tight,equal mass,0,230.0,3.0,swapped
+wide,equal mass,0,280.0,1.8,swapped
+wide,equal mass,0,310.0,2.4,bound
+wide,equal mass,0,240.0,7.4,bound
+wide,equal mass,0,280.0,4.4,swapped
+wide,equal mass,0,270.0,8.0,bound
+very wide,10x mass,0,30.0,5.0,bound
+wide,equal mass,0,60.0,3.8,bound
+very wide,10x mass,0,130.0,7.0,bound
+very wide,equal mass,0.2,50.0,3.0,bound
+tight,3x mass,0,90.0,2.0,bound
+wide,equal mass,0,120.0,6.2,bound
+tight,3x mass,0,210.0,8.0,bound
+wide,equal mass,0,230.0,5.0,swapped
+wide,10x mass,0,90.0,3.0,bound
+tight,10x mass,0,70.0,8.0,bound
+very wide,10x mass,0,270.0,3.0,disrupted
+very wide,equal mass,0,270.0,2.0,disrupted
+very wide,equal mass,0.2,290.0,5.0,swapped
+very wide,equal mass,0.4,230.0,5.0,collision
+very wide,equal mass,0.2,230.0,5.0,disrupted
+very wide,equal mass,0,190.0,1.0,disrupted
+wide,equal mass,0,130.0,8.0,bound
+very wide,equal mass,0.4,270.0,5.0,swapped
+tight,equal mass,0.4,110.0,3.0,swapped
+wide,equal mass,0,90.0,2.2,collision
+very wide,equal mass,0.2,10.0,7.0,bound
+wide,equal mass,0,90.0,3.6,bound
+wide,equal mass,0,400.0,5.6,disrupted
+wide,equal mass,0,360.0,5.0,disrupted
+tight,equal mass,0,10.0,5.0,bound
+tight,equal mass,0.2,230.0,2.0,bound
+tight,equal mass,0.2,250.0,8.0,bound
+wide,equal mass,0,50.0,3.8,bound
+wide,equal mass,0,10.0,3.0,bound
+very wide,equal mass,0.2,190.0,6.0,bound
+wide,equal mass,0,90.0,6.8,bound
+wide,equal mass,0,250.0,2.0,bound
+tight,equal mass,0.2,50.0,3.0,bound
+very wide,10x mass,0,90.0,4.0,bound
+wide,equal mass,0,290.0,3.0,bound
+very wide,equal mass,0.2,30.0,5.0,bound
+tight,equal mass,0,150.0,6.0,bound
+wide,equal mass,0,70.0,1.0,bound
+wide,equal mass,0,290.0,4.2,bound
+very wide,equal mass,0.2,110.0,3.0,swapped
+tight,equal mass,0.2,230.0,3.0,swapped
+tight,equal mass,0,30.0,6.0,bound
+wide,equal mass,0,210.0,2.8,disrupted
+wide,equal mass,0,330.0,3.4,bound
+very wide,3x mass,0,230.0,1.0,disrupted
+wide,equal mass,0,290.0,8.0,bound
+wide,equal mass,0,390.0,1.6,swapped
+tight,equal mass,0.4,230.0,5.0,swapped
+very wide,equal mass,0,190.0,7.0,bound
+wide,equal mass,0,310.0,2.0,swapped
+wide,equal mass,0,170.0,5.2,bound
+wide,equal mass,0,300.0,4.4,disrupted
+wide,equal mass,0,30.0,3.8,bound
+tight,equal mass,0,250.0,6.0,bound
+wide,equal mass,0,60.0,7.6,bound
+wide,equal mass,0,320.0,2.0,collision
+wide,equal mass,0,380.0,4.6,swapped
+very wide,10x mass,0,30.0,4.0,bound
+wide,equal mass,0,250.0,7.8,bound
+wide,equal mass,0,60.0,1.0,bound
+wide,10x mass,0,10.0,5.0,bound
+wide,equal mass,0,290.0,2.0,bound
+wide,equal mass,0,220.0,6.8,bound
+wide,equal mass,0,170.0,4.2,bound
+very wide,equal mass,0.4,10.0,5.0,bound
+wide,equal mass,0,10.0,5.2,bound
+wide,equal mass,0,280.0,1.2,swapped
+wide,equal mass,0,380.0,5.2,disrupted
+very wide,equal mass,0.2,70.0,4.0,bound
+wide,equal mass,0,190.0,4.6,bound
+tight,equal mass,0.2,110.0,5.0,bound
+wide,equal mass,0,280.0,7.8,bound
+very wide,10x mass,0,210.0,8.0,bound
+wide,equal mass,0,320.0,3.2,swapped
+wide,equal mass,0,340.0,1.2,swapped
+tight,10x mass,0,170.0,8.0,bound
+wide,equal mass,0,390.0,7.4,swapped
+wide,equal mass,0,350.0,2.4,bound
+wide,equal mass,0,320.0,3.4,swapped
+tight,3x mass,0,170.0,3.0,swapped
+very wide,equal mass,0.2,290.0,2.0,disrupted
+tight,equal mass,0.2,290.0,6.0,swapped
+wide,equal mass,0,390.0,3.0,bound
+very wide,equal mass,0.2,250.0,8.0,bound
+very wide,equal mass,0.2,170.0,2.0,disrupted
+wide,equal mass,0,340.0,1.0,swapped
+very wide,equal mass,0,150.0,8.0,bound
+tight,10x mass,0,10.0,4.0,bound
+wide,equal mass,0,40.0,4.0,bound
+wide,equal mass,0,360.0,3.6,swapped
+tight,equal mass,0,170.0,4.0,swapped
+tight,equal mass,0.2,250.0,6.0,bound
+very wide,equal mass,0.2,70.0,6.0,bound
+tight,10x mass,0,130.0,7.0,bound
+wide,equal mass,0,50.0,7.6,bound
+tight,3x mass,0,90.0,8.0,bound
+tight,equal mass,0,170.0,8.0,bound
+very wide,equal mass,0,170.0,4.0,bound
+wide,equal mass,0,70.0,1.0,bound
+wide,equal mass,0,250.0,7.4,bound
+wide,equal mass,0,50.0,2.4,bound
+wide,equal mass,0,310.0,4.0,swapped
+wide,equal mass,0,10.0,4.6,bound
+wide,equal mass,0,340.0,3.8,swapped
+very wide,3x mass,0,170.0,3.0,disrupted
+very wide,equal mass,0,190.0,5.0,bound
+wide,equal mass,0,290.0,6.0,swapped
+very wide,10x mass,0,70.0,1.0,disrupted
+wide,equal mass,0,340.0,7.2,swapped
+tight,equal mass,0.4,110.0,6.0,bound
+wide,equal mass,0,210.0,6.6,bound
+wide,equal mass,0,390.0,8.0,swapped
+wide,equal mass,0,130.0,3.6,bound
+wide,equal mass,0,140.0,7.6,bound
+tight,equal mass,0.4,150.0,7.0,bound
+wide,10x mass,0,30.0,4.0,bound
+wide,10x mass,0,70.0,7.0,bound
+tight,equal mass,0.4,210.0,1.0,swapped
+wide,equal mass,0,270.0,6.6,bound
+tight,equal mass,0,210.0,2.0,bound
+wide,equal mass,0,190.0,4.0,swapped
+wide,equal mass,0,220.0,7.8,bound
+tight,equal mass,0.4,170.0,4.0,bound
+wide,equal mass,0,370.0,1.6,swapped
+wide,10x mass,0,50.0,7.0,bound
+wide,equal mass,0,240.0,4.2,swapped
+tight,10x mass,0,110.0,4.0,bound
+wide,equal mass,0,120.0,5.0,bound
+very wide,equal mass,0.4,50.0,7.0,bound
+tight,equal mass,0,70.0,6.0,bound
+wide,equal mass,0,170.0,5.0,bound
+wide,equal mass,0,140.0,6.8,bound
+wide,10x mass,0,110.0,3.0,bound
+wide,equal mass,0,370.0,1.0,swapped
+wide,equal mass,0,360.0,4.2,swapped
+very wide,3x mass,0,10.0,5.0,bound
+wide,equal mass,0,190.0,3.2,swapped
+wide,equal mass,0,140.0,4.4,bound
+wide,equal mass,0,150.0,2.0,bound
+wide,equal mass,0,150.0,1.4,bound
+wide,equal mass,0,50.0,7.2,bound
+wide,equal mass,0,390.0,5.8,disrupted
+wide,equal mass,0,220.0,7.2,bound
+tight,3x mass,0,190.0,1.0,bound
+wide,equal mass,0,320.0,3.6,swapped
+wide,equal mass,0,180.0,3.8,swapped
+tight,equal mass,0,70.0,1.0,bound
+wide,equal mass,0,210.0,8.0,bound
+tight,10x mass,0,90.0,5.0,bound
+wide,equal mass,0,340.0,7.8,bound
+wide,equal mass,0,290.0,7.8,bound
+tight,equal mass,0,230.0,7.0,bound
+very wide,equal mass,0.4,70.0,5.0,bound
+very wide,10x mass,0,210.0,1.0,disrupted
+very wide,3x mass,0,10.0,2.0,bound
+tight,10x mass,0,130.0,6.0,bound
+wide,equal mass,0,10.0,5.6,bound
+very wide,equal mass,0.4,110.0,5.0,bound
+wide,equal mass,0,330.0,5.8,swapped
+wide,10x mass,0,190.0,7.0,bound
+wide,equal mass,0,270.0,5.4,swapped
+wide,equal mass,0,70.0,4.2,bound
+wide,equal mass,0,60.0,5.2,bound
+wide,equal mass,0,380.0,2.0,swapped
+wide,equal mass,0,220.0,3.2,disrupted
+tight,equal mass,0.2,110.0,8.0,bound
+wide,equal mass,0,200.0,4.2,swapped
+very wide,3x mass,0,50.0,6.0,bound
+wide,equal mass,0,200.0,7.0,bound
+tight,equal mass,0.4,250.0,8.0,bound
+tight,equal mass,0,130.0,8.0,bound
+very wide,equal mass,0,270.0,6.0,disrupted
+wide,10x mass,0,190.0,8.0,bound
+very wide,equal mass,0.4,30.0,1.0,bound
+wide,equal mass,0,40.0,7.6,bound
+tight,10x mass,0,270.0,7.0,bound
+wide,equal mass,0,180.0,2.6,swapped
+tight,10x mass,0,230.0,5.0,swapped
+wide,equal mass,0,180.0,2.8,collision
+wide,equal mass,0,380.0,7.0,bound
+wide,equal mass,0,10.0,2.8,bound
+very wide,equal mass,0.2,90.0,7.0,bound
+wide,equal mass,0,220.0,6.0,bound
+wide,equal mass,0,70.0,5.0,bound
+very wide,equal mass,0,230.0,4.0,swapped
+wide,equal mass,0,230.0,1.0,swapped
+wide,equal mass,0,290.0,1.4,swapped
+wide,equal mass,0,10.0,3.4,bound
+tight,3x mass,0,30.0,8.0,bound
+tight,10x mass,0,90.0,3.0,bound
+wide,equal mass,0,190.0,8.0,bound
+tight,10x mass,0,150.0,6.0,bound
+wide,equal mass,0,140.0,5.6,bound
+wide,equal mass,0,20.0,2.2,bound
+very wide,equal mass,0,10.0,2.0,bound
+very wide,equal mass,0.4,190.0,2.0,swapped
+wide,equal mass,0,110.0,2.4,collision
+tight,equal mass,0,10.0,7.0,bound
+wide,equal mass,0,100.0,1.4,swapped
+tight,equal mass,0.2,170.0,7.0,bound
+tight,equal mass,0.2,150.0,6.0,bound
+wide,equal mass,0,240.0,1.2,swapped
+wide,equal mass,0,360.0,1.8,swapped
+wide,equal mass,0,180.0,2.4,swapped
+wide,equal mass,0,330.0,4.8,disrupted
+very wide,10x mass,0,130.0,1.0,disrupted
+very wide,equal mass,0,230.0,1.0,disrupted
+very tight,equal mass,0,10.0,3.0,bound
+tight,equal mass,0.4,190.0,3.0,swapped
+tight,equal mass,0.2,10.0,8.0,bound
+wide,equal mass,0,290.0,4.6,disrupted
+very wide,equal mass,0.2,270.0,7.0,bound
+wide,equal mass,0,70.0,6.2,bound
+tight,equal mass,0.2,10.0,6.0,bound
+tight,equal mass,0.2,230.0,6.0,bound
+tight,10x mass,0,10.0,2.0,bound
+wide,equal mass,0,340.0,6.8,swapped
+wide,10x mass,0,190.0,4.0,swapped
+tight,equal mass,0.4,170.0,1.0,swapped
+wide,equal mass,0,200.0,8.0,bound
+wide,equal mass,0,390.0,6.8,disrupted
+wide,equal mass,0,150.0,5.6,bound
+very wide,equal mass,0,130.0,2.0,swapped
+very wide,equal mass,0.4,70.0,8.0,bound
+tight,3x mass,0,250.0,5.0,collision
+wide,equal mass,0,370.0,7.6,swapped
+wide,equal mass,0,80.0,8.0,bound
+tight,equal mass,0.2,170.0,3.0,swapped
+very wide,equal mass,0,110.0,3.0,collision
+tight,equal mass,0.2,30.0,4.0,bound
+wide,equal mass,0,390.0,5.6,disrupted
+wide,equal mass,0,220.0,3.0,swapped
+wide,equal mass,0,350.0,6.8,disrupted
+very wide,equal mass,0.2,170.0,7.0,bound
+wide,10x mass,0,70.0,3.0,bound
+tight,equal mass,0.4,50.0,1.0,bound
+wide,equal mass,0,320.0,4.6,
+wide,equal mass,0,170.0,3.0,swapped
+wide,equal mass,0,140.0,1.0,bound
+very wide,equal mass,0,110.0,7.0,bound
+wide,equal mass,0,170.0,7.0,bound
+tight,equal mass,0.2,130.0,7.0,bound
+tight,3x mass,0,230.0,4.0,bound
+wide,equal mass,0,140.0,1.4,bound
+wide,equal mass,0,160.0,4.2,bound
+wide,equal mass,0,230.0,4.4,swapped
+very wide,equal mass,0.4,130.0,7.0,bound
+wide,equal mass,0,190.0,1.8,swapped
+very wide,10x mass,0,250.0,6.0,bound
+wide,equal mass,0,280.0,5.8,collision
+wide,equal mass,0,60.0,5.4,bound
+very wide,10x mass,0,230.0,2.0,disrupted
+wide,10x mass,0,170.0,7.0,bound
+tight,equal mass,0,150.0,2.0,bound
+wide,equal mass,0,160.0,5.4,bound
+very wide,10x mass,0,70.0,4.0,bound
+very wide,3x mass,0,150.0,6.0,bound
+very wide,10x mass,0,50.0,2.0,collision
+wide,equal mass,0,230.0,2.6,swapped
+wide,equal mass,0,320.0,5.4,swapped
+tight,equal mass,0.2,90.0,5.0,bound
+wide,equal mass,0,50.0,6.0,bound
+wide,equal mass,0,230.0,5.6,bound
+very wide,equal mass,0,10.0,5.0,bound
+wide,equal mass,0,210.0,3.6,swapped
+very wide,equal mass,0.2,70.0,7.0,bound
+very wide,3x mass,0,110.0,7.0,bound
+wide,equal mass,0,130.0,5.4,bound
+wide,equal mass,0,20.0,1.4,bound
+wide,equal mass,0,380.0,3.8,swapped
+very wide,equal mass,0.4,30.0,7.0,bound
+wide,equal mass,0,210.0,4.2,swapped
+tight,equal mass,0.4,270.0,5.0,bound
+wide,equal mass,0,10.0,1.8,bound
+very wide,equal mass,0,230.0,8.0,bound
+very wide,3x mass,0,290.0,7.0,bound
+tight,equal mass,0.4,190.0,7.0,bound
+wide,equal mass,0,220.0,6.4,bound
+wide,equal mass,0,230.0,2.4,swapped
+tight,3x mass,0,250.0,6.0,bound
+very wide,10x mass,0,170.0,3.0,swapped
+wide,equal mass,0,320.0,2.6,bound
+wide,equal mass,0,230.0,1.2,swapped
+wide,equal mass,0,330.0,7.0,swapped
+wide,10x mass,0,230.0,8.0,bound
+tight,equal mass,0,290.0,4.0,swapped
+tight,equal mass,0.2,190.0,8.0,bound
+very wide,equal mass,0.4,10.0,7.0,bound
+wide,equal mass,0,140.0,5.4,bound
+very wide,equal mass,0.4,110.0,7.0,bound
+tight,equal mass,0.2,130.0,4.0,bound
+tight,10x mass,0,150.0,5.0,bound
+tight,10x mass,0,290.0,7.0,bound
+very wide,equal mass,0.4,150.0,8.0,bound
+very wide,equal mass,0.4,270.0,2.0,disrupted
+wide,equal mass,0,370.0,5.2,disrupted
+very wide,equal mass,0.2,290.0,3.0,disrupted
+very wide,equal mass,0.4,170.0,5.0,bound
+very wide,10x mass,0,290.0,4.0,disrupted
+very wide,3x mass,0,190.0,7.0,bound
+wide,equal mass,0,270.0,4.0,disrupted
+wide,equal mass,0,100.0,6.6,bound
+wide,equal mass,0,280.0,6.4,bound
+wide,equal mass,0,20.0,7.4,bound
+wide,equal mass,0,40.0,1.0,bound
+very tight,equal mass,0,50.0,1.0,bound
+wide,equal mass,0,180.0,1.4,swapped
+very wide,3x mass,0,130.0,4.0,bound
+wide,equal mass,0,280.0,2.6,bound
+tight,equal mass,0.4,90.0,1.0,bound
+tight,3x mass,0,30.0,1.0,bound
+wide,10x mass,0,50.0,4.0,bound
+tight,equal mass,0.2,210.0,6.0,bound
+very wide,3x mass,0,270.0,6.0,bound
+wide,equal mass,0,280.0,7.2,bound
+wide,equal mass,0,370.0,3.6,swapped
+wide,10x mass,0,210.0,3.0,disrupted
+tight,equal mass,0.4,30.0,5.0,bound
+wide,equal mass,0,360.0,3.8,swapped
+wide,equal mass,0,330.0,1.2,swapped
+wide,equal mass,0,160.0,6.2,bound
+wide,equal mass,0,90.0,2.4,bound
+wide,equal mass,0,370.0,6.0,swapped
+wide,equal mass,0,300.0,2.6,bound
+wide,equal mass,0,120.0,4.4,bound
+tight,equal mass,0,50.0,7.0,bound
+wide,equal mass,0,50.0,2.8,bound
+wide,equal mass,0,120.0,5.2,bound
+wide,equal mass,0,130.0,2.4,swapped
+tight,equal mass,0.2,10.0,5.0,bound
+wide,equal mass,0,190.0,7.0,bound
+very wide,equal mass,0.4,30.0,8.0,bound
+wide,equal mass,0,90.0,5.0,bound
+wide,10x mass,0,290.0,7.0,bound
+wide,equal mass,0,320.0,4.6,collision
+very wide,10x mass,0,170.0,2.0,disrupted
+wide,equal mass,0,170.0,7.4,bound
+very wide,3x mass,0,110.0,3.0,bound
+tight,10x mass,0,30.0,6.0,bound
+wide,equal mass,0,210.0,5.0,bound
+tight,equal mass,0,90.0,5.0,bound
+wide,equal mass,0,10.0,5.8,bound
+very wide,3x mass,0,90.0,3.0,bound
+very wide,equal mass,0.2,230.0,3.0,
+wide,equal mass,0,50.0,8.0,bound
+tight,equal mass,0.2,30.0,6.0,bound
+wide,10x mass,0,110.0,4.0,bound
+wide,equal mass,0,260.0,7.2,bound
+tight,10x mass,0,70.0,6.0,bound
+wide,equal mass,0,330.0,7.4,bound
+very wide,equal mass,0.4,150.0,5.0,bound
+wide,equal mass,0,320.0,6.4,swapped
+wide,equal mass,0,140.0,4.2,bound
+tight,10x mass,0,90.0,8.0,bound
+wide,equal mass,0,360.0,7.0,bound
+wide,equal mass,0,280.0,6.6,bound
+very wide,10x mass,0,10.0,3.0,bound
+wide,equal mass,0,150.0,4.0,bound
+tight,10x mass,0,10.0,7.0,bound
+wide,equal mass,0,160.0,1.8,swapped
+tight,3x mass,0,250.0,1.0,swapped
+wide,equal mass,0,340.0,3.2,bound
+very wide,10x mass,0,70.0,8.0,bound
+wide,equal mass,0,350.0,1.2,collision
+wide,equal mass,0,370.0,7.8,disrupted
+tight,equal mass,0.4,90.0,3.0,bound
+wide,equal mass,0,50.0,8.0,bound
+wide,equal mass,0,320.0,7.6,bound
+very wide,equal mass,0,230.0,2.0,disrupted
+wide,equal mass,0,240.0,7.0,bound
+tight,equal mass,0.2,210.0,7.0,bound
+wide,equal mass,0,150.0,5.4,bound
+very wide,equal mass,0,270.0,3.0,disrupted
+very wide,3x mass,0,90.0,7.0,bound
+wide,10x mass,0,250.0,3.0,disrupted
+wide,10x mass,0,130.0,1.0,disrupted
+wide,equal mass,0,180.0,4.4,bound
+wide,equal mass,0,260.0,5.8,bound
+wide,equal mass,0,360.0,5.4,collision
+tight,equal mass,0,70.0,2.0,collision
+wide,equal mass,0,40.0,5.6,bound
+wide,10x mass,0,90.0,1.0,swapped
+wide,equal mass,0,260.0,4.4,swapped
+wide,equal mass,0,240.0,2.6,collision
+wide,equal mass,0,30.0,5.0,bound
+tight,10x mass,0,170.0,4.0,bound
+very wide,equal mass,0.4,130.0,3.0,collision
+wide,equal mass,0,250.0,5.0,swapped
+wide,equal mass,0,30.0,8.0,bound
+very wide,equal mass,0,250.0,5.0,disrupted
+wide,equal mass,0,340.0,3.0,disrupted
+wide,equal mass,0,10.0,2.4,bound
+wide,equal mass,0,50.0,6.4,bound
+tight,10x mass,0,170.0,2.0,bound
+very wide,equal mass,0.4,290.0,5.0,swapped
+tight,equal mass,0.4,90.0,2.0,collision
+tight,equal mass,0,50.0,4.0,bound
+tight,equal mass,0.4,170.0,3.0,swapped
+tight,equal mass,0.4,30.0,8.0,bound
+very wide,equal mass,0,210.0,8.0,bound
+wide,equal mass,0,120.0,1.8,swapped
+wide,equal mass,0,350.0,5.6,collision
+wide,equal mass,0,300.0,3.0,swapped
+tight,equal mass,0,250.0,3.0,collision
+very tight,equal mass,0,30.0,7.0,bound
+tight,equal mass,0.4,190.0,5.0,bound
+wide,equal mass,0,300.0,1.2,swapped
+wide,equal mass,0,310.0,1.6,swapped
+wide,equal mass,0,190.0,4.4,swapped
+very tight,equal mass,0,10.0,4.0,bound
+very wide,equal mass,0,210.0,1.0,collision
+very wide,10x mass,0,90.0,8.0,bound
+very wide,3x mass,0,110.0,6.0,bound
+wide,equal mass,0,180.0,1.8,bound
+wide,equal mass,0,190.0,3.6,swapped
+wide,equal mass,0,200.0,6.0,bound
+very wide,equal mass,0.4,250.0,3.0,disrupted
+wide,equal mass,0,210.0,2.2,swapped
+wide,equal mass,0,100.0,3.8,bound
+wide,equal mass,0,260.0,6.6,bound
+wide,10x mass,0,190.0,3.0,collision
+wide,equal mass,0,60.0,2.8,bound
+tight,equal mass,0.2,190.0,3.0,swapped
+tight,3x mass,0,50.0,1.0,bound
+wide,equal mass,0,300.0,2.0,bound
+wide,equal mass,0,190.0,5.4,bound
+wide,equal mass,0,370.0,5.8,collision
+tight,equal mass,0,170.0,5.0,bound
+very wide,10x mass,0,50.0,1.0,disrupted
+very wide,10x mass,0,290.0,8.0,bound
+very wide,equal mass,0.4,270.0,8.0,bound
+wide,equal mass,0,220.0,8.0,bound
+wide,equal mass,0,270.0,3.4,swapped
+wide,equal mass,0,250.0,6.8,bound
+wide,equal mass,0,200.0,4.6,swapped
+tight,3x mass,0,190.0,2.0,bound
+very wide,equal mass,0.2,70.0,5.0,bound
+wide,equal mass,0,80.0,5.6,bound
+wide,equal mass,0,70.0,2.2,bound
+wide,equal mass,0,360.0,6.6,bound
+wide,equal mass,0,310.0,6.0,swapped
+tight,equal mass,0,290.0,8.0,bound
+very wide,3x mass,0,30.0,1.0,bound
+wide,10x mass,0,50.0,5.0,bound
+wide,equal mass,0,80.0,3.6,bound
+wide,10x mass,0,130.0,6.0,bound
+wide,10x mass,0,250.0,4.0,disrupted
+very wide,equal mass,0,10.0,7.0,bound
+very wide,equal mass,0.4,90.0,6.0,bound
+wide,equal mass,0,110.0,1.0,bound
+tight,equal mass,0.2,210.0,4.0,bound
+wide,equal mass,0,340.0,2.0,swapped
+wide,equal mass,0,130.0,3.0,swapped
+wide,equal mass,0,240.0,3.4,swapped
+wide,equal mass,0,100.0,7.4,bound
+very wide,3x mass,0,110.0,8.0,bound
+wide,equal mass,0,200.0,4.0,swapped
+wide,equal mass,0,30.0,5.2,bound
+wide,equal mass,0,400.0,3.2,bound
+very wide,equal mass,0.2,30.0,7.0,bound
+very wide,equal mass,0.2,130.0,7.0,bound
+very wide,3x mass,0,230.0,3.0,disrupted
+very wide,equal mass,0.2,110.0,5.0,bound
+wide,equal mass,0,140.0,2.2,swapped
+wide,equal mass,0,100.0,3.2,bound
+wide,equal mass,0,170.0,6.2,bound
+wide,equal mass,0,290.0,7.4,bound
+wide,equal mass,0,110.0,1.0,bound
+wide,equal mass,0,270.0,6.0,bound
+wide,equal mass,0,10.0,4.0,bound
+wide,equal mass,0,100.0,1.6,swapped
+wide,equal mass,0,330.0,6.6,swapped
+tight,10x mass,0,110.0,7.0,bound
+very wide,equal mass,0.4,190.0,7.0,bound
+tight,equal mass,0.2,30.0,3.0,bound
+wide,equal mass,0,60.0,5.8,bound
+wide,equal mass,0,160.0,7.2,bound
+wide,equal mass,0,190.0,3.4,swapped
+wide,equal mass,0,210.0,3.8,swapped
+wide,equal mass,0,160.0,3.8,swapped
+tight,equal mass,0.2,130.0,1.0,bound
+wide,equal mass,0,320.0,1.8,swapped
+tight,3x mass,0,190.0,8.0,bound
+very wide,3x mass,0,70.0,6.0,bound
+wide,equal mass,0,240.0,8.0,bound
+very wide,equal mass,0,250.0,1.0,collision
+wide,equal mass,0,50.0,1.0,bound
+very wide,3x mass,0,230.0,8.0,bound
+tight,10x mass,0,30.0,4.0,bound
+wide,equal mass,0,320.0,7.0,bound
+wide,equal mass,0,300.0,7.2,bound
+wide,equal mass,0,330.0,6.2,disrupted
+wide,equal mass,0,200.0,1.6,bound
+wide,equal mass,0,320.0,4.8,disrupted
+tight,equal mass,0.4,210.0,4.0,swapped
+wide,equal mass,0,250.0,2.6,swapped
+wide,equal mass,0,380.0,1.2,swapped
+wide,equal mass,0,200.0,5.0,bound
+wide,equal mass,0,380.0,8.0,disrupted
+wide,equal mass,0,150.0,5.0,bound
+very wide,equal mass,0.4,230.0,7.0,bound
+wide,equal mass,0,370.0,3.8,bound
+wide,equal mass,0,350.0,2.2,swapped
+very wide,equal mass,0.4,30.0,3.0,bound
+tight,10x mass,0,10.0,1.0,bound
+very wide,3x mass,0,50.0,5.0,bound
+very wide,equal mass,0.4,250.0,7.0,bound
+wide,equal mass,0,230.0,7.4,bound
+wide,equal mass,0,290.0,6.6,bound
+wide,equal mass,0,380.0,6.8,bound
+wide,equal mass,0,40.0,6.4,bound
+tight,3x mass,0,90.0,7.0,bound
+very wide,equal mass,0,50.0,1.0,bound
+wide,equal mass,0,180.0,4.8,bound
+very wide,10x mass,0,10.0,7.0,bound
+wide,equal mass,0,370.0,4.4,swapped
+wide,equal mass,0,80.0,2.0,swapped
+tight,10x mass,0,270.0,5.0,bound
+wide,equal mass,0,280.0,1.4,swapped
+wide,equal mass,0,220.0,2.8,swapped
+tight,equal mass,0.2,270.0,4.0,collision
+very tight,equal mass,0,30.0,4.0,bound
+tight,equal mass,0,130.0,2.0,bound
+very wide,3x mass,0,150.0,8.0,bound
+tight,10x mass,0,50.0,1.0,bound
+wide,equal mass,0,100.0,2.8,swapped
+wide,equal mass,0,300.0,6.6,bound
+wide,equal mass,0,180.0,6.2,bound
+very wide,equal mass,0.4,230.0,4.0,collision
+wide,10x mass,0,130.0,3.0,collision
+very wide,3x mass,0,70.0,4.0,bound
+wide,equal mass,0,260.0,4.2,disrupted
+very wide,equal mass,0.2,130.0,3.0,
+very wide,equal mass,0,90.0,8.0,bound
+wide,equal mass,0,200.0,7.6,bound
+wide,equal mass,0,250.0,2.8,swapped
+wide,equal mass,0,210.0,5.2,bound
+wide,equal mass,0,360.0,1.6,swapped
+wide,equal mass,0,330.0,2.0,collision
+very wide,equal mass,0,70.0,2.0,swapped
+wide,10x mass,0,230.0,4.0,swapped
+very tight,equal mass,0,30.0,2.0,bound
+very wide,equal mass,0,70.0,3.0,bound
+tight,10x mass,0,290.0,5.0,bound
+very wide,equal mass,0.2,230.0,4.0,swapped
+wide,equal mass,0,90.0,1.0,bound
+very wide,10x mass,0,150.0,2.0,disrupted
+wide,equal mass,0,120.0,7.6,bound
+tight,3x mass,0,10.0,5.0,bound
+very wide,3x mass,0,270.0,5.0,disrupted
+tight,equal mass,0.2,170.0,6.0,bound
+wide,10x mass,0,230.0,2.0,bound
+wide,equal mass,0,240.0,4.4,swapped
+very wide,equal mass,0.2,210.0,8.0,bound
+wide,equal mass,0,230.0,6.8,bound
+wide,equal mass,0,90.0,5.8,bound
+very wide,3x mass,0,230.0,4.0,disrupted
+tight,equal mass,0.4,230.0,3.0,swapped
+very wide,3x mass,0,250.0,6.0,bound
+wide,equal mass,0,130.0,4.0,bound
+wide,equal mass,0,150.0,5.2,bound
+tight,3x mass,0,170.0,4.0,bound
+tight,equal mass,0.4,10.0,7.0,bound
+wide,equal mass,0,290.0,2.6,disrupted
+very wide,3x mass,0,290.0,3.0,disrupted
+very wide,equal mass,0,270.0,1.0,swapped
+wide,equal mass,0,230.0,1.6,bound
+very wide,3x mass,0,10.0,3.0,bound
+wide,10x mass,0,290.0,3.0,swapped
+tight,equal mass,0.4,70.0,2.0,bound
+tight,3x mass,0,290.0,8.0,bound
+wide,equal mass,0,130.0,4.8,bound
+wide,equal mass,0,350.0,2.8,disrupted
+wide,equal mass,0,180.0,7.8,bound
+wide,equal mass,0,30.0,6.0,bound
+wide,equal mass,0,100.0,5.2,bound
+wide,equal mass,0,260.0,5.4,swapped
+wide,equal mass,0,50.0,4.4,bound
+wide,equal mass,0,30.0,5.4,bound
+tight,10x mass,0,210.0,1.0,swapped
+wide,equal mass,0,130.0,4.4,bound
+wide,equal mass,0,360.0,7.2,swapped
+tight,10x mass,0,270.0,4.0,disrupted
+very wide,10x mass,0,250.0,5.0,disrupted
+very wide,equal mass,0,30.0,3.0,bound
+tight,equal mass,0.4,90.0,4.0,bound
+tight,equal mass,0,230.0,4.0,swapped
+tight,10x mass,0,70.0,7.0,bound
+wide,equal mass,0,160.0,2.0,swapped
+tight,10x mass,0,30.0,1.0,bound
+very wide,equal mass,0.2,250.0,2.0,disrupted
+wide,equal mass,0,280.0,5.2,swapped
+tight,equal mass,0.2,250.0,1.0,swapped
+wide,equal mass,0,190.0,2.6,disrupted
+tight,equal mass,0.2,170.0,8.0,bound
+wide,equal mass,0,220.0,3.6,disrupted
+tight,3x mass,0,150.0,7.0,bound
+wide,equal mass,0,400.0,6.0,disrupted
+very wide,3x mass,0,70.0,8.0,bound
+tight,equal mass,0,30.0,1.0,bound
+wide,equal mass,0,200.0,1.4,bound
+wide,10x mass,0,150.0,7.0,bound
+wide,equal mass,0,360.0,2.4,bound
+very wide,equal mass,0,130.0,7.0,bound
+wide,equal mass,0,320.0,1.6,swapped
+tight,3x mass,0,50.0,3.0,bound
+wide,equal mass,0,60.0,2.0,bound
+tight,3x mass,0,90.0,3.0,bound
+tight,equal mass,0.2,110.0,7.0,bound
+very wide,3x mass,0,150.0,4.0,bound
+very wide,equal mass,0.2,110.0,4.0,bound
+very wide,10x mass,0,10.0,8.0,bound
+wide,equal mass,0,160.0,2.8,swapped
+tight,10x mass,0,250.0,7.0,bound
+tight,equal mass,0.4,290.0,2.0,bound
+wide,10x mass,0,70.0,5.0,bound
+wide,equal mass,0,370.0,2.0,bound
+tight,equal mass,0,210.0,7.0,bound
+wide,equal mass,0,20.0,5.0,bound
+very wide,equal mass,0,250.0,6.0,bound
+wide,equal mass,0,130.0,2.6,swapped
+tight,3x mass,0,210.0,1.0,bound
+wide,equal mass,0,250.0,1.0,swapped
+tight,equal mass,0.4,210.0,8.0,bound
+wide,equal mass,0,230.0,8.0,bound
+very wide,equal mass,0.2,130.0,3.0,collision
+tight,equal mass,0.4,230.0,7.0,bound
+wide,equal mass,0,180.0,3.6,swapped
+tight,equal mass,0.4,150.0,6.0,bound
+very wide,equal mass,0.4,110.0,6.0,bound
+tight,equal mass,0.4,70.0,7.0,bound
+wide,10x mass,0,110.0,6.0,bound
+wide,equal mass,0,60.0,6.6,bound
+wide,equal mass,0,80.0,7.4,bound
+tight,3x mass,0,130.0,6.0,bound
+wide,equal mass,0,130.0,1.8,swapped
+tight,10x mass,0,50.0,4.0,bound
+wide,equal mass,0,170.0,4.0,swapped
+wide,equal mass,0,310.0,1.8,swapped
+very wide,10x mass,0,150.0,4.0,bound
+wide,10x mass,0,210.0,8.0,bound
+tight,10x mass,0,30.0,8.0,bound
+wide,equal mass,0,180.0,7.6,bound
+tight,equal mass,0.4,10.0,2.0,bound
+very wide,equal mass,0,290.0,2.0,swapped
+tight,equal mass,0,10.0,6.0,bound
+wide,10x mass,0,190.0,1.0,disrupted
+wide,equal mass,0,350.0,6.2,disrupted
+tight,10x mass,0,150.0,7.0,bound
+wide,equal mass,0,200.0,5.6,bound
+wide,equal mass,0,300.0,4.6,disrupted
+wide,equal mass,0,180.0,5.8,bound
+tight,3x mass,0,190.0,4.0,swapped
+wide,equal mass,0,130.0,6.0,bound
+wide,equal mass,0,230.0,1.4,swapped
+tight,10x mass,0,150.0,4.0,bound
+wide,equal mass,0,20.0,1.6,bound
+tight,equal mass,0.2,270.0,3.0,swapped
+very wide,equal mass,0,50.0,7.0,bound
+wide,10x mass,0,270.0,4.0,bound
+wide,equal mass,0,270.0,2.6,bound
+wide,10x mass,0,250.0,8.0,bound
+wide,equal mass,0,60.0,7.8,bound
+wide,equal mass,0,380.0,5.4,disrupted
+tight,3x mass,0,150.0,8.0,bound
+tight,equal mass,0.4,110.0,2.0,collision
+very wide,10x mass,0,150.0,7.0,bound
+wide,equal mass,0,170.0,2.6,collision
+tight,10x mass,0,230.0,6.0,bound
+very wide,equal mass,0.4,210.0,7.0,bound
+wide,equal mass,0,340.0,2.2,swapped
+tight,equal mass,0.2,250.0,5.0,swapped
+wide,equal mass,0,20.0,3.8,bound
+tight,equal mass,0.4,70.0,8.0,bound
+wide,equal mass,0,140.0,5.8,bound
+wide,equal mass,0,290.0,4.8,collision
+wide,equal mass,0,20.0,1.8,bound
+very tight,equal mass,0,30.0,1.0,bound
+tight,equal mass,0,110.0,4.0,bound
+tight,3x mass,0,70.0,1.0,bound
+very wide,10x mass,0,250.0,1.0,disrupted
+wide,equal mass,0,50.0,7.0,bound
+very wide,equal mass,0.4,90.0,1.0,swapped
+wide,equal mass,0,280.0,3.0,swapped
+wide,equal mass,0,360.0,2.0,disrupted
+very wide,equal mass,0,70.0,6.0,bound
+wide,10x mass,0,170.0,2.0,swapped
+wide,equal mass,0,210.0,1.6,bound
+very wide,equal mass,0.4,170.0,1.0,swapped
+very wide,equal mass,0,50.0,6.0,bound
+wide,equal mass,0,160.0,6.4,bound
+wide,equal mass,0,140.0,2.8,swapped
+tight,equal mass,0,70.0,4.0,bound
+very wide,equal mass,0.2,110.0,1.0,swapped
+wide,equal mass,0,280.0,6.2,bound
+very wide,equal mass,0.4,250.0,4.0,swapped
+wide,equal mass,0,100.0,7.6,bound
+very wide,10x mass,0,90.0,3.0,bound
+wide,equal mass,0,30.0,6.8,bound
+wide,equal mass,0,40.0,5.4,bound
+very wide,equal mass,0.2,150.0,1.0,disrupted
+wide,equal mass,0,390.0,7.8,swapped
+tight,3x mass,0,230.0,1.0,swapped
+very wide,equal mass,0.4,50.0,6.0,bound
+wide,equal mass,0,250.0,5.6,bound
+wide,equal mass,0,60.0,3.2,bound
+wide,equal mass,0,30.0,3.6,bound
+tight,10x mass,0,170.0,7.0,bound
+wide,equal mass,0,70.0,4.6,bound
+tight,3x mass,0,110.0,6.0,bound
+wide,equal mass,0,290.0,1.2,swapped
+very wide,3x mass,0,170.0,4.0,bound
+wide,equal mass,0,260.0,1.2,swapped
+wide,equal mass,0,250.0,1.0,swapped
+wide,equal mass,0,250.0,3.6,disrupted
+tight,equal mass,0.4,70.0,1.0,bound
+wide,equal mass,0,350.0,1.6,swapped
+wide,equal mass,0,360.0,3.0,bound
+tight,3x mass,0,190.0,7.0,bound
+wide,equal mass,0,370.0,4.8,swapped
+wide,equal mass,0,300.0,5.8,swapped
+wide,equal mass,0,330.0,3.6,swapped
+wide,equal mass,0,280.0,7.6,bound
+tight,3x mass,0,270.0,3.0,bound
+wide,equal mass,0,220.0,2.4,bound
+wide,equal mass,0,320.0,1.2,swapped
+very wide,equal mass,0.4,290.0,8.0,bound
+very wide,10x mass,0,70.0,5.0,bound
+very wide,10x mass,0,270.0,2.0,disrupted
+tight,10x mass,0,210.0,2.0,bound
+wide,equal mass,0,140.0,2.6,swapped
+wide,equal mass,0,400.0,1.4,swapped
+wide,equal mass,0,170.0,3.8,swapped
+wide,equal mass,0,10.0,2.6,bound
+wide,equal mass,0,240.0,3.8,swapped
+wide,equal mass,0,230.0,4.6,swapped
+wide,equal mass,0,390.0,6.0,collision
+wide,equal mass,0,270.0,3.6,swapped
+tight,equal mass,0,270.0,1.0,swapped
+wide,equal mass,0,100.0,6.2,bound
+wide,equal mass,0,250.0,6.0,bound
+wide,equal mass,0,320.0,7.2,bound
+wide,equal mass,0,160.0,5.8,bound
+tight,equal mass,0.2,190.0,4.0,swapped
+wide,equal mass,0,180.0,1.6,bound
+tight,equal mass,0.2,170.0,1.0,bound
+wide,equal mass,0,230.0,5.2,bound
+tight,3x mass,0,30.0,5.0,bound
+wide,equal mass,0,310.0,1.0,swapped
+wide,equal mass,0,170.0,2.2,swapped
+wide,equal mass,0,290.0,6.8,bound
+wide,equal mass,0,100.0,6.0,bound
+wide,equal mass,0,160.0,7.6,bound
+wide,equal mass,0,200.0,2.8,swapped
+very wide,equal mass,0.2,10.0,6.0,bound
+wide,equal mass,0,230.0,4.0,swapped
+wide,equal mass,0,20.0,3.2,bound
+wide,equal mass,0,140.0,4.0,bound
+wide,equal mass,0,20.0,6.8,bound
+wide,equal mass,0,20.0,4.4,bound
+wide,equal mass,0,270.0,3.0,swapped
+wide,equal mass,0,120.0,4.0,bound
+wide,equal mass,0,120.0,6.6,bound
+tight,10x mass,0,70.0,3.0,bound
+wide,equal mass,0,110.0,4.0,bound
+tight,equal mass,0,190.0,6.0,bound
+tight,equal mass,0,150.0,4.0,bound
+wide,equal mass,0,110.0,6.2,bound
+wide,equal mass,0,340.0,7.6,bound
+tight,equal mass,0.4,110.0,4.0,bound
+very wide,equal mass,0.4,250.0,6.0,bound
+very wide,equal mass,0.4,210.0,2.0,disrupted
+wide,equal mass,0,170.0,1.6,bound
+wide,equal mass,0,110.0,3.4,bound
+wide,equal mass,0,170.0,5.4,bound
+tight,equal mass,0.2,210.0,1.0,swapped
+wide,equal mass,0,350.0,3.2,bound
+wide,equal mass,0,190.0,6.0,bound
+tight,equal mass,0,290.0,5.0,swapped
+very wide,equal mass,0,150.0,2.0,bound
+very wide,equal mass,0.2,50.0,2.0,bound
+tight,equal mass,0.4,50.0,8.0,bound
+wide,equal mass,0,340.0,5.2,collision
+wide,equal mass,0,130.0,2.2,collision
+wide,equal mass,0,230.0,2.0,bound
+wide,equal mass,0,350.0,7.8,bound
+tight,equal mass,0.4,210.0,5.0,bound
+wide,equal mass,0,120.0,8.0,bound
+very wide,equal mass,0,30.0,6.0,bound
+tight,10x mass,0,230.0,1.0,disrupted
+very wide,equal mass,0.4,270.0,7.0,bound
+tight,10x mass,0,250.0,1.0,swapped
+wide,equal mass,0,140.0,5.2,bound
+very wide,10x mass,0,150.0,8.0,bound
+wide,equal mass,0,380.0,4.4,disrupted
+wide,equal mass,0,130.0,3.8,bound
+very wide,10x mass,0,190.0,1.0,disrupted
+wide,equal mass,0,30.0,3.4,bound
+tight,10x mass,0,130.0,1.0,bound
+tight,3x mass,0,50.0,4.0,bound
+wide,equal mass,0,80.0,1.8,swapped
+wide,equal mass,0,140.0,5.0,bound
+wide,equal mass,0,10.0,4.2,bound
+wide,equal mass,0,150.0,7.8,bound
+wide,equal mass,0,200.0,1.8,bound
+wide,equal mass,0,300.0,7.8,bound
+tight,equal mass,0.4,270.0,4.0,collision
+tight,equal mass,0,130.0,4.0,bound
+wide,equal mass,0,320.0,6.8,disrupted
+very wide,10x mass,0,110.0,5.0,bound
+very wide,equal mass,0,70.0,7.0,bound
+tight,equal mass,0.4,230.0,6.0,bound
+wide,equal mass,0,30.0,7.2,bound
+very wide,3x mass,0,130.0,3.0,swapped
+wide,equal mass,0,160.0,1.2,bound
+very wide,equal mass,0.4,150.0,1.0,swapped
+very wide,equal mass,0.4,10.0,8.0,bound
+wide,equal mass,0,50.0,2.0,bound
+wide,10x mass,0,290.0,8.0,bound
+tight,3x mass,0,170.0,7.0,bound
+tight,equal mass,0.4,130.0,5.0,bound
+wide,equal mass,0,310.0,3.4,swapped
+wide,equal mass,0,310.0,2.6,bound
+wide,equal mass,0,170.0,1.4,bound
+wide,equal mass,0,210.0,6.2,bound
+wide,equal mass,0,90.0,7.8,bound
+wide,equal mass,0,150.0,1.2,swapped
+tight,equal mass,0,290.0,6.0,collision
+wide,equal mass,0,320.0,5.8,bound
+wide,equal mass,0,100.0,1.0,swapped
+wide,equal mass,0,80.0,2.8,collision
+wide,equal mass,0,90.0,3.2,bound
+tight,3x mass,0,10.0,3.0,bound
+tight,3x mass,0,30.0,6.0,bound
+tight,equal mass,0,150.0,1.0,swapped
+wide,equal mass,0,50.0,5.2,bound
+wide,equal mass,0,320.0,3.8,swapped
+tight,3x mass,0,150.0,4.0,bound
+tight,equal mass,0,90.0,4.0,bound
+wide,equal mass,0,40.0,6.6,bound
+very wide,10x mass,0,170.0,5.0,bound
+tight,equal mass,0.2,210.0,8.0,bound
+wide,equal mass,0,20.0,2.6,collision
+tight,equal mass,0,10.0,1.0,bound
+wide,equal mass,0,50.0,2.2,bound
+wide,equal mass,0,150.0,4.8,bound
+wide,equal mass,0,100.0,4.0,bound
+wide,equal mass,0,160.0,2.6,swapped
+very wide,3x mass,0,290.0,5.0,collision
+tight,equal mass,0.2,170.0,4.0,swapped
+tight,10x mass,0,190.0,5.0,bound
+wide,equal mass,0,200.0,3.0,bound
+wide,equal mass,0,190.0,5.0,bound
+tight,equal mass,0.2,230.0,1.0,swapped
+wide,equal mass,0,210.0,2.4,swapped
+wide,equal mass,0,300.0,3.4,swapped
+very tight,equal mass,0,10.0,5.0,bound
+very wide,equal mass,0.2,90.0,8.0,bound
+very wide,3x mass,0,10.0,6.0,bound
+very wide,equal mass,0.4,170.0,4.0,swapped
+wide,equal mass,0,230.0,6.0,bound
+wide,equal mass,0,170.0,6.0,bound
+wide,equal mass,0,10.0,3.8,bound
+wide,equal mass,0,120.0,7.0,bound
+wide,equal mass,0,310.0,4.2,disrupted
+wide,10x mass,0,70.0,1.0,bound
+tight,10x mass,0,30.0,2.0,bound
+wide,equal mass,0,120.0,2.6,collision
+very wide,equal mass,0.2,130.0,2.0,disrupted
+tight,equal mass,0.2,210.0,3.0,swapped
+wide,equal mass,0,230.0,1.0,swapped
+wide,equal mass,0,260.0,3.6,disrupted
+tight,3x mass,0,270.0,6.0,bound
+wide,equal mass,0,350.0,7.0,swapped
+wide,equal mass,0,210.0,7.4,bound
+wide,equal mass,0,10.0,1.0,bound
+wide,equal mass,0,250.0,1.6,disrupted
+very wide,equal mass,0,210.0,6.0,bound
+wide,equal mass,0,270.0,6.2,bound
+tight,equal mass,0.4,70.0,5.0,bound
+very wide,equal mass,0.2,50.0,8.0,bound
+very wide,equal mass,0.2,230.0,1.0,disrupted
+wide,equal mass,0,130.0,7.0,bound
+wide,equal mass,0,250.0,2.2,bound
+wide,equal mass,0,170.0,8.0,bound
+wide,equal mass,0,230.0,3.0,swapped
+wide,equal mass,0,320.0,4.2,swapped
+very wide,equal mass,0.4,70.0,7.0,bound
+wide,10x mass,0,230.0,7.0,bound
+wide,equal mass,0,310.0,6.8,bound
+tight,equal mass,0.4,270.0,7.0,bound
+tight,equal mass,0.4,110.0,1.0,bound
+tight,3x mass,0,270.0,1.0,swapped
+wide,equal mass,0,70.0,3.2,bound
+wide,equal mass,0,310.0,5.6,bound
+tight,equal mass,0.4,170.0,7.0,bound
+tight,equal mass,0,270.0,3.0,collision
+wide,equal mass,0,170.0,7.0,bound
+wide,equal mass,0,220.0,2.2,swapped
+wide,equal mass,0,270.0,7.2,bound
+tight,10x mass,0,290.0,4.0,disrupted
+tight,equal mass,0.2,50.0,4.0,bound
+wide,equal mass,0,400.0,2.0,swapped
+tight,3x mass,0,230.0,5.0,swapped
+wide,equal mass,0,10.0,2.2,collision
+wide,equal mass,0,390.0,6.6,swapped
+very wide,equal mass,0.2,210.0,2.0,disrupted
+tight,equal mass,0,130.0,1.0,bound
+wide,equal mass,0,110.0,1.8,swapped
+wide,10x mass,0,250.0,2.0,swapped
+wide,equal mass,0,310.0,3.6,bound
+wide,equal mass,0,360.0,1.0,swapped
+wide,10x mass,0,190.0,5.0,bound
+wide,10x mass,0,170.0,8.0,bound
+wide,equal mass,0,340.0,6.2,swapped
+wide,equal mass,0,240.0,6.0,bound
+wide,10x mass,0,70.0,2.0,swapped
+tight,3x mass,0,290.0,1.0,swapped
+very wide,equal mass,0,90.0,6.0,bound
+wide,equal mass,0,100.0,2.0,bound
+wide,equal mass,0,200.0,3.6,swapped
+tight,equal mass,0.4,190.0,8.0,bound
+wide,equal mass,0,390.0,1.8,swapped
+wide,equal mass,0,310.0,7.8,bound
+wide,equal mass,0,320.0,1.0,bound
+wide,equal mass,0,360.0,6.0,disrupted
+wide,equal mass,0,230.0,1.8,bound
+very wide,3x mass,0,190.0,1.0,disrupted
+tight,equal mass,0.4,230.0,8.0,bound
+very wide,10x mass,0,190.0,3.0,disrupted
+tight,equal mass,0,130.0,5.0,bound
+very wide,equal mass,0,210.0,7.0,bound
+tight,equal mass,0,70.0,8.0,bound
+wide,equal mass,0,70.0,2.6,collision
+tight,10x mass,0,110.0,1.0,bound
+wide,equal mass,0,80.0,1.0,bound
+wide,equal mass,0,60.0,3.0,bound
+very wide,equal mass,0.2,50.0,4.0,bound
+tight,equal mass,0.4,230.0,1.0,swapped
+wide,equal mass,0,370.0,7.4,collision
+very wide,10x mass,0,170.0,7.0,bound
+wide,equal mass,0,310.0,7.4,bound
+wide,equal mass,0,170.0,7.8,bound
+wide,equal mass,0,140.0,1.2,bound
+wide,10x mass,0,290.0,5.0,disrupted
+tight,equal mass,0.2,110.0,1.0,bound
+tight,equal mass,0.4,230.0,2.0,bound
+wide,equal mass,0,130.0,4.0,bound
+very wide,10x mass,0,290.0,7.0,bound
+very wide,equal mass,0,10.0,3.0,bound
+wide,equal mass,0,50.0,6.0,bound
+very wide,10x mass,0,210.0,6.0,bound
+very wide,equal mass,0.4,210.0,3.0,collision
+tight,equal mass,0.2,230.0,7.0,bound
+very wide,3x mass,0,230.0,5.0,disrupted
+wide,equal mass,0,110.0,4.4,bound
+wide,equal mass,0,370.0,1.2,swapped
+very tight,equal mass,0,10.0,6.0,bound
+very wide,equal mass,0.4,190.0,4.0,swapped
+wide,equal mass,0,390.0,6.4,disrupted
+tight,equal mass,0.4,150.0,3.0,swapped
+very wide,equal mass,0.4,50.0,5.0,bound
+wide,equal mass,0,300.0,2.2,bound
+tight,equal mass,0.2,50.0,6.0,bound
+wide,equal mass,0,370.0,4.0,swapped
+wide,equal mass,0,270.0,2.0,bound
+wide,equal mass,0,10.0,6.2,bound
+tight,equal mass,0,70.0,5.0,bound
+very tight,equal mass,0,10.0,2.0,bound
+tight,equal mass,0,90.0,8.0,bound
+wide,10x mass,0,210.0,4.0,bound
+wide,equal mass,0,350.0,4.2,swapped
+wide,equal mass,0,290.0,6.0,swapped
+tight,equal mass,0.2,270.0,6.0,bound
+tight,equal mass,0.2,150.0,4.0,bound
+very wide,3x mass,0,170.0,8.0,bound
+very wide,3x mass,0,150.0,3.0,swapped
+very wide,10x mass,0,270.0,1.0,disrupted
+very wide,equal mass,0,290.0,8.0,bound
+wide,equal mass,0,360.0,6.8,disrupted
+wide,equal mass,0,260.0,6.2,bound
+wide,equal mass,0,80.0,6.0,bound
+wide,equal mass,0,170.0,3.6,swapped
+wide,10x mass,0,170.0,4.0,bound
+tight,equal mass,0.2,50.0,8.0,bound
+wide,equal mass,0,60.0,2.4,bound
+very wide,10x mass,0,270.0,8.0,bound
+wide,equal mass,0,250.0,3.8,swapped
+very wide,equal mass,0,130.0,8.0,bound
+tight,equal mass,0.2,70.0,4.0,bound
+very wide,3x mass,0,30.0,6.0,bound
+wide,10x mass,0,190.0,2.0,bound
+tight,3x mass,0,190.0,5.0,bound
+wide,equal mass,0,190.0,4.8,bound
+tight,equal mass,0.4,250.0,1.0,bound
+very wide,10x mass,0,130.0,8.0,bound
+wide,equal mass,0,20.0,2.4,bound
+very wide,equal mass,0.4,170.0,3.0,swapped
+tight,10x mass,0,250.0,5.0,collision
+very wide,3x mass,0,30.0,5.0,bound
+tight,3x mass,0,70.0,5.0,bound
+wide,10x mass,0,270.0,1.0,disrupted
+wide,equal mass,0,80.0,4.6,bound
+very tight,equal mass,0,50.0,2.0,bound
+very wide,3x mass,0,250.0,5.0,collision
+very wide,equal mass,0,210.0,4.0,swapped
+tight,equal mass,0,170.0,7.0,bound
+wide,equal mass,0,50.0,3.0,bound
+tight,3x mass,0,10.0,4.0,bound
+very wide,equal mass,0.2,290.0,7.0,bound
+wide,equal mass,0,160.0,2.2,swapped
+tight,3x mass,0,210.0,5.0,bound
+wide,equal mass,0,310.0,2.8,disrupted
+wide,equal mass,0,60.0,7.0,bound
+wide,equal mass,0,90.0,3.0,bound
+tight,3x mass,0,230.0,7.0,bound
+wide,equal mass,0,390.0,2.8,disrupted
+tight,equal mass,0.2,10.0,2.0,bound
+wide,equal mass,0,80.0,1.2,bound
+wide,equal mass,0,170.0,4.0,swapped
+wide,equal mass,0,240.0,3.0,swapped
+wide,equal mass,0,210.0,2.6,swapped
+wide,equal mass,0,150.0,1.6,bound
+wide,equal mass,0,10.0,7.0,bound
+very wide,10x mass,0,30.0,2.0,collision
+very wide,equal mass,0,170.0,1.0,disrupted
+wide,equal mass,0,220.0,2.0,swapped
+wide,equal mass,0,260.0,1.6,bound
+wide,equal mass,0,100.0,3.4,bound
+wide,equal mass,0,100.0,4.8,bound
+wide,equal mass,0,310.0,7.6,bound
+wide,equal mass,0,240.0,5.6,bound
+very wide,equal mass,0,230.0,3.0,disrupted
+wide,equal mass,0,150.0,5.8,bound
+wide,equal mass,0,340.0,5.4,disrupted
+wide,equal mass,0,340.0,7.0,swapped
+wide,equal mass,0,140.0,4.6,bound
+wide,equal mass,0,250.0,5.4,collision
+wide,equal mass,0,240.0,6.6,bound
+wide,equal mass,0,150.0,1.8,bound
+wide,equal mass,0,60.0,4.8,bound
+tight,10x mass,0,50.0,7.0,bound
+very wide,3x mass,0,50.0,7.0,bound
+very wide,equal mass,0.2,170.0,3.0,swapped
+wide,equal mass,0,240.0,1.0,swapped
+wide,equal mass,0,90.0,7.6,bound
+tight,3x mass,0,90.0,5.0,bound
+tight,10x mass,0,290.0,6.0,collision
+wide,equal mass,0,110.0,3.2,bound
+wide,equal mass,0,310.0,5.4,disrupted
+wide,equal mass,0,70.0,3.0,bound
+very wide,equal mass,0.4,70.0,3.0,bound
+wide,equal mass,0,180.0,1.0,swapped
+very wide,10x mass,0,270.0,7.0,bound
+very wide,3x mass,0,10.0,8.0,bound
+very wide,equal mass,0,90.0,7.0,bound
+wide,equal mass,0,270.0,2.2,disrupted
+wide,equal mass,0,150.0,2.2,disrupted
+wide,10x mass,0,90.0,7.0,bound
+wide,equal mass,0,330.0,3.2,swapped
+wide,10x mass,0,290.0,4.0,disrupted
+very wide,equal mass,0.4,150.0,7.0,bound
+very wide,10x mass,0,110.0,3.0,bound
+tight,equal mass,0.2,190.0,2.0,bound
+very wide,10x mass,0,230.0,7.0,bound
+wide,equal mass,0,110.0,6.4,bound
+very wide,equal mass,0.2,110.0,6.0,bound
+wide,equal mass,0,320.0,7.4,bound
+wide,equal mass,0,380.0,2.8,bound
+very wide,equal mass,0.4,130.0,2.0,disrupted
+tight,10x mass,0,190.0,4.0,swapped
+wide,equal mass,0,250.0,3.2,swapped
+tight,equal mass,0.4,250.0,7.0,bound
+wide,equal mass,0,50.0,1.4,bound
+tight,equal mass,0.4,190.0,4.0,collision
+wide,equal mass,0,390.0,5.0,swapped
+wide,equal mass,0,350.0,3.0,bound
+wide,10x mass,0,290.0,6.0,swapped
+very wide,3x mass,0,50.0,1.0,
+tight,equal mass,0,30.0,5.0,bound
+very wide,10x mass,0,130.0,4.0,bound
+wide,equal mass,0,250.0,3.0,swapped
+wide,equal mass,0,380.0,6.4,swapped
+wide,equal mass,0,330.0,4.6,disrupted
+wide,equal mass,0,260.0,3.2,swapped
+wide,equal mass,0,80.0,5.4,bound
+wide,equal mass,0,60.0,4.2,bound
+wide,equal mass,0,240.0,3.6,disrupted
+wide,equal mass,0,100.0,3.6,bound
+wide,equal mass,0,240.0,1.4,swapped
+wide,equal mass,0,110.0,3.0,collision
+wide,equal mass,0,130.0,2.0,swapped
+very wide,3x mass,0,70.0,5.0,bound
+wide,10x mass,0,110.0,7.0,bound
+wide,equal mass,0,70.0,1.8,collision
+wide,equal mass,0,350.0,8.0,bound
+tight,3x mass,0,70.0,3.0,bound
+very wide,3x mass,0,150.0,7.0,bound
+very tight,equal mass,0,50.0,3.0,bound
+wide,equal mass,0,370.0,6.6,collision
+very wide,equal mass,0.4,90.0,5.0,bound
+very wide,10x mass,0,230.0,8.0,bound
+wide,equal mass,0,330.0,3.0,bound
+wide,equal mass,0,70.0,3.0,bound
+wide,10x mass,0,110.0,8.0,bound
+wide,equal mass,0,290.0,8.0,bound
+very wide,3x mass,0,290.0,6.0,swapped
+tight,equal mass,0,290.0,7.0,bound
+wide,equal mass,0,80.0,7.8,bound
+very wide,equal mass,0,110.0,2.0,disrupted
+wide,equal mass,0,260.0,5.6,bound
+wide,10x mass,0,70.0,6.0,bound
+wide,equal mass,0,90.0,4.4,bound
+wide,equal mass,0,110.0,4.2,bound
+wide,equal mass,0,90.0,6.2,bound
+very wide,10x mass,0,150.0,6.0,bound
+very wide,equal mass,0.4,50.0,3.0,bound
+very wide,equal mass,0,30.0,7.0,bound
+very wide,10x mass,0,230.0,1.0,disrupted
+wide,10x mass,0,90.0,5.0,bound
+very wide,3x mass,0,50.0,2.0,collision
+wide,equal mass,0,260.0,2.2,bound
+wide,10x mass,0,290.0,2.0,disrupted
+tight,equal mass,0,10.0,2.0,bound
+wide,equal mass,0,40.0,1.2,bound
+wide,equal mass,0,290.0,4.0,swapped
+very wide,equal mass,0.4,270.0,6.0,disrupted
+very wide,equal mass,0.2,150.0,2.0,disrupted
+wide,equal mass,0,400.0,5.4,disrupted
+wide,equal mass,0,250.0,7.6,bound
+tight,equal mass,0.4,270.0,2.0,bound
+wide,equal mass,0,20.0,7.8,bound
+tight,3x mass,0,230.0,3.0,swapped
+wide,equal mass,0,80.0,2.4,bound
+wide,equal mass,0,160.0,6.8,bound
+wide,equal mass,0,150.0,4.2,bound
+tight,10x mass,0,210.0,8.0,bound
+wide,equal mass,0,50.0,6.6,bound
+wide,equal mass,0,120.0,3.6,bound
+wide,10x mass,0,10.0,7.0,bound
+very wide,3x mass,0,70.0,3.0,bound
+tight,equal mass,0.2,170.0,5.0,bound
+wide,10x mass,0,110.0,5.0,bound
+tight,equal mass,0.4,10.0,8.0,bound
+wide,equal mass,0,190.0,2.4,swapped
+wide,equal mass,0,340.0,3.6,swapped
+very wide,equal mass,0.4,130.0,8.0,bound
+very wide,3x mass,0,250.0,2.0,disrupted
+very wide,10x mass,0,210.0,2.0,bound
+wide,equal mass,0,380.0,5.0,disrupted
+very wide,equal mass,0.4,250.0,8.0,bound
+wide,equal mass,0,150.0,7.0,bound
+tight,3x mass,0,270.0,2.0,bound
+very wide,equal mass,0.2,190.0,2.0,swapped
+wide,equal mass,0,100.0,4.4,bound
+wide,equal mass,0,210.0,5.0,bound
+tight,equal mass,0.4,50.0,3.0,bound
+wide,equal mass,0,190.0,5.2,bound
+wide,equal mass,0,30.0,7.6,bound
+very wide,10x mass,0,170.0,6.0,bound
+wide,equal mass,0,40.0,2.4,bound
+wide,equal mass,0,270.0,7.0,bound
+very wide,10x mass,0,10.0,5.0,bound
+wide,equal mass,0,200.0,5.8,bound
+very wide,10x mass,0,150.0,1.0,bound
+wide,equal mass,0,290.0,1.0,swapped
+tight,equal mass,0.4,290.0,4.0,swapped
+wide,equal mass,0,240.0,6.8,bound
+very wide,equal mass,0,250.0,4.0,disrupted
+wide,equal mass,0,280.0,3.2,swapped
+very wide,3x mass,0,110.0,1.0,disrupted
+wide,equal mass,0,310.0,7.0,bound
+wide,equal mass,0,60.0,2.6,bound
+wide,equal mass,0,30.0,5.0,bound
+wide,equal mass,0,330.0,1.6,collision
+tight,equal mass,0,90.0,6.0,bound
+wide,equal mass,0,340.0,1.4,swapped
+wide,equal mass,0,10.0,6.0,bound
+wide,equal mass,0,370.0,4.6,swapped
+wide,equal mass,0,280.0,8.0,bound
+tight,10x mass,0,150.0,1.0,bound
+very wide,equal mass,0.2,110.0,8.0,bound
+wide,equal mass,0,350.0,6.4,disrupted
+very wide,equal mass,0,30.0,1.0,bound
+tight,equal mass,0,110.0,2.0,collision
+wide,equal mass,0,10.0,1.6,bound
+wide,equal mass,0,260.0,7.6,bound
+wide,equal mass,0,100.0,6.4,bound
+wide,equal mass,0,270.0,6.8,bound
+wide,10x mass,0,10.0,2.0,collision
+tight,equal mass,0,170.0,3.0,swapped
+wide,equal mass,0,110.0,5.4,bound
+tight,10x mass,0,50.0,5.0,bound
+wide,equal mass,0,10.0,4.4,bound
+very wide,3x mass,0,10.0,1.0,collision
+very wide,equal mass,0.2,130.0,8.0,bound
+wide,equal mass,0,180.0,1.2,bound
+wide,equal mass,0,40.0,6.2,bound
+wide,equal mass,0,360.0,6.2,disrupted
+very wide,equal mass,0.2,10.0,4.0,bound
+very wide,equal mass,0.2,190.0,3.0,bound
+tight,equal mass,0,70.0,7.0,bound
+wide,equal mass,0,130.0,1.2,bound
+wide,equal mass,0,70.0,6.0,bound
+wide,equal mass,0,310.0,2.2,disrupted
+wide,equal mass,0,400.0,2.8,disrupted
+very wide,10x mass,0,190.0,2.0,disrupted
+wide,equal mass,0,30.0,4.2,bound
+very wide,equal mass,0,10.0,4.0,bound
+wide,equal mass,0,300.0,7.6,bound
+wide,equal mass,0,390.0,7.2,bound
+wide,equal mass,0,60.0,4.0,bound
+wide,equal mass,0,110.0,1.2,bound
+tight,equal mass,0,210.0,1.0,swapped
+wide,equal mass,0,120.0,7.8,bound
+tight,equal mass,0.4,250.0,4.0,swapped
+wide,equal mass,0,40.0,6.0,bound
+wide,equal mass,0,300.0,1.4,swapped
+very wide,equal mass,0.2,210.0,5.0,bound
+wide,equal mass,0,270.0,4.6,swapped
+wide,equal mass,0,90.0,5.0,bound
+wide,equal mass,0,10.0,3.0,bound
+very wide,equal mass,0.4,170.0,8.0,bound
+wide,equal mass,0,90.0,6.6,bound
+wide,equal mass,0,280.0,2.0,disrupted
+wide,10x mass,0,150.0,4.0,bound
+tight,equal mass,0,190.0,1.0,bound
+very wide,equal mass,0,210.0,2.0,swapped
+tight,equal mass,0.2,290.0,4.0,swapped
+very wide,equal mass,0,190.0,6.0,bound
+very wide,equal mass,0,30.0,8.0,bound
+very wide,equal mass,0.4,130.0,5.0,bound
+tight,10x mass,0,290.0,3.0,bound
+tight,3x mass,0,190.0,3.0,disrupted
+wide,equal mass,0,400.0,1.2,swapped
+wide,equal mass,0,350.0,4.6,swapped
+wide,equal mass,0,210.0,3.0,collision
+tight,10x mass,0,210.0,3.0,disrupted
+wide,equal mass,0,390.0,1.2,swapped
+wide,10x mass,0,210.0,2.0,disrupted
+wide,equal mass,0,280.0,5.6,swapped
+very wide,3x mass,0,70.0,7.0,bound
+very wide,10x mass,0,130.0,3.0,swapped
+tight,10x mass,0,190.0,2.0,bound
+wide,equal mass,0,40.0,3.0,bound
+wide,equal mass,0,260.0,7.4,bound
+wide,equal mass,0,290.0,2.0,bound
+wide,equal mass,0,220.0,7.6,bound
+very wide,3x mass,0,170.0,5.0,bound
+wide,10x mass,0,170.0,1.0,swapped
+wide,equal mass,0,360.0,7.4,swapped
+tight,equal mass,0,10.0,4.0,bound
+wide,equal mass,0,130.0,1.0,swapped
+wide,equal mass,0,280.0,3.6,swapped
+wide,equal mass,0,90.0,4.0,bound
+wide,equal mass,0,170.0,4.6,bound
+wide,equal mass,0,290.0,5.8,swapped
+wide,equal mass,0,350.0,5.4,collision
+wide,equal mass,0,310.0,6.6,disrupted
+very wide,3x mass,0,270.0,7.0,bound
+wide,equal mass,0,240.0,7.8,bound
+tight,equal mass,0.4,250.0,5.0,swapped
+very wide,10x mass,0,50.0,3.0,bound
+wide,equal mass,0,330.0,6.4,swapped
+wide,equal mass,0,230.0,6.4,bound
+wide,equal mass,0,260.0,2.0,bound
+very wide,equal mass,0.4,90.0,2.0,bound
+wide,equal mass,0,210.0,4.0,swapped
+tight,10x mass,0,230.0,3.0,swapped
+wide,equal mass,0,320.0,3.0,bound
+very wide,3x mass,0,190.0,8.0,bound
+wide,equal mass,0,400.0,2.2,bound
+wide,equal mass,0,270.0,7.4,bound
+wide,equal mass,0,280.0,3.4,swapped
+wide,equal mass,0,270.0,1.0,swapped
+tight,equal mass,0.2,290.0,1.0,swapped
+wide,equal mass,0,160.0,4.4,bound
+wide,equal mass,0,300.0,2.8,bound
+very wide,equal mass,0.4,110.0,3.0,swapped
+wide,10x mass,0,70.0,8.0,bound
+very wide,equal mass,0.4,130.0,4.0,bound
+wide,10x mass,0,270.0,7.0,bound
+tight,equal mass,0.2,150.0,1.0,swapped
+wide,equal mass,0,400.0,7.8,collision
+wide,equal mass,0,210.0,7.6,bound
+very wide,equal mass,0,130.0,6.0,bound
+very wide,3x mass,0,270.0,8.0,bound
+wide,equal mass,0,70.0,6.0,bound
+tight,equal mass,0.2,30.0,8.0,bound
+wide,equal mass,0,200.0,7.8,bound
+tight,3x mass,0,170.0,2.0,bound
+tight,3x mass,0,110.0,5.0,bound
+wide,equal mass,0,280.0,4.6,swapped
+tight,equal mass,0,230.0,1.0,swapped
+very wide,equal mass,0.4,290.0,4.0,disrupted
+wide,equal mass,0,220.0,1.4,bound
+wide,equal mass,0,170.0,5.0,bound
+tight,3x mass,0,130.0,3.0,swapped
+wide,equal mass,0,380.0,1.4,swapped
+wide,equal mass,0,110.0,8.0,bound
+wide,equal mass,0,100.0,5.0,bound
+tight,equal mass,0,290.0,1.0,swapped
+tight,equal mass,0.4,170.0,6.0,bound
+very wide,equal mass,0.4,70.0,1.0,swapped
+very wide,10x mass,0,110.0,7.0,bound
+wide,equal mass,0,240.0,5.4,bound
+wide,equal mass,0,70.0,5.8,bound
+very wide,equal mass,0.4,170.0,2.0,collision
+very wide,10x mass,0,230.0,3.0,disrupted
+wide,equal mass,0,350.0,4.4,swapped
+wide,equal mass,0,400.0,1.0,swapped
+wide,equal mass,0,20.0,7.6,bound
+wide,equal mass,0,240.0,5.2,bound
+wide,equal mass,0,290.0,4.4,disrupted
+very tight,equal mass,0,30.0,8.0,bound
+tight,equal mass,0.4,10.0,6.0,bound
+very wide,3x mass,0,30.0,7.0,bound
+wide,10x mass,0,130.0,8.0,bound
+wide,equal mass,0,230.0,7.2,bound
+tight,equal mass,0,230.0,5.0,bound
+wide,equal mass,0,340.0,3.4,swapped
+wide,equal mass,0,80.0,2.2,bound
+wide,equal mass,0,200.0,7.2,bound
+wide,equal mass,0,70.0,4.0,bound
+wide,equal mass,0,150.0,5.0,bound
+very wide,equal mass,0,150.0,7.0,bound
+wide,equal mass,0,330.0,1.4,swapped
+wide,equal mass,0,150.0,7.4,bound
+wide,equal mass,0,100.0,4.2,bound
+wide,equal mass,0,280.0,6.8,bound
+wide,equal mass,0,220.0,1.2,swapped
+very wide,equal mass,0.2,230.0,3.0,collision
+very wide,equal mass,0.2,130.0,6.0,bound
+tight,10x mass,0,250.0,8.0,bound
+wide,equal mass,0,200.0,6.4,bound
+tight,10x mass,0,90.0,4.0,bound
+very wide,equal mass,0,110.0,1.0,swapped
+wide,10x mass,0,10.0,4.0,bound
+very wide,equal mass,0.2,250.0,5.0,swapped
+wide,10x mass,0,10.0,1.0,bound
+wide,equal mass,0,110.0,7.8,bound
+wide,equal mass,0,120.0,5.8,bound
+very wide,10x mass,0,230.0,6.0,bound
+wide,equal mass,0,70.0,2.4,collision
+wide,equal mass,0,100.0,7.0,bound
+wide,equal mass,0,20.0,2.8,bound
+very wide,equal mass,0.4,270.0,1.0,disrupted
+wide,equal mass,0,120.0,7.4,bound
+wide,equal mass,0,30.0,2.2,bound
+wide,10x mass,0,90.0,6.0,bound
+wide,equal mass,0,130.0,7.8,bound
+wide,equal mass,0,320.0,2.2,bound
+wide,equal mass,0,10.0,6.6,bound
+wide,equal mass,0,310.0,5.2,disrupted
+very wide,equal mass,0.4,230.0,1.0,disrupted
+wide,equal mass,0,120.0,3.2,swapped
+tight,10x mass,0,270.0,1.0,collision
+wide,equal mass,0,370.0,5.6,disrupted
+wide,equal mass,0,350.0,2.0,swapped
+tight,3x mass,0,30.0,4.0,bound
+wide,equal mass,0,110.0,3.6,bound
+tight,3x mass,0,10.0,2.0,bound
+wide,equal mass,0,220.0,3.8,swapped
+wide,equal mass,0,10.0,7.4,bound
+wide,equal mass,0,230.0,5.0,swapped
+wide,equal mass,0,220.0,7.4,bound
+wide,equal mass,0,360.0,8.0,bound
+very wide,equal mass,0.4,10.0,4.0,bound
+very wide,equal mass,0.4,110.0,4.0,bound
+wide,equal mass,0,400.0,3.8,disrupted
+very wide,10x mass,0,190.0,4.0,swapped
+tight,3x mass,0,70.0,4.0,bound
+wide,equal mass,0,240.0,2.8,swapped
+wide,equal mass,0,300.0,3.8,swapped
+very wide,equal mass,0.2,130.0,4.0,bound
+wide,equal mass,0,230.0,5.4,bound
+wide,equal mass,0,60.0,8.0,bound
+wide,equal mass,0,290.0,7.0,bound
+tight,10x mass,0,210.0,7.0,bound
+wide,equal mass,0,60.0,1.6,bound
+wide,10x mass,0,250.0,5.0,disrupted
+wide,equal mass,0,20.0,4.6,bound
+tight,10x mass,0,90.0,6.0,bound
+wide,equal mass,0,230.0,6.0,bound
+wide,10x mass,0,70.0,4.0,bound
+very tight,equal mass,0,10.0,7.0,bound
+tight,equal mass,0.2,290.0,3.0,bound
+wide,equal mass,0,20.0,5.8,bound
+wide,10x mass,0,150.0,2.0,disrupted
+wide,equal mass,0,370.0,4.2,swapped
+wide,equal mass,0,240.0,4.6,disrupted
+tight,equal mass,0.2,70.0,6.0,bound
+wide,equal mass,0,190.0,7.4,bound
+wide,equal mass,0,340.0,4.6,disrupted
+wide,equal mass,0,270.0,5.6,swapped
+wide,equal mass,0,260.0,4.8,disrupted
+wide,equal mass,0,200.0,2.6,swapped
+wide,equal mass,0,280.0,5.4,disrupted
+wide,equal mass,0,340.0,4.0,swapped
+wide,equal mass,0,260.0,1.0,swapped
+tight,equal mass,0.4,210.0,2.0,bound
+wide,equal mass,0,100.0,4.6,bound
+very wide,3x mass,0,210.0,1.0,disrupted
+wide,equal mass,0,330.0,2.2,bound
+wide,equal mass,0,210.0,7.0,bound
+wide,equal mass,0,180.0,4.6,bound
+wide,equal mass,0,290.0,2.4,bound
+tight,3x mass,0,290.0,7.0,bound
+wide,equal mass,0,300.0,6.4,disrupted
+wide,equal mass,0,310.0,6.4,collision
+wide,equal mass,0,130.0,3.0,swapped
+wide,equal mass,0,290.0,5.6,disrupted
+wide,equal mass,0,380.0,2.2,swapped
+wide,equal mass,0,200.0,1.2,swapped
+wide,equal mass,0,290.0,3.2,swapped
+wide,equal mass,0,180.0,6.4,bound
+very wide,3x mass,0,250.0,7.0,bound
+tight,equal mass,0.4,90.0,5.0,bound
+tight,equal mass,0.2,90.0,2.0,collision
+wide,equal mass,0,260.0,2.4,bound
+tight,10x mass,0,30.0,5.0,bound
+wide,equal mass,0,80.0,7.0,bound
+tight,equal mass,0.2,190.0,1.0,swapped
+wide,equal mass,0,250.0,3.0,swapped
+wide,equal mass,0,60.0,3.6,bound
+wide,equal mass,0,50.0,7.0,bound
+wide,equal mass,0,280.0,4.2,disrupted
+wide,equal mass,0,380.0,1.8,swapped
+wide,10x mass,0,130.0,5.0,bound
+very wide,equal mass,0.4,230.0,3.0,disrupted
+wide,equal mass,0,230.0,6.2,bound
+wide,10x mass,0,150.0,3.0,disrupted
+wide,equal mass,0,380.0,3.4,disrupted
+wide,equal mass,0,220.0,5.8,bound
+wide,equal mass,0,270.0,7.8,bound
+wide,equal mass,0,40.0,3.6,bound
+tight,equal mass,0.4,90.0,8.0,bound
+wide,equal mass,0,50.0,3.2,bound
+wide,equal mass,0,270.0,8.0,bound
+tight,equal mass,0.4,170.0,5.0,bound
+wide,10x mass,0,230.0,5.0,disrupted
+tight,equal mass,0.2,10.0,1.0,bound
+wide,equal mass,0,80.0,4.8,bound
+wide,equal mass,0,170.0,3.2,swapped
+wide,equal mass,0,120.0,1.4,bound
+tight,3x mass,0,210.0,4.0,bound
+wide,equal mass,0,180.0,3.2,collision
+wide,equal mass,0,170.0,6.6,bound
+tight,equal mass,0,150.0,7.0,bound
+wide,equal mass,0,130.0,7.6,bound
+very wide,equal mass,0.4,250.0,1.0,disrupted
+wide,equal mass,0,300.0,4.0,swapped
+wide,10x mass,0,230.0,6.0,bound
+wide,equal mass,0,310.0,1.4,swapped
+very wide,equal mass,0.2,10.0,5.0,bound
+tight,equal mass,0,270.0,2.0,bound
+wide,equal mass,0,30.0,7.0,bound
+wide,equal mass,0,230.0,3.6,swapped
+wide,equal mass,0,190.0,3.0,swapped
+very tight,equal mass,0,30.0,5.0,bound
+wide,equal mass,0,110.0,4.0,bound
+wide,equal mass,0,370.0,3.2,disrupted
+wide,equal mass,0,240.0,4.8,swapped
+tight,10x mass,0,70.0,2.0,collision
+wide,equal mass,0,140.0,2.0,swapped
+tight,equal mass,0.4,90.0,7.0,bound
+wide,equal mass,0,100.0,8.0,bound
+wide,equal mass,0,240.0,6.4,bound
+wide,equal mass,0,210.0,6.4,bound
+tight,10x mass,0,210.0,4.0,bound
+tight,equal mass,0.4,10.0,3.0,bound
+wide,equal mass,0,120.0,3.4,bound
+tight,equal mass,0,90.0,7.0,bound
+wide,equal mass,0,180.0,5.2,bound
+wide,equal mass,0,210.0,1.0,swapped
+wide,equal mass,0,250.0,6.4,bound
+wide,equal mass,0,260.0,3.0,swapped
+wide,equal mass,0,290.0,3.4,disrupted
+wide,equal mass,0,190.0,2.8,collision
+tight,10x mass,0,130.0,5.0,bound
+wide,equal mass,0,300.0,5.0,collision
+wide,equal mass,0,70.0,2.0,bound
+wide,equal mass,0,40.0,6.8,bound
+tight,equal mass,0.4,10.0,5.0,bound
+tight,equal mass,0,50.0,3.0,bound
+wide,equal mass,0,290.0,5.0,swapped
+wide,equal mass,0,120.0,5.4,bound
+very wide,equal mass,0.4,30.0,4.0,bound
+tight,10x mass,0,290.0,8.0,bound
+wide,equal mass,0,390.0,2.0,swapped
+wide,equal mass,0,70.0,1.2,bound
+wide,equal mass,0,330.0,8.0,bound
+wide,equal mass,0,370.0,5.4,disrupted
+wide,equal mass,0,380.0,3.2,bound
+wide,equal mass,0,130.0,3.4,swapped
+wide,equal mass,0,260.0,1.8,bound
+wide,equal mass,0,360.0,2.2,swapped
+very wide,equal mass,0,110.0,8.0,bound
+wide,equal mass,0,120.0,1.0,bound
+wide,equal mass,0,220.0,3.4,swapped
+tight,equal mass,0.4,150.0,2.0,swapped
+very wide,3x mass,0,190.0,6.0,bound
+wide,equal mass,0,300.0,2.4,disrupted
+wide,equal mass,0,270.0,1.0,swapped
+wide,equal mass,0,50.0,5.0,bound
+tight,equal mass,0,190.0,7.0,bound
+tight,equal mass,0,250.0,8.0,bound
+tight,equal mass,0,90.0,3.0,bound
+wide,equal mass,0,270.0,5.8,swapped
+tight,equal mass,0.4,170.0,2.0,bound
+very wide,equal mass,0.4,270.0,4.0,disrupted
+tight,equal mass,0.2,30.0,2.0,bound
+very wide,equal mass,0,170.0,5.0,bound
+wide,equal mass,0,390.0,3.2,bound
+wide,equal mass,0,310.0,1.2,swapped
+wide,10x mass,0,170.0,3.0,disrupted
+wide,equal mass,0,290.0,3.6,swapped
+wide,equal mass,0,150.0,1.0,swapped
+wide,equal mass,0,190.0,2.0,swapped
+tight,equal mass,0.2,150.0,5.0,bound
+tight,equal mass,0,290.0,6.0,
+wide,equal mass,0,110.0,2.6,swapped
+wide,equal mass,0,90.0,2.0,swapped
+wide,equal mass,0,240.0,1.8,bound
+very tight,equal mass,0,30.0,6.0,bound
+wide,equal mass,0,310.0,4.8,collision
+tight,equal mass,0.4,210.0,6.0,bound
+wide,equal mass,0,300.0,5.2,collision
+very wide,equal mass,0.2,70.0,1.0,swapped
+wide,equal mass,0,250.0,2.0,bound
+very wide,10x mass,0,170.0,1.0,disrupted
+very wide,equal mass,0,30.0,2.0,bound
+wide,equal mass,0,80.0,6.4,bound
+tight,equal mass,0,270.0,8.0,bound
+wide,equal mass,0,130.0,5.6,bound
+wide,equal mass,0,70.0,7.2,bound
+tight,10x mass,0,190.0,8.0,bound
+very wide,3x mass,0,270.0,3.0,disrupted
+tight,equal mass,0.4,50.0,7.0,bound
+wide,equal mass,0,330.0,1.0,swapped
+wide,equal mass,0,90.0,7.2,bound
+wide,equal mass,0,120.0,3.8,bound
+wide,equal mass,0,250.0,7.0,bound
+very wide,equal mass,0.4,210.0,8.0,bound
+tight,3x mass,0,110.0,1.0,bound
+wide,equal mass,0,130.0,6.8,bound
+wide,equal mass,0,310.0,3.2,bound
+very wide,3x mass,0,130.0,6.0,bound
+very wide,equal mass,0,290.0,6.0,collision
+wide,equal mass,0,400.0,2.6,disrupted
+wide,equal mass,0,400.0,5.2,swapped
+very wide,equal mass,0,50.0,2.0,bound
+wide,equal mass,0,320.0,5.0,collision
+very wide,3x mass,0,10.0,4.0,bound
+very wide,equal mass,0.4,210.0,6.0,bound
+wide,equal mass,0,210.0,6.8,bound
+wide,equal mass,0,20.0,6.6,bound
+wide,10x mass,0,110.0,1.0,bound
+very wide,3x mass,0,130.0,1.0,collision
+tight,10x mass,0,170.0,1.0,bound
+very wide,equal mass,0.2,90.0,3.0,bound
+very wide,equal mass,0,190.0,3.0,disrupted
+wide,equal mass,0,20.0,3.6,bound
+wide,equal mass,0,50.0,7.4,bound
+wide,equal mass,0,310.0,4.6,disrupted
+very wide,equal mass,0,190.0,4.0,swapped
+wide,equal mass,0,350.0,4.8,disrupted
+very wide,10x mass,0,290.0,2.0,swapped
+wide,equal mass,0,290.0,6.4,bound
+wide,equal mass,0,160.0,1.6,bound
+very wide,3x mass,0,230.0,2.0,disrupted
+wide,equal mass,0,120.0,6.4,bound
+tight,equal mass,0.2,190.0,5.0,bound
+tight,equal mass,0.4,130.0,2.0,swapped
+wide,equal mass,0,30.0,4.0,bound
+wide,equal mass,0,190.0,1.0,swapped
+wide,equal mass,0,80.0,3.0,bound
+wide,equal mass,0,370.0,5.0,disrupted
+wide,equal mass,0,70.0,5.0,bound
+very wide,equal mass,0.2,50.0,6.0,bound
+wide,equal mass,0,40.0,4.2,bound
+wide,equal mass,0,100.0,1.2,bound
+very wide,equal mass,0.2,90.0,1.0,swapped
+very wide,equal mass,0,110.0,5.0,bound
+wide,equal mass,0,390.0,4.8,swapped
+wide,equal mass,0,330.0,6.0,disrupted
+wide,equal mass,0,360.0,7.8,swapped
+wide,equal mass,0,270.0,4.2,swapped
+wide,equal mass,0,160.0,7.8,bound
+very wide,3x mass,0,50.0,3.0,bound
+tight,10x mass,0,290.0,1.0,swapped
+wide,equal mass,0,390.0,3.6,bound
+wide,equal mass,0,290.0,3.0,bound
+wide,equal mass,0,200.0,3.4,swapped
+wide,equal mass,0,190.0,8.0,bound
+tight,10x mass,0,90.0,7.0,bound
+tight,equal mass,0,90.0,2.0,collision
+tight,equal mass,0.4,110.0,7.0,bound
+very wide,equal mass,0.4,150.0,2.0,collision
+tight,3x mass,0,30.0,2.0,bound
+wide,equal mass,0,230.0,7.8,bound
+very wide,equal mass,0.4,30.0,5.0,bound
+tight,3x mass,0,110.0,8.0,bound
+wide,equal mass,0,150.0,6.4,bound
+very wide,3x mass,0,250.0,1.0,disrupted
+tight,equal mass,0.2,130.0,3.0,swapped
+very wide,equal mass,0.2,230.0,7.0,bound
+very wide,equal mass,0.4,70.0,2.0,swapped
+wide,equal mass,0,390.0,1.4,swapped
+wide,equal mass,0,30.0,1.8,bound
+wide,equal mass,0,70.0,3.6,bound
+tight,equal mass,0.4,190.0,6.0,bound
+wide,equal mass,0,70.0,3.4,bound
+wide,equal mass,0,380.0,7.4,bound
+very wide,equal mass,0,250.0,7.0,bound
+wide,equal mass,0,160.0,1.4,bound
+tight,equal mass,0.4,50.0,2.0,bound
+wide,equal mass,0,240.0,1.6,swapped
+wide,10x mass,0,150.0,5.0,bound
+tight,equal mass,0.2,150.0,2.0,bound
+tight,equal mass,0,50.0,6.0,bound
+wide,equal mass,0,30.0,1.2,bound
+tight,equal mass,0.2,30.0,1.0,bound
+wide,equal mass,0,250.0,1.2,swapped
+very wide,3x mass,0,30.0,2.0,bound
+wide,equal mass,0,150.0,6.2,bound
+wide,equal mass,0,90.0,2.6,collision
+very wide,3x mass,0,270.0,4.0,collision
+wide,equal mass,0,150.0,2.0,bound
+wide,equal mass,0,250.0,4.2,collision
+wide,equal mass,0,50.0,2.0,bound
+wide,equal mass,0,280.0,7.4,bound
+tight,3x mass,0,130.0,4.0,bound
+very wide,10x mass,0,110.0,4.0,bound
+wide,equal mass,0,50.0,4.8,bound
+tight,equal mass,0,30.0,2.0,bound
+wide,equal mass,0,170.0,1.8,swapped
+very wide,equal mass,0.2,90.0,5.0,bound
+wide,equal mass,0,200.0,3.2,swapped
+tight,3x mass,0,150.0,1.0,bound
+very wide,10x mass,0,30.0,3.0,bound
+wide,equal mass,0,110.0,2.2,swapped
+tight,3x mass,0,50.0,8.0,bound
+tight,equal mass,0,130.0,3.0,swapped
+wide,equal mass,0,350.0,1.4,swapped
+very wide,equal mass,0.2,250.0,3.0,disrupted
+wide,equal mass,0,160.0,4.6,bound
+wide,equal mass,0,360.0,5.6,collision
+wide,equal mass,0,190.0,6.2,bound
+tight,3x mass,0,110.0,4.0,bound
+very wide,equal mass,0.2,170.0,6.0,bound
+tight,equal mass,0.2,110.0,3.0,swapped
+wide,equal mass,0,270.0,5.2,swapped
+wide,equal mass,0,130.0,6.0,bound
+tight,10x mass,0,270.0,3.0,disrupted
+very wide,3x mass,0,90.0,6.0,bound
+tight,equal mass,0.2,250.0,7.0,bound
+wide,equal mass,0,220.0,4.4,swapped
+very wide,10x mass,0,190.0,6.0,bound
+wide,equal mass,0,30.0,2.4,bound
+tight,equal mass,0,270.0,4.0,collision
+wide,equal mass,0,320.0,4.0,swapped
+very wide,equal mass,0.2,290.0,1.0,swapped
+tight,equal mass,0,170.0,2.0,bound
+wide,10x mass,0,30.0,8.0,bound
+tight,equal mass,0.4,130.0,3.0,bound
+tight,equal mass,0.2,110.0,4.0,bound
+very wide,3x mass,0,190.0,3.0,bound
+wide,equal mass,0,330.0,1.8,bound
+wide,equal mass,0,400.0,7.0,swapped
+wide,equal mass,0,30.0,7.8,bound
+wide,10x mass,0,10.0,3.0,bound
+wide,equal mass,0,110.0,3.0,collision
+tight,3x mass,0,10.0,7.0,bound
+very wide,equal mass,0,190.0,8.0,bound
+tight,equal mass,0.2,70.0,1.0,bound
+tight,equal mass,0.4,130.0,6.0,bound
+wide,equal mass,0,240.0,6.2,bound
+wide,equal mass,0,320.0,5.6,disrupted
+wide,equal mass,0,40.0,8.0,bound
+wide,equal mass,0,250.0,8.0,bound
+wide,equal mass,0,260.0,3.4,swapped
+wide,equal mass,0,90.0,3.0,bound
+tight,equal mass,0.4,150.0,1.0,swapped
+tight,equal mass,0.4,30.0,7.0,bound
+wide,equal mass,0,230.0,6.6,bound
+wide,equal mass,0,330.0,5.0,disrupted
+very wide,equal mass,0.2,190.0,7.0,bound
+wide,equal mass,0,400.0,5.8,disrupted
+tight,equal mass,0.2,50.0,7.0,bound
+wide,equal mass,0,270.0,5.0,swapped
+wide,equal mass,0,380.0,4.8,swapped
+wide,equal mass,0,380.0,7.6,swapped
+very wide,3x mass,0,290.0,2.0,disrupted
+tight,equal mass,0.2,50.0,1.0,bound
+wide,equal mass,0,310.0,3.8,swapped
+wide,equal mass,0,390.0,3.4,disrupted
+wide,equal mass,0,350.0,5.0,bound
+wide,equal mass,0,350.0,7.6,swapped
+wide,equal mass,0,330.0,4.2,swapped
+wide,equal mass,0,270.0,4.8,swapped
+wide,equal mass,0,20.0,5.4,bound
+wide,10x mass,0,290.0,1.0,disrupted
+very wide,equal mass,0.2,230.0,2.0,disrupted
+wide,equal mass,0,290.0,1.0,swapped

@@ -26,13 +26,13 @@ a = 0.3*rhill                            # separation of binary
 e = 0
 i = np.deg2rad(0)
 
+pbin = 2.*np.pi/np.sqrt(g*(m1+m2)/a**3)            # orbital period of binary around the sun
 t = 2.*np.pi/np.sqrt(g*msun/rsun**3)            # orbital period of binary around the sun
-p_bin = 2.*np.pi/np.sqrt(g*(m1+m2)/a**3)            # orbital period of binary around the sun
 noutputs = 1000             # number of outputs
 p, s, imp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3)) # position
 vp, vs, vimp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3)) # velocity
 dr, dv, h = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3))
-totaltime = t*0.4
+totaltime = t
 times = np.linspace(0,totaltime, noutputs) # create times for integrations
 
 for j in range(1):
@@ -106,13 +106,15 @@ for j in range(1):
     h[:,2] = np.cross(s-imp,vs-vimp)[:,2]
     mu = g*(m1+m2)
     
+    window = int(noutputs*pbin/totaltime*2) # set moving average window to be equal to 2 orbits of binary
+    
     a = mu*dr/(2*mu - dr*dv**2)
     energy = -mu/2/a
     e = np.sqrt(1 + (2*energy*h**2 / mu**2))
     e_movingavg = np.zeros(noutputs)
     for ii in range(noutputs):
-        if ii > 100:
-            xi = ii - 100
+        if ii > window:
+            xi = ii - window
         else:
             xi = 0
         e_movingavg[ii] = np.mean(e[xi:ii,0])

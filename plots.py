@@ -30,7 +30,7 @@ a_all = np.zeros(len(filenames))
 bound = np.zeros((len(filenames), 3))
 
 for i, sim in enumerate(filenames):
-    # print(sim)
+    
     data = np.loadtxt(sim)
 
     times = data[:,0]
@@ -136,7 +136,7 @@ ax.legend(loc='upper center', bbox_to_anchor=(0.5, 1.04), ncol=3, fancybox=True,
 # ax.set_yticks(np.asarray((np.unique(simp_all)), dtype=int),)
 # ax.set_xticks(np.round(np.unique(b_all), 2))
 # plt.xlim(100,350)simp
-plt.savefig(f"./img/{sim_name}_final_bound.pdf", bbox_inches='tight')
+# plt.savefig(f"./img/{sim_name}_final_bound.pdf", bbox_inches='tight')
 # %%
 b_all = np.round(b_all, 2)
 binary_e = np.ones((len(np.unique(simp_all)), len(np.unique(b_all))))
