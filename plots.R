@@ -1,7 +1,8 @@
 library(tidyverse)
-data(iris)
 
 data <- read_csv('results.csv')
+
+data <- na.omit(data)
 
 data %>%
   ggplot(aes(a, fill=status)) +

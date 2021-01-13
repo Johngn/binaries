@@ -19,7 +19,7 @@ au = 1.496e11
 rsun = 44.*au
 Msun = 1.9891e30
 
-sim_name = 'showcase_wide_equalmass_0ecc'
+sim_name = 'showcase2_equalmass_0ecc'
 filenames = glob(f'./rebound/mastersproject/binaries/results/{sim_name}*')
 
 b_all = np.zeros(len(filenames))
@@ -136,7 +136,7 @@ ax.legend(loc='upper center', bbox_to_anchor=(0.5, 1.04), ncol=3, fancybox=True,
 # ax.set_yticks(np.asarray((np.unique(simp_all)), dtype=int),)
 # ax.set_xticks(np.round(np.unique(b_all), 2))
 # plt.xlim(100,350)simp
-# plt.savefig(f"./img/{sim_name}_final_bound.pdf", bbox_inches='tight')
+plt.savefig(f"./img/{sim_name}_final_bound.pdf", bbox_inches='tight')
 # %%
 b_all = np.round(b_all, 2)
 binary_e = np.ones((len(np.unique(simp_all)), len(np.unique(b_all))))
@@ -152,7 +152,7 @@ binary_e = np.round(binary_e, 2)
 
 fig, ax = plt.subplots(1, figsize=(10, 8))
 ax = sns.heatmap(binary_e, 
-                 # annot=True, 
+                 # annot=True,
                  linewidths=0.5, 
                  cmap="YlGnBu",
                  yticklabels=np.asarray((np.unique(simp_all)), dtype=int),
