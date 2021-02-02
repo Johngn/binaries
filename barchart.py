@@ -9,6 +9,8 @@ Created on Tue Dec 15 17:48:00 2020
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
+import seaborn as sns
+import pandas as pd
 
 
 labels = [f'a = 0.4 $R_H$', 'a = 0.2 $R_H$', 'a = 0.1 $R_H$',]
@@ -21,10 +23,10 @@ x = np.arange(len(labels))  # the label locations
 width = 0.12  # the width of the bars
 
 fig, ax = plt.subplots(1, figsize=(6, 5))
-rects1 = ax.bar(x - width*1.5, bound, width, label='Bound')
-rects2 = ax.bar(x - width/2, swapped, width, label='Swapped')
-rects2 = ax.bar(x + width/2, disrupted, width, label='Disrupted')
-rects2 = ax.bar(x + width*1.5, collisions, width, label='Collisions')
+rects1 = sns.barplot(x - width*1.5, bound, label='Bound')
+rects2 = sns.barplot(x - width/2, swapped, label='Swapped')
+# rects2 = ax.bar(x + width/2, disrupted, width, label='Disrupted')
+# rects2 = ax.bar(x + width*1.5, collisions, width, label='Collisions')
 
 ax.set_ylabel('Total')
 ax.set_xticks(x)
@@ -32,7 +34,7 @@ ax.set_xticklabels(labels)
 ax.set_ylim(0,120)
 ax.legend()
 
-fig.savefig('./img/totals_1.pdf', bbox_inches='tight')
+# fig.savefig('./img/totals_1.pdf', bbox_inches='tight')
 
 # %%
 import matplotlib

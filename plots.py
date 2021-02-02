@@ -19,8 +19,8 @@ au = 1.496e11
 rsun = 44.*au
 Msun = 1.9891e30
 
-sim_name = 'showcase2_equalmass_0ecc'
-filenames = glob(f'./rebound/mastersproject/binaries/results/{sim_name}*')
+sim_name = 'test'
+filenames = glob(f'./results/{sim_name}*')
 
 b_all = np.zeros(len(filenames))
 simp_all = np.zeros(len(filenames))
@@ -31,7 +31,7 @@ bound = np.zeros((len(filenames), 3))
 
 for i, sim in enumerate(filenames):
     
-    data = np.loadtxt(sim)
+    data = np.array(pd.read_csv(sim, index_col=0))
 
     times = data[:,0]
     b = data[:,1]
@@ -45,7 +45,7 @@ for i, sim in enumerate(filenames):
     vs = data[:,17:20]
     hash_impactor = data[:,20]
     mimp = data[0,21]
-    simp = data[:,22]/1e3
+    simp = data[:,22]
     imp = data[:,23:26]
     vimp = data[:,26:29]
     
@@ -77,7 +77,7 @@ for i, sim in enumerate(filenames):
     # periapsis = a*(1-e)
     # will_collide = periapsis/3e5 < 1
     
-    a_all[i] = a[-1,0]
+    a_all[i] = a[0,0]
     
     bound[i] = np.logical_and(np.logical_and(energy < 0, np.isfinite(energy)), R < Rhill_largest)[-1]
     
@@ -94,25 +94,32 @@ for i, sim in enumerate(filenames):
     # plt.figure()
     # plt.plot(a/Rhill[0])
     # plt.ylim(0,1)
-    
+
+b_all = b_all*Rhill[0]
+simp_all = simp_all/1e3
+
 bound = np.array(bound, dtype='bool')
 
-collisions = glob(f'./rebound/mastersproject/binaries/results/collision_{sim_name}*')
+collisions = glob(f'./results/collision_{sim_name}*')
 coll_params = np.zeros((len(collisions), 3))
 for i, collision in enumerate(collisions):
     params = re.findall('[0-9]+\.[0-9]+', collision)
     params = [float(param) for param in params]
     
-    collided_bodies = np.loadtxt(collision)[:,1]
+    collided_bodies = np.array(pd.read_csv(collision, index_col=0))[:,1]
     
-    if hash_primary[0] in collided_bodies and hash_secondary[0] in collided_bodies:
+    # if hash_primary[0] in collided_bodies and hash_secondary[0] in collided_bodies:
+    if np.array_equal(collided_bodies, [0,1]):
         params.append(1)
-    if hash_primary[0] in collided_bodies and hash_impactor[0] in collided_bodies:
+    # if hash_primary[0] in collided_bodies and hash_impactor[0] in collided_bodies:
+    if np.array_equal(collided_bodies, [0,3]):
         params.append(2)
-    if hash_secondary[0] in collided_bodies and hash_impactor[0] in collided_bodies:
+    # if hash_secondary[0] in collided_bodies and hash_impactor[0] in collided_bodies:
+    if np.array_equal(collided_bodies, [1,3]):
         params.append(3)
     if len(params) == 3: # needed if more than one collision per sim
         coll_params[i] = params
+    
 # %%
 total_space = len(b_all)
 number_of_bound = len(b_all[bound[:,0]])
@@ -121,7 +128,7 @@ number_of_collisions = len(collisions)
 number_of_disrupted = total_space - (number_of_bound + number_of_swapped + number_of_collisions)
 # %%
 fig, ax = plt.subplots(1, figsize=(7,7))
-s = 50
+s = 100
 ax.scatter(b_all, simp_all, s=1, marker="x", c="black")
 ax.scatter(b_all[bound[:,0]], simp_all[bound[:,0]], label='prim-sec', s=s, c="tab:blue")
 ax.scatter(b_all[bound[:,1]], simp_all[bound[:,1]], label='prim-imp', s=s, c="tab:orange")
@@ -136,7 +143,7 @@ ax.legend(loc='upper center', bbox_to_anchor=(0.5, 1.04), ncol=3, fancybox=True,
 # ax.set_yticks(np.asarray((np.unique(simp_all)), dtype=int),)
 # ax.set_xticks(np.round(np.unique(b_all), 2))
 # plt.xlim(100,350)simp
-plt.savefig(f"./img/{sim_name}_final_bound.pdf", bbox_inches='tight')
+# plt.savefig(f"./img/{sim_name}_final_bound.pdf", bbox_inches='tight')
 # %%
 b_all = np.round(b_all, 2)
 binary_e = np.ones((len(np.unique(simp_all)), len(np.unique(b_all))))
@@ -163,7 +170,7 @@ ax.invert_yaxis()
 # plt.title(f"Final eccentricity - {sim_name}")
 plt.xlabel("Impact parameter (Hill radii)")
 plt.ylabel("Impactor radius (km)")
-plt.savefig(f"./img/{sim_name}_final_eccentricity.pdf", bbox_inches='tight')
+# plt.savefig(f"./img/{sim_name}_final_eccentricity.pdf", bbox_inches='tight')
 # %%
 binary_a = np.ones((len(np.unique(simp_all)), len(np.unique(b_all))))
 

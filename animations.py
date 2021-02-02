@@ -1,12 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Sat Nov  7 18:24:11 2020
-
-@author: john
-"""
-
-# %%
 import glob, os, rebound
 import numpy as np
 import pandas as pd
@@ -25,12 +16,10 @@ T = 2.*np.pi/np.sqrt(G*(Msun)/rsun**3)      # orbital period of binary around th
 n = 2*np.pi/T                               # mean motion of binary around the sun
 year = 365.25*24.*60.*60.                   # number of seconds in a year
 
-sim_name = 'verytight_equalmass_0ecc'
-r = '10.0'
-b = '2.0'
-
-data = np.loadtxt(f'./rebound/mastersproject/binaries/results/{sim_name}_{r}_{b}.txt')
-Noutputs = len(data)
+sim_name = 'test'
+r = '170.0'
+b = '3.4'
+data = np.array(pd.read_csv(f'./results/{sim_name}_{r}_{b}.csv', index_col=0))
 
 times = data[:,0]
 hash_primary = data[0,2]
@@ -50,6 +39,7 @@ vimp = data[:,26:29]
 OmegaK = np.sqrt(G*Msun/rsun**3)      # keplerian frequency at this distance
 angles = -OmegaK*times                        # one full circle divided up into as many angles as there are outputs
 
+Noutputs = len(data)
 dr, dv, mu, h = np.zeros((Noutputs,3)), np.zeros((Noutputs,3)), np.zeros((Noutputs,3)), np.zeros((Noutputs,3))
 dr[:,0] = np.linalg.norm(p-s, axis=1)
 dr[:,1] = np.linalg.norm(p-imp, axis=1)
@@ -68,9 +58,9 @@ a = mu*dr/(2*mu-dr*dv**2)                            # semi-major axis between e
 energy = -mu/2/a                                    # total energy between each pair of bodies
 e = np.sqrt(1+(2*energy*h**2/mu**2))
 
-plt.figure()
-plt.plot(times,e[:,0])
-plt.ylim(0,1)
+# plt.figure()
+# plt.plot(times,e[:,0])
+# plt.ylim(0,1)
 Rhill = np.array([rsun*(m1/Msun/3.)**(1./3.), rsun*(m2/Msun/3.)**(1./3.), rsun*(mimp/Msun/3.)**(1./3.)])
 Rhill_largest = np.array([np.amax([Rhill[0], Rhill[1]]), np.amax([Rhill[0], Rhill[2]]), np.amax([Rhill[1], Rhill[2]])])
 bound = np.logical_and(np.logical_and(energy < 0, np.isfinite(energy)), dr < Rhill_largest)
@@ -104,26 +94,32 @@ sinsx, sinsy = np.sin(angles)*sref[:,0], np.sin(angles)*sref[:,1]       # sin of
 sinix, siniy = np.sin(angles)*impref[:,0], np.sin(angles)*impref[:,1]   # sin of reference angles times relative location of impactor
 
 '''2D ANIMATION OF OUTCOME OF SIMULATION'''
-lim = 5
+lim = 10
+
+color1 = "teal"
+color2 = "hotpink"
+color3 = "sienna"
+lw = 1.5
+ms = 8
 
 fig, axes = plt.subplots(1, figsize=(9, 9))
 axes.set_xlabel("$x/R_\mathrm{h}$")
 axes.set_ylabel("$y/R_\mathrm{h}$")
 axes.set_ylim(-lim,lim)
 axes.set_xlim(-lim,lim)
-primaryline, = axes.plot([], [], label="primary", c="tab:orange", lw=1.2)
-secondaryline, = axes.plot([], [], label="secondary", c="tab:blue", lw=1.2)
-impactorline, = axes.plot([], [], label="impactor", c="tab:green", lw=1.2)
-primarydot, = axes.plot([], [], marker="o", ms=7, c="tab:orange")
-secondarydot, = axes.plot([], [], marker="o", ms=7, c="tab:blue")
-impactordot, = axes.plot([], [], marker="o", ms=7, c="tab:green")
+primaryline, = axes.plot([], [], label="primary", c=color1, lw=lw)
+secondaryline, = axes.plot([], [], label="secondary", c=color2, lw=lw)
+impactorline, = axes.plot([], [], label="impactor", c=color3, lw=lw)
+primarydot, = axes.plot([], [], marker="o", ms=ms, c=color1)
+secondarydot, = axes.plot([], [], marker="o", ms=ms, c=color2)
+impactordot, = axes.plot([], [], marker="o", ms=ms, c=color3)
 text = axes.text(-lim+(lim/10), lim-(lim/10), '', fontsize=15)
 axes.grid()
 axes.legend()
 
-primaryhill = plt.Circle((0,0), Rhill[0]/Rhill[0], fc="none", ec="tab:orange") # circle with hill radius of primary - normalized for plotting
-secondaryhill = plt.Circle((0,0), Rhill[1]/Rhill[0], fc="none", ec="tab:blue") # circle with hill radius of secondary - normalized for plotting
-impactorhill = plt.Circle((0,0), Rhill[2]/Rhill[0], fc="none", ec="tab:green") # circle with hill radius of impactor - normalized for plotting
+primaryhill = plt.Circle((0,0), Rhill[0]/Rhill[0], fc="none", ec=color1) # circle with hill radius of primary - normalized for plotting
+secondaryhill = plt.Circle((0,0), Rhill[1]/Rhill[0], fc="none", ec=color2) # circle with hill radius of secondary - normalized for plotting
+impactorhill = plt.Circle((0,0), Rhill[2]/Rhill[0], fc="none", ec=color3) # circle with hill radius of impactor - normalized for plotting
 
 def init():
     axes.add_patch(primaryhill)
@@ -161,12 +157,12 @@ axes.set_zlabel("$z/R_\mathrm{h}$")
 axes.set_xlim3d([-lim, lim])
 axes.set_ylim3d([-lim, lim])
 axes.set_zlim3d([-lim, lim])
-primaryline, = axes.plot([], [], [], label="primary", c="tab:orange", lw=1.5)
-secondaryline, = axes.plot([], [], [], label="secondary", c="tab:blue", lw=1.5)
-impactorline, = axes.plot([], [], [], label="impactor", c="tab:green", lw=1.5)
-primarydot, = axes.plot([], [], [], marker="o", ms=8, c="tab:orange")
-secondarydot, = axes.plot([], [], [], marker="o", ms=8, c="tab:blue")
-impactordot, = axes.plot([], [], [], marker="o", ms=8, c="tab:green")
+primaryline, = axes.plot([], [], [], label="primary", c="tab:orange", lw=lw)
+secondaryline, = axes.plot([], [], [], label="secondary", c="tab:blue", lw=lw)
+impactorline, = axes.plot([], [], [], label="impactor", c="tab:green", lw=lw)
+primarydot, = axes.plot([], [], [], marker="o", ms=ms, c="tab:orange")
+secondarydot, = axes.plot([], [], [], marker="o", ms=ms, c="tab:blue")
+impactordot, = axes.plot([], [], [], marker="o", ms=ms, c="tab:green")
 text = axes.text(-lim+(lim/10), lim-(lim/10), lim-(lim/10), '', fontsize=15)
 axes.legend()
 
@@ -189,7 +185,7 @@ def animate(i):
 anim = animation.FuncAnimation(fig, animate, frames=Noutputs, interval=1)
 # %%
 '''2D PLOT OF OUTCOME OF SIMULATION'''
-lim = 10
+lim = 20
 fig, axes = plt.subplots(1, figsize=(8, 8))
 axes.set_xlabel("$x/R_\mathrm{h}$")
 axes.set_ylabel("$y/R_\mathrm{h}$")
