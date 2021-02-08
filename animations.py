@@ -16,10 +16,12 @@ T = 2.*np.pi/np.sqrt(G*(Msun)/rsun**3)      # orbital period of binary around th
 n = 2*np.pi/T                               # mean motion of binary around the sun
 year = 365.25*24.*60.*60.                   # number of seconds in a year
 
-sim_name = 'test'
+sim_name = 'single_random_test'
 r = '170.0'
-b = '3.4'
-data = np.array(pd.read_csv(f'./results/{sim_name}_{r}_{b}.csv', index_col=0))
+b = '3.6'
+starting_position = 0.439
+# data = np.array(pd.read_csv(f'./results/{sim_name}_{r}_{b}.csv', index_col=0))
+data = np.array(pd.read_csv(f'./results/{sim_name}_{starting_position}.csv', index_col=0))
 
 times = data[:,0]
 hash_primary = data[0,2]
@@ -94,7 +96,7 @@ sinsx, sinsy = np.sin(angles)*sref[:,0], np.sin(angles)*sref[:,1]       # sin of
 sinix, siniy = np.sin(angles)*impref[:,0], np.sin(angles)*impref[:,1]   # sin of reference angles times relative location of impactor
 
 '''2D ANIMATION OF OUTCOME OF SIMULATION'''
-lim = 10
+lim = 20
 
 color1 = "teal"
 color2 = "hotpink"
@@ -185,7 +187,7 @@ def animate(i):
 anim = animation.FuncAnimation(fig, animate, frames=Noutputs, interval=1)
 # %%
 '''2D PLOT OF OUTCOME OF SIMULATION'''
-lim = 20
+lim = 5
 fig, axes = plt.subplots(1, figsize=(8, 8))
 axes.set_xlabel("$x/R_\mathrm{h}$")
 axes.set_ylabel("$y/R_\mathrm{h}$")

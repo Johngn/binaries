@@ -1,12 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Sun Nov  8 16:12:22 2020
-
-@author: john
-"""
-
-# %%
 import re
 import numpy as np
 import pandas as pd
@@ -19,7 +10,7 @@ au = 1.496e11
 rsun = 44.*au
 Msun = 1.9891e30
 
-sim_name = 'test'
+sim_name = 'single_random_test'
 filenames = glob(f'./results/{sim_name}*')
 
 b_all = np.zeros(len(filenames))
@@ -74,27 +65,14 @@ for i, sim in enumerate(filenames):
     e = np.sqrt(1 + (2*energy*h**2 / mu**2))
     e_movingavg = [np.mean(e[ii-100:ii,0]) for ii in range(len(data))]
     
-    # periapsis = a*(1-e)
-    # will_collide = periapsis/3e5 < 1
-    
     a_all[i] = a[0,0]
     
     bound[i] = np.logical_and(np.logical_and(energy < 0, np.isfinite(energy)), R < Rhill_largest)[-1]
     
-    # e[np.isnan(e)] = 0
-    # e_mean[i] = np.sqrt(np.mean(e[:,0]**2))
-    # print(e_mean[i])
-    # print(np.mean(e[:,0]))
     e_final[i] = e_movingavg[-1]
     
-    # plt.figure()
-    # plt.plot(times,e)
-    # plt.ylim(0,1)
-        
-    # plt.figure()
-    # plt.plot(a/Rhill[0])
-    # plt.ylim(0,1)
-
+    
+# %%
 b_all = b_all*Rhill[0]
 simp_all = simp_all/1e3
 
@@ -121,12 +99,6 @@ for i, collision in enumerate(collisions):
         coll_params[i] = params
     
 # %%
-total_space = len(b_all)
-number_of_bound = len(b_all[bound[:,0]])
-number_of_swapped = len(b_all[bound[:,1]]) + len(b_all[bound[:,2]])
-number_of_collisions = len(collisions)
-number_of_disrupted = total_space - (number_of_bound + number_of_swapped + number_of_collisions)
-# %%
 fig, ax = plt.subplots(1, figsize=(7,7))
 s = 100
 ax.scatter(b_all, simp_all, s=1, marker="x", c="black")
@@ -144,6 +116,25 @@ ax.legend(loc='upper center', bbox_to_anchor=(0.5, 1.04), ncol=3, fancybox=True,
 # ax.set_xticks(np.round(np.unique(b_all), 2))
 # plt.xlim(100,350)simp
 # plt.savefig(f"./img/{sim_name}_final_bound.pdf", bbox_inches='tight')
+# %%
+total_space = len(b_all)
+number_of_bound = len(b_all[bound[:,0]])
+number_of_swapped = len(b_all[bound[:,1]]) + len(b_all[bound[:,2]])
+number_of_collisions = len(collisions)
+number_of_disrupted = total_space - (number_of_bound + number_of_swapped + number_of_collisions)
+
+plt.bar([1,2,3,4], [number_of_bound,number_of_swapped,number_of_disrupted,number_of_collisions])
+plt.xticks([1,2,3,4], ('bound', 'swapped', 'disrupted', 'collided'))
+# %%
+
+data = {'bound':  number_of_bound,
+        'swapped': number_of_swapped,
+        'collided': number_of_collisions,
+        'disrupted': number_of_disrupted
+        }
+
+df = pd.DataFrame(data)
+# plt.bar(number_of_bound, number_of_swapped)
 # %%
 b_all = np.round(b_all, 2)
 binary_e = np.ones((len(np.unique(simp_all)), len(np.unique(b_all))))

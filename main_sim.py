@@ -33,10 +33,13 @@ headers = ['time','b',
 
 coll_headers = ['time','body','r','m','x','y','z','vx','vy','vz']
 
-sim_name = "test2"
+sim_name = "single_random_test"
 
-simp = np.arange(10e3,210e3,50e3) # create range of impactor sizes to loop through
-b = np.arange(1,4.1,0.6) # create range of impact parameters to loop through
+# simp = np.arange(50e3,210e3,10e3) # create range of impactor sizes to loop through
+# b = np.arange(2,4.1,0.2) # create range of impact parameters to loop through
+
+simp = np.ones(10)*100e3
+b = np.ones(1)*2.5
 
 
 timer = timed() # start timer to time simulations
@@ -48,12 +51,14 @@ for j in range(len(b)):             # loop through each impact parameter
         mimp = 4./3.*np.pi*dens*simp[i]**3   # mass of impactor
         theta = 0.0015  # true anomaly of impactor
         
+        starting_position = np.round(np.random.uniform()*2*np.pi, 4)
+        
         def setupSimulation():
             sim = rebound.Simulation()              # initialize rebound simulation
             sim.G = g                               # set G which sets units of integrator - SI in this case
             sim.collision = 'direct'
             sim.add(m=m1, r=s1, hash="primary")
-            sim.add(m=m2, r=s2, a=a, e=e, hash="secondary")
+            sim.add(m=m2, r=s2, a=a, e=e, f=starting_position, hash="secondary")
             sim.add(m=msun, a=rsun, f=np.pi, hash="sun")
             sim.move_to_com()
             sim.add(m=mimp, r=simp[i], a=rsun+bhill, f=theta, hash="impactor")
@@ -85,7 +90,8 @@ for j in range(len(b)):             # loop through each impact parameter
                     collided.append([sim.t, item.index, item.r, item.m, item.x, item.y, item.z, item.vx, item.vy, item.vz])
             collided = np.array(collided) 
             df_coll = pd.DataFrame(collided)
-            df_coll.to_csv(f'./results/collision_{sim_name}_{np.round(simp[i]/1e3, 1)}_{np.round(b[j], 1)}.csv', header=coll_headers)
+            # df_coll.to_csv(f'./results/collision_{sim_name}_{np.round(simp[i]/1e3, 1)}_{np.round(b[j], 1)}.csv', header=coll_headers)
+            df_coll.to_csv(f'./results/collision_{sim_name}_{starting_position}.csv', header=coll_headers)
             
             sim.collision_resolve = 'merge'
         
@@ -123,7 +129,8 @@ for j in range(len(b)):             # loop through each impact parameter
                                vimp))
         
         df = pd.DataFrame(particles)
-        # write to csv with impactor size and impact parameter in title - round values to avoid long file names
-        df.to_csv(f'./results/{sim_name}_{np.round(simp[i]/1e3, 1)}_{np.round(b[j], 1)}.csv', header=headers)
+        
+        # df.to_csv(f'./results/{sim_name}_{np.round(simp[i]/1e3, 1)}_{np.round(b[j], 1)}.csv', header=headers)
+        df.to_csv(f'./results/{sim_name}_{starting_position}.csv', header=headers)
             
 print(timed()-timer) # finish timer
