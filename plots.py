@@ -10,7 +10,7 @@ au = 1.496e11
 rsun = 44.*au
 Msun = 1.9891e30
 
-sim_name = 'single_random_test'
+sim_name = 'eccentricity_random_two'
 filenames = glob(f'./results/{sim_name}*')
 
 b_all = np.zeros(len(filenames))
@@ -71,8 +71,7 @@ for i, sim in enumerate(filenames):
     
     e_final[i] = e_movingavg[-1]
     
-    
-# %%
+
 b_all = b_all*Rhill[0]
 simp_all = simp_all/1e3
 
@@ -99,15 +98,15 @@ for i, collision in enumerate(collisions):
         coll_params[i] = params
     
 # %%
-fig, ax = plt.subplots(1, figsize=(7,7))
-s = 100
+fig, ax = plt.subplots(1, figsize=(9,9))
+s = 150
 ax.scatter(b_all, simp_all, s=1, marker="x", c="black")
-ax.scatter(b_all[bound[:,0]], simp_all[bound[:,0]], label='prim-sec', s=s, c="tab:blue")
-ax.scatter(b_all[bound[:,1]], simp_all[bound[:,1]], label='prim-imp', s=s, c="tab:orange")
-ax.scatter(b_all[bound[:,2]], simp_all[bound[:,2]], label='sec-imp', s=s, c="tab:green")
-ax.scatter(coll_params[coll_params[:,2] == 1][:,1], coll_params[coll_params[:,2] == 1][:,0], marker='x', s=s, c="tab:blue")
-ax.scatter(coll_params[coll_params[:,2] == 2][:,1], coll_params[coll_params[:,2] == 2][:,0], marker='x', s=s, c="tab:orange")
-ax.scatter(coll_params[coll_params[:,2] == 3][:,1], coll_params[coll_params[:,2] == 3][:,0], marker='x', s=s, c="tab:green")
+ax.scatter(b_all[bound[:,0]], simp_all[bound[:,0]], label='prim-sec', s=s, c="tab:blue", edgecolors="black")
+ax.scatter(b_all[bound[:,1]], simp_all[bound[:,1]], label='prim-imp', s=s, c="yellow", edgecolors="black")
+ax.scatter(b_all[bound[:,2]], simp_all[bound[:,2]], label='sec-imp', s=s, c="lime", edgecolors="black")
+ax.scatter(coll_params[coll_params[:,2] == 1][:,1], coll_params[coll_params[:,2] == 1][:,0], marker='X', s=s, c="tab:blue", edgecolors="black")
+ax.scatter(coll_params[coll_params[:,2] == 2][:,1], coll_params[coll_params[:,2] == 2][:,0], marker='X', s=s, c="yellow", edgecolors="black")
+ax.scatter(coll_params[coll_params[:,2] == 3][:,1], coll_params[coll_params[:,2] == 3][:,0], marker='X', s=s, c="lime", edgecolors="black")
 ax.set_xlabel("Impact parameter (R$_H$)")
 ax.set_ylabel("Impactor radius (km)")
 # ax.set_title(f'initial semi-major axis = 0.4 R$_H$', y=1, pad=15, fontdict={'fontsize': 14})
@@ -122,9 +121,10 @@ number_of_bound = len(b_all[bound[:,0]])
 number_of_swapped = len(b_all[bound[:,1]]) + len(b_all[bound[:,2]])
 number_of_collisions = len(collisions)
 number_of_disrupted = total_space - (number_of_bound + number_of_swapped + number_of_collisions)
-
+fig, ax = plt.subplots(1, figsize=(10,10))
 plt.bar([1,2,3,4], [number_of_bound,number_of_swapped,number_of_disrupted,number_of_collisions])
 plt.xticks([1,2,3,4], ('bound', 'swapped', 'disrupted', 'collided'))
+plt.savefig(f"./img/{sim_name}_dist.png", bbox_inches='tight')
 # %%
 
 data = {'bound':  number_of_bound,

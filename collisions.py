@@ -4,8 +4,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from glob import glob
-
-sim_name = 'verywide_equalmass_ecc0'
+# %%
+sim_name = 'single_random_test_2nd'
 r = '100.0'
 b = '2.8'
 
@@ -52,13 +52,16 @@ escape_speed = np.sqrt(2*g*m/radius)     # escape speed for each body
 fragmentation = collision_speed > escape_speed        # collision causes fragmentation if speed greater than escape speed
 fragmentation = q_r > gravitational_binding_energy
 # %%
-sim_name = 'wide_equalmass_ecc0'
-collisions = glob(f'./results/collision_{sim_name}_*')
+sim_name = 'eccentricity_random_two'
+collisions = glob(f'./results/collision_{sim_name}*')
 # collisions = glob(f'./rebound/mastersproject/binaries/results/collision_*')
 fragmentation = np.zeros((len(collisions), 2))
 impact_param = []
 simp_all = []
 dv_all = np.zeros(len(collisions))
+collision_speed_all = np.zeros(len(collisions))
+b_all = np.zeros(len(collisions))
+theta_all = np.zeros(len(collisions))
 for i, collision in enumerate(collisions):
     coll_data = pd.read_csv(collision)
     # coll_data = np.loadtxt(collision)
@@ -84,13 +87,14 @@ for i, collision in enumerate(collisions):
     position_unit_vector = position_vector/dr
     
     collision_speed = -np.dot(velocity_vector, position_unit_vector)
-    dv_all[i] = collision_speed
+    dv_all[i] = dv
+    collision_speed_all[i] = collision_speed
     
     n = velocity_vector/collision_speed
     
     B = np.linalg.norm(position_vector-np.dot(position_vector,n)*n)
     theta = np.arcsin(B/dr)
-    # theta = np.rad2deg(theta)
+    theta_deg = np.rad2deg(theta)
     
     M_tot = m[0]+m[1]
     mu = m[0]*m[1]/M_tot
@@ -100,37 +104,34 @@ for i, collision in enumerate(collisions):
     
     b = B/dr
     
+    b_all[i] = b
+    theta_all[i] = theta_deg
+    
     b_crit = np.amax(radius)/dr
     
     escape_speed = np.sqrt(2*g*m/radius)     # escape speed for each body
-    fragmentation[i] = collision_speed > escape_speed     # collision causes fragmentation if speed greater than escape speed
-    fragmentation[i] = q_r > gravitational_binding_energy
+    fragmentation[i] = collision_speed / escape_speed     # collision causes fragmentation if speed greater than escape speed
+    # fragmentation[i] = q_r > gravitational_binding_energy
     
-    simp_all.append(re.findall("\d+\.\d+", collision)[0])
-    impact_param.append(re.findall("\d+\.\d+", collision)[1])
+    # simp_all.append(re.findall("\d+\.\d+", collision)[0])
+    # impact_param.append(re.findall("\d+\.\d+", collision)[1])
     
-    print(collision_speed, re.findall("\d+\.\d+", collision))
-    
+    # print(collision_speed, re.findall("\d+\.\d+", collision))
+# %%
 bins = 20
 
 fig, ax = plt.subplots(1, figsize=(9,6))
 sns.distplot(dv_all, bins=bins, kde=False)
-ax.set_title(r'a = 0.2 R${_h}$')
-ax.set_xlim()
+# ax.set_title(r'a = 0.4 R${_h}$')
+# ax.set_xlim(0,1)
 ax.set_xlabel('collision speed [m/s]')
-plt.savefig(f"./img/collision_dist_wide.png", bbox_inches='tight')
+plt.savefig(f"./img/collision_{sim_name}.png", bbox_inches='tight')
 # %%
 fig, ax = plt.subplots(1, figsize=(11,8))
-sns.distplot(impact_param, bins=bins)
+sns.distplot(theta_all, bins=bins, kde=False)
 ax.set_xlim()
-ax.set_xlabel('impact parameter [m/s]')
-# plt.savefig(f"./img/collision_dist.png", bbox_inches='tight')
-
-fig, ax = plt.subplots(1, figsize=(11,8))
-sns.distplot(simp_all, bins=bins)
-ax.set_xlim()
-ax.set_xlabel('impactor radius [km]')
-# plt.savefig(f"./img/collision_dist.png", bbox_inches='tight')
+ax.set_xlabel('impact angle')
+plt.savefig(f"./img/angle_{sim_name}.png", bbox_inches='tight')
 
 # %%
 data = pd.read_csv(f'./results/{sim_name}_b-{b}_r-{r}.csv')

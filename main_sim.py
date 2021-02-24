@@ -20,7 +20,7 @@ e = 0
 
 t = 2.*np.pi/np.sqrt(g*msun/rsun**3)         # orbital period of binary around the sun
 totaltime = t*2
-noutputs = 1000             # number of outputs for plotting
+noutputs = 5000             # number of outputs for plotting
 times = np.linspace(0,totaltime, noutputs) # create times for integrations
 p, s, imp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3))
 vp, vs, vimp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3))
@@ -33,12 +33,12 @@ headers = ['time','b',
 
 coll_headers = ['time','body','r','m','x','y','z','vx','vy','vz']
 
-sim_name = "single_random_test"
+sim_name = "eccentricity_random_test"
 
 # simp = np.arange(50e3,210e3,10e3) # create range of impactor sizes to loop through
 # b = np.arange(2,4.1,0.2) # create range of impact parameters to loop through
 
-simp = np.ones(10)*100e3
+simp = np.ones(5)*100e3
 b = np.ones(1)*2.5
 
 
@@ -51,14 +51,16 @@ for j in range(len(b)):             # loop through each impact parameter
         mimp = 4./3.*np.pi*dens*simp[i]**3   # mass of impactor
         theta = 0.0015  # true anomaly of impactor
         
-        starting_position = np.round(np.random.uniform()*2*np.pi, 4)
+        starting_position = np.random.uniform()*2*np.pi
+        omega = np.random.uniform()*2*np.pi
+        e = np.random.uniform()*0.9
         
         def setupSimulation():
             sim = rebound.Simulation()              # initialize rebound simulation
             sim.G = g                               # set G which sets units of integrator - SI in this case
             sim.collision = 'direct'
             sim.add(m=m1, r=s1, hash="primary")
-            sim.add(m=m2, r=s2, a=a, e=e, f=starting_position, hash="secondary")
+            sim.add(m=m2, r=s2, a=a, e=e, omega=omega, f=starting_position, hash="secondary")
             sim.add(m=msun, a=rsun, f=np.pi, hash="sun")
             sim.move_to_com()
             sim.add(m=mimp, r=simp[i], a=rsun+bhill, f=theta, hash="impactor")
@@ -91,7 +93,7 @@ for j in range(len(b)):             # loop through each impact parameter
             collided = np.array(collided) 
             df_coll = pd.DataFrame(collided)
             # df_coll.to_csv(f'./results/collision_{sim_name}_{np.round(simp[i]/1e3, 1)}_{np.round(b[j], 1)}.csv', header=coll_headers)
-            df_coll.to_csv(f'./results/collision_{sim_name}_{starting_position}.csv', header=coll_headers)
+            df_coll.to_csv(f'./results/collision_{sim_name}_{i}.csv', header=coll_headers)
             
             sim.collision_resolve = 'merge'
         
@@ -131,6 +133,6 @@ for j in range(len(b)):             # loop through each impact parameter
         df = pd.DataFrame(particles)
         
         # df.to_csv(f'./results/{sim_name}_{np.round(simp[i]/1e3, 1)}_{np.round(b[j], 1)}.csv', header=headers)
-        df.to_csv(f'./results/{sim_name}_{starting_position}.csv', header=headers)
+        df.to_csv(f'./results/{sim_name}_{i}.csv', header=headers)
             
 print(timed()-timer) # finish timer

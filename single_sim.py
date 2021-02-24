@@ -1,4 +1,3 @@
-# %%
 import numpy as np
 import rebound
 import matplotlib.pyplot as plt
@@ -21,11 +20,11 @@ m1 = 4./3.*np.pi*dens*s1**3                # mass of primary calculated from den
 m2 = 4./3.*np.pi*dens*s2**3                # mass of secondary calculated from density and radius
 rhill = rsun*(m1/msun/3.)**(1./3.)        # Hill radius of primary
 
-a0 = 0.4*rhill                            # separation of binary
-e0 = 0
+a = 0.4*rhill                            # separation of binary
+e = 0
 i = np.deg2rad(0)
 
-pbin = 2.*np.pi/np.sqrt(g*(m1+m2)/a0**3)            # orbital period of binary around the sun
+pbin = 2.*np.pi/np.sqrt(g*(m1+m2)/a**3)            # orbital period of binary around the sun
 t = 2.*np.pi/np.sqrt(g*msun/rsun**3)            # orbital period of binary around the sun
 noutputs = 1000             # number of outputs
 p, s, imp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3)) # position
@@ -34,20 +33,27 @@ totaltime = t*1.5
 times = np.linspace(0,totaltime, noutputs) # create times for integrations
 
 f = np.linspace(0,np.pi,100)
+f = 0
+omega = 0
 
-bound_all = np.zeros((len(f), 3))
+# bound_all = np.zeros((len(f), 3))
 
 timer = timed() # start timer to time simulations
 collision_totals = 0
 
-for j in range(1):
+e_movingavg_total = []
+a_total = []
+
+number_of_encounters = 50
+
+for j in range(number_of_encounters):
     print(j)
     collision = False
     # simp = rndm(10, 200, g=-1.6, size=1)*1e3 # impactor radius
     simp = 100e3
     # print(simp)
-    # b = np.random.uniform(2,8)
-    b0 = 2.5
+    b0 = np.random.uniform(2,8)
+    # b0 = 2.5
     bhill = b0*rhill # impact parameter
     mimp = 4./3.*np.pi*dens*simp**3   # mass of impactor
     theta = 0.0015  # true anomaly of impactor
@@ -57,7 +63,8 @@ for j in range(1):
         sim.G = g                               # set G which sets units of integrator - SI in this case
         sim.collision = 'direct'
         sim.add(m=m1, r=s1, hash="primary")
-        sim.add(m=m2, r=s2, a=a0, e=e0, f=np.random.uniform()*2*np.pi, hash="secondary")
+        # sim.add(m=m2, r=s2, a=a0, e=e0, f=np.random.uniform()*2*np.pi, hash="secondary")
+        sim.add(m=m2, r=s2, a=a, e=e, omega=omega, f=f, hash="secondary")
         sim.add(m=msun, a=rsun, f=np.pi, hash="sun")
         sim.move_to_com()
         sim.add(m=mimp, r=simp, a=rsun+bhill, f=theta, hash="impactor")
@@ -101,6 +108,12 @@ for j in range(1):
             if all_ps[3] in existing_ps:
                 imp[k] = [ps["impactor"].x, ps["impactor"].y, ps["impactor"].z]
                 vimp[k] = [ps["impactor"].vx, ps["impactor"].vy, ps["impactor"].vz]
+                
+    orbit = sim.particles[1].calculate_orbit(sim.particles[0])
+    a = orbit.a
+    e = orbit.e
+    omega = orbit.omega
+    f = orbit.f
     
     R, V, mu, h = np.zeros((noutputs,3)), np.zeros((noutputs,3)), np.zeros((noutputs,3)), np.zeros((noutputs,3))
     R[:,0] = np.linalg.norm(p-s, axis=1)
@@ -119,13 +132,15 @@ for j in range(1):
     Rhill = np.array([rsun*(m1/msun/3.)**(1./3.), rsun*(m2/msun/3.)**(1./3.), rsun*(mimp/msun/3.)**(1./3.)])
     Rhill_largest = np.array([np.amax([Rhill[0], Rhill[1]]), np.amax([Rhill[0], Rhill[2]]), np.amax([Rhill[1], Rhill[2]])])
     
-    a = mu*R/(2*mu - R*V**2)
-    energy = -mu/2/a
-    e = np.sqrt(1 + (2*energy*h**2 / mu**2))
-    e_movingavg = [np.mean(e[ii-100:ii,0]) for ii in range(noutputs)]
+    a_final = mu*R/(2*mu - R*V**2)
+    energy = -mu/2/a_final
+    e_final = np.sqrt(1 + (2*energy*h**2 / mu**2))[:,0]
+    # e_movingavg = [np.mean(e_final[ii-100:ii,0]) for ii in range(noutputs)]
+    e_movingavg_total.append(e_final)
+    a_total.append(a_final[:,0])
     
     bound = np.logical_and(np.logical_and(energy < 0, np.isfinite(energy)), R < Rhill_largest)[-1]    
-    bound_all[j] = bound
+    # bound_all[j] = bound
     
     omegak = np.sqrt(g*msun/rsun**3)
     angles = -omegak*times
@@ -143,8 +158,78 @@ for j in range(1):
     sinsx, sinsy = np.sin(angles)*sref[:,0], np.sin(angles)*sref[:,1]
     sinix, siniy = np.sin(angles)*impref[:,0], np.sin(angles)*impref[:,1]
 
-print(timed()-timer) # finish timer
+# print(timed()-timer) # finish timer
+   
+# %%
+    lim = 5
+    fig, axes = plt.subplots(1, figsize=(9, 9))
+    axes.set_xlabel("$x/R_\mathrm{H}$")
+    axes.set_ylabel("$y/R_\mathrm{H}$")
+    axes.set_ylim(-lim,lim)
+    axes.set_xlim(-lim,lim)
+    
+    i = -1 
+    
+    color1 = "teal"
+    color2 = "hotpink"
+    color3 = "sienna"
+    
+    Rhillprim = rsun*(m1/msun/3.)**(1./3.)/rhill
+    Rhillsec = rsun*(m2/msun/3.)**(1./3.)/rhill
+    Rhillimp = rsun*(mimp/msun/3.)**(1./3.)/rhill
+    # axes.grid()
+    primaryhill = plt.Circle((cospx[i]-sinpy[i], sinpx[i]+cospy[i]), Rhillprim, fc="none", ec=color1, zorder=100)
+    axes.add_artist(primaryhill)
+    secondaryhill = plt.Circle((cossx[i]-sinsy[i], sinsx[i]+cossy[i]), Rhillsec, fc="none", ec=color2)
+    axes.add_artist(secondaryhill)
+    impactorhill = plt.Circle((cosix[i]-siniy[i], sinix[i]+cosiy[i]), Rhillimp, fc="none", ec=color3)
+    axes.add_artist(impactorhill)
+    lw = 1.5
+    ms = 8
+    axes.plot(cospx[0:i]-sinpy[0:i], sinpx[0:i]+cospy[0:i], c=color1, lw=lw)
+    axes.plot(cossx[0:i]-sinsy[0:i], sinsx[0:i]+cossy[0:i], c=color2, lw=lw)
+    axes.plot(cosix[0:i]-siniy[0:i], sinix[0:i]+cosiy[0:i], c=color3, lw=lw)
+    axes.grid()
+    axes.plot(cospx[i]-sinpy[i], sinpx[i]+cospy[i], c=color1, marker='o', ms=ms, label="primary")
+    axes.plot(cossx[i]-sinsy[i], sinsx[i]+cossy[i], c=color2, marker='o', ms=ms, label="secondary")
+    axes.plot(cosix[i]-siniy[i], sinix[i]+cosiy[i], c=color3, marker='o', ms=ms, label="impactor")
+    # axes.text(-4.5, -4.5, 't = {} Years'.format(int(times[i]/(year))), fontsize=12)
+    
+    axes.legend()
+    # fig.savefig(f'./img/changes_test_{j}.png', bbox_inches='tight')
+# %%
+e_movingavg_total = np.array(e_movingavg_total).flatten()
 
+e_movingavg_final = [np.mean(e_movingavg_total[ii-500:ii]) for ii in range(len(e_movingavg_total))]
+
+x_ticks = np.linspace(0,number_of_encounters, number_of_encounters*1000)
+fig, axes = plt.subplots(1, figsize=(15,8))
+axes.plot(x_ticks, e_movingavg_total, lw=1, color="lightskyblue")
+axes.plot(x_ticks, e_movingavg_final, lw=1, color="red", label="moving average over two orbits")
+# axes.set_ylim(0,1)
+axes.set_xlim(0,number_of_encounters)
+axes.set_ylabel("eccentricity")
+axes.set_xlabel("cumulative encounters")
+axes.set_title(f'a = 0.2 R$_H$', y=1, pad=15, fontdict={'fontsize': 14})
+axes.grid()
+axes.legend()
+
+# fig.savefig(f'./img/eccentricity_many_encounters_wide3.pdf', bbox_inches='tight')
+# %%
+a_total = np.array(a_total).flatten()
+
+x_ticks = np.linspace(0,number_of_encounters, number_of_encounters*1000)
+fig, axes = plt.subplots(1, figsize=(15,8))
+axes.plot(x_ticks, a_total/rhill, lw=1, color="lightskyblue")
+# axes.set_ylim(0,10)
+axes.set_xlim(0,number_of_encounters)
+axes.set_ylabel("semi-major axis")
+axes.set_xlabel("cumulative encounters")
+axes.set_title(f'a = 0.2 R$_H$', y=1, pad=15, fontdict={'fontsize': 14})
+axes.grid()
+
+# fig.savefig(f'./img/a_many_encounters_wide3.pdf', bbox_inches='tight')
+# %%
 lim = 10
 color1 = "teal"
 color2 = "hotpink"
@@ -200,43 +285,7 @@ plt.rcParams['animation.ffmpeg_path'] = '/usr/bin/ffmpeg'
 f = f'videos/ps_animation_3.mp4' 
 writervideo = FFMpegWriter(fps=100) # ffmpeg must be installed
 anim.save(f, writer=writervideo)
-# %%
-lim = 10
-fig, axes = plt.subplots(1, figsize=(9, 9))
-axes.set_xlabel("$x/R_\mathrm{H}$")
-axes.set_ylabel("$y/R_\mathrm{H}$")
-axes.set_ylim(-lim,lim)
-axes.set_xlim(-lim,lim)
 
-i = -1 
-
-color1 = "teal"
-color2 = "hotpink"
-color3 = "sienna"
-
-Rhillprim = rsun*(m1/msun/3.)**(1./3.)/rhill
-Rhillsec = rsun*(m2/msun/3.)**(1./3.)/rhill
-Rhillimp = rsun*(mimp/msun/3.)**(1./3.)/rhill
-# axes.grid()
-primaryhill = plt.Circle((cospx[i]-sinpy[i], sinpx[i]+cospy[i]), Rhillprim, fc="none", ec=color1, zorder=100)
-axes.add_artist(primaryhill)
-secondaryhill = plt.Circle((cossx[i]-sinsy[i], sinsx[i]+cossy[i]), Rhillsec, fc="none", ec=color2)
-axes.add_artist(secondaryhill)
-impactorhill = plt.Circle((cosix[i]-siniy[i], sinix[i]+cosiy[i]), Rhillimp, fc="none", ec=color3)
-axes.add_artist(impactorhill)
-lw = 1.5
-ms = 8
-axes.plot(cospx[0:i]-sinpy[0:i], sinpx[0:i]+cospy[0:i], c=color1, lw=lw)
-axes.plot(cossx[0:i]-sinsy[0:i], sinsx[0:i]+cossy[0:i], c=color2, lw=lw)
-axes.plot(cosix[0:i]-siniy[0:i], sinix[0:i]+cosiy[0:i], c=color3, lw=lw)
-axes.grid()
-axes.plot(cospx[i]-sinpy[i], sinpx[i]+cospy[i], c=color1, marker='o', ms=ms, label="primary")
-axes.plot(cossx[i]-sinsy[i], sinsx[i]+cossy[i], c=color2, marker='o', ms=ms, label="secondary")
-axes.plot(cosix[i]-siniy[i], sinix[i]+cosiy[i], c=color3, marker='o', ms=ms, label="impactor")
-# axes.text(-4.5, -4.5, 't = {} Years'.format(int(times[i]/(year))), fontsize=12)
-
-axes.legend()
-# fig.savefig(f'./img/changes_test_{j}.png', bbox_inches='tight')
 # %%
 # sp = (s-p)/rhill         # difference between positions of secondary and primary
 # ip = (imp-p)/rhill       # difference between positions of impactor and primary
