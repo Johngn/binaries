@@ -1,6 +1,8 @@
 import numpy as np
 import rebound
 import matplotlib.pyplot as plt
+import matplotlib as matplotlib
+matplotlib.rcParams.update({'figure.max_open_warning': 0})
 import mpl_toolkits.mplot3d.axes3d as p3
 from powerlaw import rndm
 from scipy.stats import powerlaw
@@ -22,41 +24,48 @@ rhill = rsun*(m1/msun/3.)**(1./3.)        # Hill radius of primary
 
 a = 0.4*rhill                            # separation of binary
 e = 0
-i = np.deg2rad(0)
+inc = np.deg2rad(0)
 
 pbin = 2.*np.pi/np.sqrt(g*(m1+m2)/a**3)            # orbital period of binary around the sun
 t = 2.*np.pi/np.sqrt(g*msun/rsun**3)            # orbital period of binary around the sun
 noutputs = 1000             # number of outputs
 p, s, imp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3)) # position
 vp, vs, vimp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3)) # velocity
-totaltime = t*1.5
+totaltime = t*0.2
 times = np.linspace(0,totaltime, noutputs) # create times for integrations
 
 f = np.linspace(0,np.pi,100)
 f = 0
 omega = 0
+Omega = 0
 
 # bound_all = np.zeros((len(f), 3))
 
 timer = timed() # start timer to time simulations
 collision_totals = 0
 
-e_movingavg_total = []
+e_total = []
 a_total = []
 
-number_of_encounters = 50
+n_encounters = 1
 
-for j in range(number_of_encounters):
+sim_name = "single_sim_ecc2_0"
+
+for j in range(n_encounters):
     print(j)
     collision = False
     # simp = rndm(10, 200, g=-1.6, size=1)*1e3 # impactor radius
-    simp = 100e3
+    # print(simp/1e3)
+    simp = 60e3
     # print(simp)
-    b0 = np.random.uniform(2,8)
-    # b0 = 2.5
+    # b0 = np.random.uniform(-8,8)
+    b0 = 3
     bhill = b0*rhill # impact parameter
     mimp = 4./3.*np.pi*dens*simp**3   # mass of impactor
-    theta = 0.0015  # true anomaly of impactor
+    if b0 > 0:
+        theta = 0.0006  # true anomaly of impactor
+    else:
+        theta = -0.001
     
     def setupSimulation():
         sim = rebound.Simulation()              # initialize rebound simulation
@@ -64,7 +73,7 @@ for j in range(number_of_encounters):
         sim.collision = 'direct'
         sim.add(m=m1, r=s1, hash="primary")
         # sim.add(m=m2, r=s2, a=a0, e=e0, f=np.random.uniform()*2*np.pi, hash="secondary")
-        sim.add(m=m2, r=s2, a=a, e=e, omega=omega, f=f, hash="secondary")
+        sim.add(m=m2, r=s2, a=a, e=e, omega=omega, f=f, inc=inc, Omega=Omega, hash="secondary")
         sim.add(m=msun, a=rsun, f=np.pi, hash="sun")
         sim.move_to_com()
         sim.add(m=mimp, r=simp, a=rsun+bhill, f=theta, hash="impactor")
@@ -77,6 +86,7 @@ for j in range(number_of_encounters):
     
     try:
         for k, time in enumerate(times):
+            # print(k)
             sim.integrate(time)
             p[k] = [ps["primary"].x, ps["primary"].y, ps["primary"].z]
             s[k] = [ps["secondary"].x, ps["secondary"].y, ps["secondary"].z]
@@ -92,7 +102,10 @@ for j in range(number_of_encounters):
         for item in sim.particles:
             if item.lastcollision == sim.t:
                 collided.append([sim.t, item.index, item.r, item.m, item.x, item.y, item.z, item.vx, item.vy, item.vz])
-        collided = np.array(collided) 
+        collided = np.array(collided)
+        
+        if(np.array_equal(collided[:,1], [0,1])):
+            print("binary collided")
         
         sim.collision_resolve = 'merge'
     
@@ -108,6 +121,10 @@ for j in range(number_of_encounters):
             if all_ps[3] in existing_ps:
                 imp[k] = [ps["impactor"].x, ps["impactor"].y, ps["impactor"].z]
                 vimp[k] = [ps["impactor"].vx, ps["impactor"].vy, ps["impactor"].vz]
+                
+            
+        m1 = sim.particles[0].m
+        m1 = sim.particles[1].m
                 
     orbit = sim.particles[1].calculate_orbit(sim.particles[0])
     a = orbit.a
@@ -135,8 +152,8 @@ for j in range(number_of_encounters):
     a_final = mu*R/(2*mu - R*V**2)
     energy = -mu/2/a_final
     e_final = np.sqrt(1 + (2*energy*h**2 / mu**2))[:,0]
-    # e_movingavg = [np.mean(e_final[ii-100:ii,0]) for ii in range(noutputs)]
-    e_movingavg_total.append(e_final)
+    
+    e_total.append(e_final)
     a_total.append(a_final[:,0])
     
     bound = np.logical_and(np.logical_and(energy < 0, np.isfinite(energy)), R < Rhill_largest)[-1]    
@@ -158,17 +175,27 @@ for j in range(number_of_encounters):
     sinsx, sinsy = np.sin(angles)*sref[:,0], np.sin(angles)*sref[:,1]
     sinix, siniy = np.sin(angles)*impref[:,0], np.sin(angles)*impref[:,1]
 
+# e_total = np.array(e_total).flatten()
+# a_total = np.array(a_total).flatten()/rhill
+
+# e_total = np.reshape(e_total, (noutputs*n_encounters, 1))
+# a_total = np.reshape(a_total, (noutputs*n_encounters, 1))
+
+# save_data = np.hstack((e_total, a_total))
+
+# # np.savetxt(f"{sim_name}", save_data)
+
 # print(timed()-timer) # finish timer
-   
-# %%
-    lim = 5
-    fig, axes = plt.subplots(1, figsize=(9, 9))
+    
+
+    lim = 6
+    fig, axes = plt.subplots(1, figsize=(6, 6))
     axes.set_xlabel("$x/R_\mathrm{H}$")
     axes.set_ylabel("$y/R_\mathrm{H}$")
     axes.set_ylim(-lim,lim)
     axes.set_xlim(-lim,lim)
     
-    i = -1 
+    i = -200
     
     color1 = "teal"
     color2 = "hotpink"
@@ -189,46 +216,15 @@ for j in range(number_of_encounters):
     axes.plot(cospx[0:i]-sinpy[0:i], sinpx[0:i]+cospy[0:i], c=color1, lw=lw)
     axes.plot(cossx[0:i]-sinsy[0:i], sinsx[0:i]+cossy[0:i], c=color2, lw=lw)
     axes.plot(cosix[0:i]-siniy[0:i], sinix[0:i]+cosiy[0:i], c=color3, lw=lw)
-    axes.grid()
     axes.plot(cospx[i]-sinpy[i], sinpx[i]+cospy[i], c=color1, marker='o', ms=ms, label="primary")
     axes.plot(cossx[i]-sinsy[i], sinsx[i]+cossy[i], c=color2, marker='o', ms=ms, label="secondary")
     axes.plot(cosix[i]-siniy[i], sinix[i]+cosiy[i], c=color3, marker='o', ms=ms, label="impactor")
     # axes.text(-4.5, -4.5, 't = {} Years'.format(int(times[i]/(year))), fontsize=12)
     
+    axes.grid()
     axes.legend()
-    # fig.savefig(f'./img/changes_test_{j}.png', bbox_inches='tight')
-# %%
-e_movingavg_total = np.array(e_movingavg_total).flatten()
+    fig.savefig(f'./img/setup_example.pdf', bbox_inches='tight')
 
-e_movingavg_final = [np.mean(e_movingavg_total[ii-500:ii]) for ii in range(len(e_movingavg_total))]
-
-x_ticks = np.linspace(0,number_of_encounters, number_of_encounters*1000)
-fig, axes = plt.subplots(1, figsize=(15,8))
-axes.plot(x_ticks, e_movingavg_total, lw=1, color="lightskyblue")
-axes.plot(x_ticks, e_movingavg_final, lw=1, color="red", label="moving average over two orbits")
-# axes.set_ylim(0,1)
-axes.set_xlim(0,number_of_encounters)
-axes.set_ylabel("eccentricity")
-axes.set_xlabel("cumulative encounters")
-axes.set_title(f'a = 0.2 R$_H$', y=1, pad=15, fontdict={'fontsize': 14})
-axes.grid()
-axes.legend()
-
-# fig.savefig(f'./img/eccentricity_many_encounters_wide3.pdf', bbox_inches='tight')
-# %%
-a_total = np.array(a_total).flatten()
-
-x_ticks = np.linspace(0,number_of_encounters, number_of_encounters*1000)
-fig, axes = plt.subplots(1, figsize=(15,8))
-axes.plot(x_ticks, a_total/rhill, lw=1, color="lightskyblue")
-# axes.set_ylim(0,10)
-axes.set_xlim(0,number_of_encounters)
-axes.set_ylabel("semi-major axis")
-axes.set_xlabel("cumulative encounters")
-axes.set_title(f'a = 0.2 R$_H$', y=1, pad=15, fontdict={'fontsize': 14})
-axes.grid()
-
-# fig.savefig(f'./img/a_many_encounters_wide3.pdf', bbox_inches='tight')
 # %%
 lim = 10
 color1 = "teal"
