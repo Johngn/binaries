@@ -22,8 +22,8 @@ m1 = 4./3.*np.pi*dens*s1**3                # mass of primary calculated from den
 m2 = 4./3.*np.pi*dens*s2**3                # mass of secondary calculated from density and radius
 rhill = rsun*(m1/msun/3.)**(1./3.)        # Hill radius of primary
 
-a = 0.4*rhill                            # separation of binary
-e = 0
+a = 0.2*rhill                            # separation of binary
+e = 0.2
 inc = np.deg2rad(0)
 
 pbin = 2.*np.pi/np.sqrt(g*(m1+m2)/a**3)            # orbital period of binary around the sun
@@ -31,15 +31,12 @@ t = 2.*np.pi/np.sqrt(g*msun/rsun**3)            # orbital period of binary aroun
 noutputs = 1000             # number of outputs
 p, s, imp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3)) # position
 vp, vs, vimp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3)) # velocity
-totaltime = t*0.2
+totaltime = t*2
 times = np.linspace(0,totaltime, noutputs) # create times for integrations
 
-f = np.linspace(0,np.pi,100)
 f = 0
 omega = 0
 Omega = 0
-
-# bound_all = np.zeros((len(f), 3))
 
 timer = timed() # start timer to time simulations
 collision_totals = 0
@@ -47,32 +44,31 @@ collision_totals = 0
 e_total = []
 a_total = []
 
-n_encounters = 1
+n_encounters = 100
 
-sim_name = "single_sim_ecc2_0"
+sim_name = "single_sim_ecc2_5"
 
 for j in range(n_encounters):
     print(j)
     collision = False
-    # simp = rndm(10, 200, g=-1.6, size=1)*1e3 # impactor radius
+    simp = rndm(10, 200, g=-1.6, size=1)*1e3 # impactor radius
     # print(simp/1e3)
-    simp = 60e3
+    # simp = 60e3
     # print(simp)
-    # b0 = np.random.uniform(-8,8)
-    b0 = 3
+    b0 = np.random.uniform(-8,8)
+    # b0 = 3
     bhill = b0*rhill # impact parameter
     mimp = 4./3.*np.pi*dens*simp**3   # mass of impactor
     if b0 > 0:
-        theta = 0.0006  # true anomaly of impactor
+        theta = 0.0015  # true anomaly of impactor
     else:
-        theta = -0.001
+        theta = -0.0015
     
     def setupSimulation():
         sim = rebound.Simulation()              # initialize rebound simulation
         sim.G = g                               # set G which sets units of integrator - SI in this case
         sim.collision = 'direct'
         sim.add(m=m1, r=s1, hash="primary")
-        # sim.add(m=m2, r=s2, a=a0, e=e0, f=np.random.uniform()*2*np.pi, hash="secondary")
         sim.add(m=m2, r=s2, a=a, e=e, omega=omega, f=f, inc=inc, Omega=Omega, hash="secondary")
         sim.add(m=msun, a=rsun, f=np.pi, hash="sun")
         sim.move_to_com()
@@ -175,18 +171,18 @@ for j in range(n_encounters):
     sinsx, sinsy = np.sin(angles)*sref[:,0], np.sin(angles)*sref[:,1]
     sinix, siniy = np.sin(angles)*impref[:,0], np.sin(angles)*impref[:,1]
 
-# e_total = np.array(e_total).flatten()
-# a_total = np.array(a_total).flatten()/rhill
+e_total = np.array(e_total).flatten()
+a_total = np.array(a_total).flatten()/rhill
 
-# e_total = np.reshape(e_total, (noutputs*n_encounters, 1))
-# a_total = np.reshape(a_total, (noutputs*n_encounters, 1))
+e_total = np.reshape(e_total, (noutputs*n_encounters, 1))
+a_total = np.reshape(a_total, (noutputs*n_encounters, 1))
 
-# save_data = np.hstack((e_total, a_total))
+save_data = np.hstack((e_total, a_total))
 
-# # np.savetxt(f"{sim_name}", save_data)
+np.savetxt(f"./data/{sim_name}", save_data)
 
-# print(timed()-timer) # finish timer
-    
+print(timed()-timer) # finish timer
+# %%    
 
     lim = 6
     fig, axes = plt.subplots(1, figsize=(6, 6))
@@ -221,7 +217,7 @@ for j in range(n_encounters):
     axes.plot(cosix[i]-siniy[i], sinix[i]+cosiy[i], c=color3, marker='o', ms=ms, label="impactor")
     # axes.text(-4.5, -4.5, 't = {} Years'.format(int(times[i]/(year))), fontsize=12)
     
-    axes.grid()
+    # axes.grid()
     axes.legend()
     fig.savefig(f'./img/setup_example.pdf', bbox_inches='tight')
 

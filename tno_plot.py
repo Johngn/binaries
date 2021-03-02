@@ -1,17 +1,7 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Sat Aug 15 18:48:29 2020
-
-@author: John Gillan
-
-This takes all known Kuiper belt objects and makes a plot of semi-major axis vs inclination
-"""
-
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-# %%
+
 tnos = pd.read_table('./data/TNOs.txt', names='-', skiprows=1)
 tnos = tnos['-'] # each row is just one long string
 tnos1 = [item.split(' ') for i, item in enumerate(tnos)] # split into many strings
@@ -28,9 +18,16 @@ data_low = np.delete(data_low, (7,), axis=0).astype(float) # remove row with bad
 
 data_clean = np.vstack((data_high, data_low))
 
+resonant = np.logical_and(data_clean[:,2] > 39, data_clean[:,2] < 40.3)
+resonant_objs = data_clean[resonant]
+
 classical = np.logical_and(data_clean[:,2] > 41, data_clean[:,2] < 48.7) # select objects with range of 'a'
-cold = data_clean[:,0] < 5 # low inclination
-hot = data_clean[:,0] > 5 # high inclination
+low_ecc = data_clean[:,1] < 0.3
+low_inc = data_clean[:,0] < 37
+
+low_ecc_inc = np.logical_and(low_ecc, low_inc)
+cold = np.logical_and(data_clean[:,0] < 5, low_ecc_inc) # low inclination
+hot = np.logical_and(data_clean[:,0] > 5, low_ecc_inc) # high inclination
 
 cold_classical = np.logical_and(cold, classical)
 data_cold_classical = data_clean[cold_classical]
@@ -43,31 +40,38 @@ df.to_csv('./data/tnos_clean', index=None)
 # %%
 data_clean = pd.read_csv('./data/tnos_clean')
 
-fig, ax = plt.subplots(2, figsize=(7,7))
+fig, ax = plt.subplots(2, figsize=(8,8))
+fig.subplots_adjust(hspace=0)
 
-ax[0].scatter(data_clean['a'],data_clean['i'], s=7, alpha=0.7)
-ax[0].scatter(data_cold_classical[:,2],data_cold_classical[:,0], s=7, color='red', label='Cold-classical objects')
-ax[0].scatter(data_hot_classical[:,2],data_hot_classical[:,0], s=15)
-ax[0].scatter(39.482, 17.16, s=400, label='Pluto', color='indianred')
-ax[0].scatter(30.11, 1.77, s=400,  label='Neptune', color ='lightsteelblue')
-ax[0].set_ylim(0, 40)
-ax[0].set_xlim(35, 55)
-ax[0].set_yticks(np.arange(0,41,5))
-ax[0].axvline(44)
-ax[0].set_ylabel(r'Inclination [$^\circ$]')
-ax[0].set_xlabel('Semi-major axis [AU]')
+s = 25
+alpha = 1
 
-ax[1].scatter(data_clean['a'],data_clean['i'], s=7, alpha=0.7)
-ax[1].scatter(data_cold_classical[:,2],data_cold_classical[:,0], s=7, color='red', label='Cold-classical objects')
-ax[1].scatter(data_hot_classical[:,2],data_hot_classical[:,0], s=7)
-ax[1].scatter(30.11, 1.77, s=400,  label='Neptune', color ='lightsteelblue')
-ax[1].set_ylim(0, 40)
-ax[1].set_xlim(35, 55)
+ax[0].scatter(data_clean['a'],data_clean['e'], s=s, alpha=alpha, color="dimgray", edgecolors="black")
+ax[0].scatter(data_hot_classical[:,2],data_hot_classical[:,1], alpha=alpha, s=s, color='darkturquoise', label='Hot classicals', edgecolors='black')
+ax[0].scatter(data_cold_classical[:,2],data_cold_classical[:,1], alpha=alpha, s=s, color='red', label='Cold classicals', edgecolors='black')
+ax[0].scatter(resonant_objs[:,2],resonant_objs[:,1], alpha=alpha, s=s, color='limegreen', label='Plutinos', edgecolors='black')
+# ax[0].scatter(39.482, 0.2488, s=200, label='Pluto', color='darkorange', edgecolors='black')
+# ax[0].scatter(30.11, 0.008678, s=150,  label='Neptune', color='darkviolet', edgecolors='black')
+ax[0].set_ylim(0, 0.4)
+ax[0].set_xlim(35, 60)
+ax[0].set_xticks(np.arange(0))
+# ax[0].axvline(44)
+ax[0].set_ylabel(r'Eccentricity')
+# ax[0].set_xlabel('Semi-major axis [AU]')
+
+ax[1].scatter(data_clean['a'],data_clean['i'], s=s, alpha=alpha, color='dimgray', edgecolors='black')
+ax[1].scatter(data_cold_classical[:,2],data_cold_classical[:,0], s=s, alpha=alpha, color='red', edgecolors='black')
+ax[1].scatter(data_hot_classical[:,2],data_hot_classical[:,0], s=s, alpha=alpha, color='darkturquoise', edgecolors='black')
+ax[1].scatter(resonant_objs[:,2],resonant_objs[:,0], s=s, alpha=alpha, color='limegreen', edgecolors='black')
+# ax[1].scatter(39.482, 17.16, s=200, label='Pluto', color='darkorange', edgecolors='black')
+# ax[1].scatter(30.11, 1.77, s=150,  label='Neptune', color ='darkviolet', edgecolors='black')
+ax[1].set_ylim(0, 45)
+ax[1].set_xlim(35,60)
 ax[1].set_yticks(np.arange(0,41,5))
-ax[1].axvline(44)
+# ax[1].axvline(44)
 ax[1].set_ylabel(r'Inclination [$^\circ$]')
 ax[1].set_xlabel('Semi-major axis [AU]')
 # ax.grid()
-# ax.legend()
+ax[0].legend()
 
-# fig.savefig('./cckbos.pdf', bbox_inches='tight')
+fig.savefig('./img/cckbos.pdf', bbox_inches='tight')

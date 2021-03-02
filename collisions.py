@@ -4,7 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from glob import glob
-# %%
+
 sim_name = 'single_random_test_2nd'
 r = '100.0'
 b = '2.8'
@@ -53,7 +53,7 @@ fragmentation = collision_speed > escape_speed        # collision causes fragmen
 fragmentation = q_r > gravitational_binding_energy
 # %%
 sim_name = 'eccentricity_random_two'
-collisions = glob(f'./results/collision_{sim_name}*')
+collisions = glob(f'./results/collision_*')
 # collisions = glob(f'./rebound/mastersproject/binaries/results/collision_*')
 fragmentation = np.zeros((len(collisions), 2))
 impact_param = []
@@ -118,6 +118,11 @@ for i, collision in enumerate(collisions):
     
     # print(collision_speed, re.findall("\d+\.\d+", collision))
 # %%
+fig, ax = plt.subplots(1, figsize=(8,6))
+ax.scatter(dv_all, theta_all)
+ax.set_xlabel('Collision speed [m/s]')
+ax.set_ylabel(r'Impact angle [$^\circ$]')
+# %%
 bins = 20
 
 fig, ax = plt.subplots(1, figsize=(9,6))
@@ -125,13 +130,13 @@ sns.distplot(dv_all, bins=bins, kde=False)
 # ax.set_title(r'a = 0.4 R${_h}$')
 # ax.set_xlim(0,1)
 ax.set_xlabel('collision speed [m/s]')
-plt.savefig(f"./img/collision_{sim_name}.png", bbox_inches='tight')
+# plt.savefig(f"./img/collision_{sim_name}.png", bbox_inches='tight')
 # %%
 fig, ax = plt.subplots(1, figsize=(11,8))
 sns.distplot(theta_all, bins=bins, kde=False)
 ax.set_xlim()
 ax.set_xlabel('impact angle')
-plt.savefig(f"./img/angle_{sim_name}.png", bbox_inches='tight')
+# plt.savefig(f"./img/angle_{sim_name}.png", bbox_inches='tight')
 
 # %%
 data = pd.read_csv(f'./results/{sim_name}_b-{b}_r-{r}.csv')

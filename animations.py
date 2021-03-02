@@ -16,7 +16,7 @@ T = 2.*np.pi/np.sqrt(G*(Msun)/rsun**3)      # orbital period of binary around th
 n = 2*np.pi/T                               # mean motion of binary around the sun
 year = 365.25*24.*60.*60.                   # number of seconds in a year
 
-sim_name = 'eccentricity_random_test_2'
+sim_name = 'inclination_random_test_3'
 r = '170.0'
 b = '3.6'
 starting_position = 4.48353
@@ -96,7 +96,7 @@ sinsx, sinsy = np.sin(angles)*sref[:,0], np.sin(angles)*sref[:,1]       # sin of
 sinix, siniy = np.sin(angles)*impref[:,0], np.sin(angles)*impref[:,1]   # sin of reference angles times relative location of impactor
 
 '''2D ANIMATION OF OUTCOME OF SIMULATION'''
-lim = 2
+lim = 8
 
 color1 = "teal"
 color2 = "hotpink"
@@ -150,7 +150,7 @@ writervideo = FFMpegWriter(fps=10) # ffmpeg must be installed
 anim.save(f, writer=writervideo)
 # %%
 '''3D ANIMATION OF OUTCOME OF SIMULATION'''
-lim = 2
+lim = 1
 fig = plt.figure(figsize=(9,9))
 axes = fig.add_subplot(111, projection='3d')
 axes.set_xlabel("$x/R_\mathrm{h}$")
@@ -159,12 +159,12 @@ axes.set_zlabel("$z/R_\mathrm{h}$")
 axes.set_xlim3d([-lim, lim])
 axes.set_ylim3d([-lim, lim])
 axes.set_zlim3d([-lim, lim])
-primaryline, = axes.plot([], [], [], label="primary", c="tab:orange", lw=lw)
-secondaryline, = axes.plot([], [], [], label="secondary", c="tab:blue", lw=lw)
-impactorline, = axes.plot([], [], [], label="impactor", c="tab:green", lw=lw)
-primarydot, = axes.plot([], [], [], marker="o", ms=ms, c="tab:orange")
-secondarydot, = axes.plot([], [], [], marker="o", ms=ms, c="tab:blue")
-impactordot, = axes.plot([], [], [], marker="o", ms=ms, c="tab:green")
+primaryline, = axes.plot([], [], [], label="primary", c="teal", lw=lw)
+secondaryline, = axes.plot([], [], [], label="secondary", c="hotpink", lw=lw)
+impactorline, = axes.plot([], [], [], label="impactor", c="sienna", lw=lw)
+primarydot, = axes.plot([], [], [], marker="o", ms=ms, c="teal")
+secondarydot, = axes.plot([], [], [], marker="o", ms=ms, c="hotpink")
+impactordot, = axes.plot([], [], [], marker="o", ms=ms, c="sienna")
 text = axes.text(-lim+(lim/10), lim-(lim/10), lim-(lim/10), '', fontsize=15)
 axes.legend()
 
@@ -201,13 +201,13 @@ axes.add_artist(primaryhill)
 axes.add_artist(secondaryhill)
 axes.add_artist(impactorhill)
 
-axes.plot(cospx-sinpy, sinpx+cospy, label="primary", c="tab:orange", lw=1.5)
-axes.plot(cossx-sinsy, sinsx+cossy, label="secondary", c="tab:blue", lw=1.5)
-axes.plot(cosix-siniy, sinix+cosiy, label="impactor", c="tab:green", lw=1.5)
+axes.plot(cospx-sinpy, sinpx+cospy, label="primary", c="teal", lw=1.5)
+axes.plot(cossx-sinsy, sinsx+cossy, label="secondary", c="hotpink", lw=1.5)
+axes.plot(cosix-siniy, sinix+cosiy, label="impactor", c="sienna", lw=1.5)
 
-axes.plot(cospx[-1]-sinpy[-1], sinpx[-1]+cospy[-1], c="tab:orange", marker='o')
-axes.plot(cossx[-1]-sinsy[-1], sinsx[-1]+cossy[-1], c="tab:blue", marker='o')
-axes.plot(cosix[-1]-siniy[-1], sinix[-1]+cosiy[-1], c="tab:green", marker='o')
+axes.plot(cospx[-1]-sinpy[-1], sinpx[-1]+cospy[-1], c="teal", marker='o')
+axes.plot(cossx[-1]-sinsy[-1], sinsx[-1]+cossy[-1], c="hotpink", marker='o')
+axes.plot(cosix[-1]-siniy[-1], sinix[-1]+cosiy[-1], c="sienna", marker='o')
 axes.grid()
 axes.legend()
 # fig.savefig('./result5.pdf', bbox_inches='tight')

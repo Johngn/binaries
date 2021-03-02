@@ -15,12 +15,12 @@ m2 = 4./3.*np.pi*dens*s2**3                # mass of secondary calculated from d
 rsun = 44.*au                                  # distance of centre of mass of binary from the sun 
 rhill = rsun*(m1/msun/3.)**(1./3.)         # Hill radius of primary
 
-a = 0.4*rhill                            # separation of binary
+a = 0.2*rhill                            # separation of binary
 e = 0
 
 t = 2.*np.pi/np.sqrt(g*msun/rsun**3)         # orbital period of binary around the sun
 totaltime = t*2
-noutputs = 5000             # number of outputs for plotting
+noutputs = 1000             # number of outputs for plotting
 times = np.linspace(0,totaltime, noutputs) # create times for integrations
 p, s, imp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3))
 vp, vs, vimp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3))
@@ -33,7 +33,7 @@ headers = ['time','b',
 
 coll_headers = ['time','body','r','m','x','y','z','vx','vy','vz']
 
-sim_name = "eccentricity_random_test"
+sim_name = "inclination_random_test"
 
 # simp = np.arange(50e3,210e3,10e3) # create range of impactor sizes to loop through
 # b = np.arange(2,4.1,0.2) # create range of impact parameters to loop through
@@ -51,16 +51,18 @@ for j in range(len(b)):             # loop through each impact parameter
         mimp = 4./3.*np.pi*dens*simp[i]**3   # mass of impactor
         theta = 0.0015  # true anomaly of impactor
         
-        starting_position = np.random.uniform()*2*np.pi
+        e = np.random.uniform()*0.5
+        inc = np.random.uniform()*2*np.pi
+        f = np.random.uniform()*2*np.pi
         omega = np.random.uniform()*2*np.pi
-        e = np.random.uniform()*0.9
+        Omega = np.random.uniform()*2*np.pi
         
         def setupSimulation():
             sim = rebound.Simulation()              # initialize rebound simulation
             sim.G = g                               # set G which sets units of integrator - SI in this case
             sim.collision = 'direct'
             sim.add(m=m1, r=s1, hash="primary")
-            sim.add(m=m2, r=s2, a=a, e=e, omega=omega, f=starting_position, hash="secondary")
+            sim.add(m=m2, r=s2, a=a, e=e, inc=inc, omega=omega, Omega=Omega, f=f, hash="secondary")
             sim.add(m=msun, a=rsun, f=np.pi, hash="sun")
             sim.move_to_com()
             sim.add(m=mimp, r=simp[i], a=rsun+bhill, f=theta, hash="impactor")

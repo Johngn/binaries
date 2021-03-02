@@ -124,7 +124,7 @@ number_of_disrupted = total_space - (number_of_bound + number_of_swapped + numbe
 fig, ax = plt.subplots(1, figsize=(10,10))
 plt.bar([1,2,3,4], [number_of_bound,number_of_swapped,number_of_disrupted,number_of_collisions])
 plt.xticks([1,2,3,4], ('bound', 'swapped', 'disrupted', 'collided'))
-plt.savefig(f"./img/{sim_name}_dist.png", bbox_inches='tight')
+# plt.savefig(f"./img/{sim_name}_dist.png", bbox_inches='tight')
 # %%
 
 data = {'bound':  number_of_bound,
