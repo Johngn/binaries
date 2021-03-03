@@ -10,7 +10,7 @@ au = 1.496e11
 rsun = 44.*au
 Msun = 1.9891e30
 
-sim_name = 'eccentricity_random_two'
+sim_name = 'inc_random_one'
 filenames = glob(f'./results/{sim_name}*')
 
 b_all = np.zeros(len(filenames))

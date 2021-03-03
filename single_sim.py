@@ -23,8 +23,8 @@ m2 = 4./3.*np.pi*dens*s2**3                # mass of secondary calculated from d
 rhill = rsun*(m1/msun/3.)**(1./3.)        # Hill radius of primary
 
 a = 0.2*rhill                            # separation of binary
-e = 0.2
-inc = np.deg2rad(0)
+e = 0
+inc = np.deg2rad(45)
 
 pbin = 2.*np.pi/np.sqrt(g*(m1+m2)/a**3)            # orbital period of binary around the sun
 t = 2.*np.pi/np.sqrt(g*msun/rsun**3)            # orbital period of binary around the sun
@@ -41,22 +41,23 @@ Omega = 0
 timer = timed() # start timer to time simulations
 collision_totals = 0
 
-e_total = []
 a_total = []
+e_total = []
+inc_total = []
 
 n_encounters = 100
 
-sim_name = "single_sim_ecc2_5"
+sim_name = "single_sim_inc5_0"
 
 for j in range(n_encounters):
     print(j)
     collision = False
     simp = rndm(10, 200, g=-1.6, size=1)*1e3 # impactor radius
     # print(simp/1e3)
-    # simp = 60e3
+    # simp = 10e3
     # print(simp)
     b0 = np.random.uniform(-8,8)
-    # b0 = 3
+    # b0 = 3.5
     bhill = b0*rhill # impact parameter
     mimp = 4./3.*np.pi*dens*simp**3   # mass of impactor
     if b0 > 0:
@@ -125,19 +126,24 @@ for j in range(n_encounters):
     orbit = sim.particles[1].calculate_orbit(sim.particles[0])
     a = orbit.a
     e = orbit.e
+    inc = orbit.inc
+    Omega = orbit.Omega
     omega = orbit.omega
     f = orbit.f
     
-    R, V, mu, h = np.zeros((noutputs,3)), np.zeros((noutputs,3)), np.zeros((noutputs,3)), np.zeros((noutputs,3))
+    R, V, mu, hz, h_mag = np.zeros((noutputs,3)), np.zeros((noutputs,3)), np.zeros((noutputs,3)), np.zeros((noutputs,3)), np.zeros((noutputs,3))
     R[:,0] = np.linalg.norm(p-s, axis=1)
     R[:,1] = np.linalg.norm(p-imp, axis=1)
     R[:,2] = np.linalg.norm(s-imp, axis=1)
     V[:,0] = np.linalg.norm(vp-vs, axis=1)
     V[:,1] = np.linalg.norm(vp-vimp, axis=1)
     V[:,2] = np.linalg.norm(vs-vimp, axis=1)
-    h[:,0] = np.cross(p-s,vp-vs)[:,2]
-    h[:,1] = np.cross(p-imp,vp-vimp)[:,2]
-    h[:,2] = np.cross(s-imp,vs-vimp)[:,2]
+    hz[:,0] = np.cross(p-s,vp-vs)[:,2]
+    hz[:,1] = np.cross(p-imp,vp-vimp)[:,2]
+    hz[:,2] = np.cross(s-imp,vs-vimp)[:,2]
+    h_mag[:,0] = np.linalg.norm(np.cross(p-s,vp-vs), axis=1)
+    h_mag[:,1] = np.linalg.norm(np.cross(p-imp,vp-vimp), axis=1)
+    h_mag[:,2] = np.linalg.norm(np.cross(s-imp,vs-vimp), axis=1)
     mu[:,0] = g*(m1+m2)
     mu[:,1] = g*(m1+mimp)
     mu[:,2] = g*(m2+mimp)
@@ -147,13 +153,14 @@ for j in range(n_encounters):
     
     a_final = mu*R/(2*mu - R*V**2)
     energy = -mu/2/a_final
-    e_final = np.sqrt(1 + (2*energy*h**2 / mu**2))[:,0]
+    e_final = np.sqrt(1 + (2*energy*h_mag**2 / mu**2))
+    inc_final = np.arccos(hz/h_mag)
     
-    e_total.append(e_final)
+    e_total.append(e_final[:,0])
     a_total.append(a_final[:,0])
+    inc_total.append(inc_final[:,0])
     
-    bound = np.logical_and(np.logical_and(energy < 0, np.isfinite(energy)), R < Rhill_largest)[-1]    
-    # bound_all[j] = bound
+    bound = np.logical_and(np.logical_and(energy < 0, np.isfinite(energy)), R < Rhill_largest)[-1]
     
     omegak = np.sqrt(g*msun/rsun**3)
     angles = -omegak*times
@@ -170,56 +177,60 @@ for j in range(n_encounters):
     sinpx, sinpy = np.sin(angles)*pref[:,0], np.sin(angles)*pref[:,1]
     sinsx, sinsy = np.sin(angles)*sref[:,0], np.sin(angles)*sref[:,1]
     sinix, siniy = np.sin(angles)*impref[:,0], np.sin(angles)*impref[:,1]
+    
+    # lim = 6
+    # fig, axes = plt.subplots(1, figsize=(6, 6))
+    # axes.set_xlabel("$x/R_\mathrm{H}$")
+    # axes.set_ylabel("$y/R_\mathrm{H}$")
+    # axes.set_ylim(-lim,lim)
+    # axes.set_xlim(-lim,lim)
+    
+    # i = -200
+    
+    # color1 = "teal"
+    # color2 = "hotpink"
+    # color3 = "sienna"
+    
+    # Rhillprim = rsun*(m1/msun/3.)**(1./3.)/rhill
+    # Rhillsec = rsun*(m2/msun/3.)**(1./3.)/rhill
+    # Rhillimp = rsun*(mimp/msun/3.)**(1./3.)/rhill
+    # # axes.grid()
+    # primaryhill = plt.Circle((cospx[i]-sinpy[i], sinpx[i]+cospy[i]), Rhillprim, fc="none", ec=color1, zorder=100)
+    # axes.add_artist(primaryhill)
+    # secondaryhill = plt.Circle((cossx[i]-sinsy[i], sinsx[i]+cossy[i]), Rhillsec, fc="none", ec=color2)
+    # axes.add_artist(secondaryhill)
+    # impactorhill = plt.Circle((cosix[i]-siniy[i], sinix[i]+cosiy[i]), Rhillimp, fc="none", ec=color3)
+    # axes.add_artist(impactorhill)
+    # lw = 1.5
+    # ms = 8
+    # axes.plot(cospx[0:i]-sinpy[0:i], sinpx[0:i]+cospy[0:i], c=color1, lw=lw)
+    # axes.plot(cossx[0:i]-sinsy[0:i], sinsx[0:i]+cossy[0:i], c=color2, lw=lw)
+    # axes.plot(cosix[0:i]-siniy[0:i], sinix[0:i]+cosiy[0:i], c=color3, lw=lw)
+    # axes.plot(cospx[i]-sinpy[i], sinpx[i]+cospy[i], c=color1, marker='o', ms=ms, label="primary")
+    # axes.plot(cossx[i]-sinsy[i], sinsx[i]+cossy[i], c=color2, marker='o', ms=ms, label="secondary")
+    # axes.plot(cosix[i]-siniy[i], sinix[i]+cosiy[i], c=color3, marker='o', ms=ms, label="impactor")
+    # # axes.text(-4.5, -4.5, 't = {} Years'.format(int(times[i]/(year))), fontsize=12)
+    
+    # # axes.grid()
+    # axes.legend()
+    # # fig.savefig(f'./img/setup_example.pdf', bbox_inches='tight')
 
-e_total = np.array(e_total).flatten()
 a_total = np.array(a_total).flatten()/rhill
+e_total = np.array(e_total).flatten()
+inc_total = np.array(inc_total).flatten()
 
-e_total = np.reshape(e_total, (noutputs*n_encounters, 1))
 a_total = np.reshape(a_total, (noutputs*n_encounters, 1))
+e_total = np.reshape(e_total, (noutputs*n_encounters, 1))
+inc_total = np.reshape(inc_total, (noutputs*n_encounters, 1))
 
-save_data = np.hstack((e_total, a_total))
+save_data = np.hstack((a_total, e_total, inc_total))
 
 np.savetxt(f"./data/{sim_name}", save_data)
 
 print(timed()-timer) # finish timer
-# %%    
+# %% 
 
-    lim = 6
-    fig, axes = plt.subplots(1, figsize=(6, 6))
-    axes.set_xlabel("$x/R_\mathrm{H}$")
-    axes.set_ylabel("$y/R_\mathrm{H}$")
-    axes.set_ylim(-lim,lim)
-    axes.set_xlim(-lim,lim)
-    
-    i = -200
-    
-    color1 = "teal"
-    color2 = "hotpink"
-    color3 = "sienna"
-    
-    Rhillprim = rsun*(m1/msun/3.)**(1./3.)/rhill
-    Rhillsec = rsun*(m2/msun/3.)**(1./3.)/rhill
-    Rhillimp = rsun*(mimp/msun/3.)**(1./3.)/rhill
-    # axes.grid()
-    primaryhill = plt.Circle((cospx[i]-sinpy[i], sinpx[i]+cospy[i]), Rhillprim, fc="none", ec=color1, zorder=100)
-    axes.add_artist(primaryhill)
-    secondaryhill = plt.Circle((cossx[i]-sinsy[i], sinsx[i]+cossy[i]), Rhillsec, fc="none", ec=color2)
-    axes.add_artist(secondaryhill)
-    impactorhill = plt.Circle((cosix[i]-siniy[i], sinix[i]+cosiy[i]), Rhillimp, fc="none", ec=color3)
-    axes.add_artist(impactorhill)
-    lw = 1.5
-    ms = 8
-    axes.plot(cospx[0:i]-sinpy[0:i], sinpx[0:i]+cospy[0:i], c=color1, lw=lw)
-    axes.plot(cossx[0:i]-sinsy[0:i], sinsx[0:i]+cossy[0:i], c=color2, lw=lw)
-    axes.plot(cosix[0:i]-siniy[0:i], sinix[0:i]+cosiy[0:i], c=color3, lw=lw)
-    axes.plot(cospx[i]-sinpy[i], sinpx[i]+cospy[i], c=color1, marker='o', ms=ms, label="primary")
-    axes.plot(cossx[i]-sinsy[i], sinsx[i]+cossy[i], c=color2, marker='o', ms=ms, label="secondary")
-    axes.plot(cosix[i]-siniy[i], sinix[i]+cosiy[i], c=color3, marker='o', ms=ms, label="impactor")
-    # axes.text(-4.5, -4.5, 't = {} Years'.format(int(times[i]/(year))), fontsize=12)
-    
-    # axes.grid()
-    axes.legend()
-    fig.savefig(f'./img/setup_example.pdf', bbox_inches='tight')
+
 
 # %%
 lim = 10
@@ -247,7 +258,7 @@ axes.grid()
 rhillprim = rsun*(m1/msun/3.)**(1./3.)/rhill
 rhillsec = rsun*(m2/msun/3.)**(1./3.)/rhill
 rhillimp = rsun*(mimp/msun/3.)**(1./3.)/rhill
-primaryhill = plt.Circle((0,0), rhillprim, fc="none", ec=color1)
+primaryhill = plt.Circle((0,0), rhillprim, fc="none", ec=color1)    
 secondaryhill = plt.Circle((0,0), rhillsec, fc="none", ec=color2)
 impactorhill = plt.Circle((0,0), rhillimp, fc="none", ec=color3)
 

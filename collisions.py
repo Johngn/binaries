@@ -52,8 +52,8 @@ escape_speed = np.sqrt(2*g*m/radius)     # escape speed for each body
 fragmentation = collision_speed > escape_speed        # collision causes fragmentation if speed greater than escape speed
 fragmentation = q_r > gravitational_binding_energy
 # %%
-sim_name = 'eccentricity_random_two'
-collisions = glob(f'./results/collision_*')
+sim_name = 'verywide_equalmass_ecc0'
+collisions = glob(f'./results/collision_{sim_name}*')
 # collisions = glob(f'./rebound/mastersproject/binaries/results/collision_*')
 fragmentation = np.zeros((len(collisions), 2))
 impact_param = []
@@ -120,8 +120,10 @@ for i, collision in enumerate(collisions):
 # %%
 fig, ax = plt.subplots(1, figsize=(8,6))
 ax.scatter(dv_all, theta_all)
+# ax.set_xlim(62.5, 63.2)
 ax.set_xlabel('Collision speed [m/s]')
 ax.set_ylabel(r'Impact angle [$^\circ$]')
+plt.savefig(f"./img/collision_scatter_{sim_name}.png")
 # %%
 bins = 20
 
