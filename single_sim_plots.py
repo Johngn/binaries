@@ -3,11 +3,11 @@ import matplotlib.pyplot as plt
 
 n_encounters = 100
 x_ticks = np.linspace(0,n_encounters, n_encounters*1000)
-fig, axes = plt.subplots(2,1, figsize=(10,10))
+fig, axes = plt.subplots(2,1, figsize=(10,6))
 fig.subplots_adjust(hspace=0.15)
 
 for i in range(10):
-    data = np.loadtxt(f"./data/single_sim_ecc2_{i}")
+    data = np.loadtxt(f"./data/single_sim_{i}")
     a = data[:,0]
     e = data[:,1]
     
