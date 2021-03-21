@@ -138,7 +138,7 @@ fig, ax = plt.subplots(1, figsize=(11,8))
 sns.distplot(theta_all, bins=bins, kde=False)
 ax.set_xlim()
 ax.set_xlabel('impact angle')
-# plt.savefig(f"./img/angle_{sim_name}.png", bbox_inches='tight')
+plt.savefig(f"./img/angle_{sim_name}.pdf", bbox_inches='tight')
 
 # %%
 data = pd.read_csv(f'./results/{sim_name}_b-{b}_r-{r}.csv')
