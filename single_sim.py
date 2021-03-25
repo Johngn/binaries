@@ -54,18 +54,18 @@ for j in range(n_encounters):
     # simp = rndm(10, 200, g=-1.6, size=1)*1e3    # impactor radius
     # b0 = np.random.uniform(-8,8)
     
-    inc_imp = np.deg2rad(40)
-    e_imp = 0.01
+    inc_imp = np.deg2rad(0)
+    e_imp = 0.00001  
     
     simp = 100e3
-    b = 2*rhill                          # impact parameter
+    b = 2.5*rhill                          # impact parameter
     mimp = 4./3.*np.pi*dens*simp**3
     n_bin = np.sqrt(g*msun/rsun)**3        # mean motion of binary COM
     n_imp = np.sqrt(g*msun/(rsun+b))**3    # mean motion of impactor
     
-    # (rsun+b)*(1-e_imp**2)/(e_imp*rsun) - 1/e_imp
-    f_enc   = np.arccos((rsun+b)*(1-e_imp**2)/(e_imp*rsun) - 1/e_imp)  # angle at which eccentric orbit crosses binary orbit
     
+    f_enc   = np.arccos((rsun+b)*(1-e_imp**2)/(e_imp*(rsun+b)) - 1/e_imp)  # angle at which close encounter occurs
+    f_enc   = np.arccos(-e_imp)
     E       = np.arctan( np.sqrt(1-e_imp**2) * np.sin(f_enc) / (e_imp + np.cos(f_enc)) ) # E at encounter    
     M       = E - e_imp*np.sin(E)           # mean anomaly at encounter
     t_enc   = np.pi/n_bin                   # time it takes for COM to get to crossover point
@@ -78,7 +78,7 @@ for j in range(n_encounters):
     
     f_0 = np.arccos( (np.cos(E_0) - e_imp) / (1 - e_imp*np.cos(E_0)) )
     
-    
+
     def setupSimulation():
         sim = rebound.Simulation()              # initialize rebound simulation
         sim.G = g                               # set G which sets units of integrator - SI in this case
@@ -279,7 +279,7 @@ for j in range(n_encounters):
     color2 = "hotpink"
     color3 = "sienna"
     lw = 1.2
-    ms = 5
+    ms = 5np.arccos((rsun+b)*(1-e_imp**2)/(e_imp*(rsun+b)) - 1/e_imp)
     lim = 40*au
     fig = plt.figure(figsize=(10,10))
     axes = fig.add_subplot(111, projection='3d')
@@ -343,7 +343,7 @@ print(timed()-timer) # finish timer
 
 # %%
 
-lim = 10
+lim = 100
 color1 = "teal"
 color2 = "hotpink"
 color3 = "sienna"
@@ -479,7 +479,8 @@ plt.legend()
 color1 = "teal"
 color2 = "hotpink"
 color3 = "sienna"
-lim = 1
+lim = 10
+    
 fig = plt.figure(figsize=(10,10))
 axes = fig.add_subplot(111, projection='3d')
 axes.set_xlabel("$x/R_\mathrm{h}$")
