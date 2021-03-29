@@ -33,13 +33,13 @@ headers = ['time','b',
 
 coll_headers = ['time','body','r','m','x','y','z','vx','vy','vz']
 
-sim_name = "inclination_random_test"
+sim_name = "thesis_test"
 
 # simp = np.arange(50e3,210e3,10e3) # create range of impactor sizes to loop through
 # b = np.arange(2,4.1,0.2) # create range of impact parameters to loop through
 
 simp = np.ones(5)*100e3
-b = np.ones(1)*2.5
+b = np.ones(1)*3
 
 
 timer = timed() # start timer to time simulations
@@ -51,11 +51,14 @@ for j in range(len(b)):             # loop through each impact parameter
         mimp = 4./3.*np.pi*dens*simp[i]**3   # mass of impactor
         theta = 0.0015  # true anomaly of impactor
         
-        e = np.random.uniform()*0.5
-        inc = np.random.uniform()*2*np.pi
+        # e = np.random.uniform()*0.5
+        # inc = np.random.uniform()*2*np.pi
+        inc = 0
         f = np.random.uniform()*2*np.pi
-        omega = np.random.uniform()*2*np.pi
-        Omega = np.random.uniform()*2*np.pi
+        # omega = np.random.uniform()*2*np.pi
+        omega = 0
+        # Omega = np.random.uniform()*2*np.pi
+        Omega = 0
         
         def setupSimulation():
             sim = rebound.Simulation()              # initialize rebound simulation
@@ -95,7 +98,7 @@ for j in range(len(b)):             # loop through each impact parameter
             collided = np.array(collided) 
             df_coll = pd.DataFrame(collided)
             # df_coll.to_csv(f'./results/collision_{sim_name}_{np.round(simp[i]/1e3, 1)}_{np.round(b[j], 1)}.csv', header=coll_headers)
-            df_coll.to_csv(f'./results/collision_{sim_name}_{i}.csv', header=coll_headers)
+            df_coll.to_csv(f'./thesis_results/collision_{sim_name}_{i}.csv', header=coll_headers)
             
             sim.collision_resolve = 'merge'
         
@@ -135,6 +138,6 @@ for j in range(len(b)):             # loop through each impact parameter
         df = pd.DataFrame(particles)
         
         # df.to_csv(f'./results/{sim_name}_{np.round(simp[i]/1e3, 1)}_{np.round(b[j], 1)}.csv', header=headers)
-        df.to_csv(f'./results/{sim_name}_{i}.csv', header=headers)
+        df.to_csv(f'./thesis_results/{sim_name}_{i}.csv', header=headers)
             
 print(timed()-timer) # finish timer

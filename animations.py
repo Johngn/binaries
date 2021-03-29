@@ -16,12 +16,12 @@ T = 2.*np.pi/np.sqrt(G*(Msun)/rsun**3)      # orbital period of binary around th
 n = 2*np.pi/T                               # mean motion of binary around the sun
 year = 365.25*24.*60.*60.                   # number of seconds in a year
 
-sim_name = 'inclination_random_test_3'
+sim_name = 'chaos_wide_equalmass_b-3_imp-100_129'
 r = '170.0'
 b = '3.6'
 starting_position = 4.48353
 # data = np.array(pd.read_csv(f'./results/{sim_name}_{r}_{b}.csv', index_col=0))
-data = np.array(pd.read_csv(f'./results/{sim_name}.csv', index_col=0))
+data = np.array(pd.read_csv(f'./thesis_results/{sim_name}.csv', index_col=0))
 
 times = data[:,0]
 hash_primary = data[0,2]
@@ -95,6 +95,33 @@ sinpx, sinpy = np.sin(angles)*pref[:,0], np.sin(angles)*pref[:,1]       # sin of
 sinsx, sinsy = np.sin(angles)*sref[:,0], np.sin(angles)*sref[:,1]       # sin of reference angles times relative location of secondary
 sinix, siniy = np.sin(angles)*impref[:,0], np.sin(angles)*impref[:,1]   # sin of reference angles times relative location of impactor
 
+'''2D PLOT OF OUTCOME OF SIMULATION'''
+lim = 10
+i = -200
+fig, axes = plt.subplots(1, figsize=(5,5))
+axes.set_xlabel("$x/R_\mathrm{h}$")
+axes.set_ylabel("$y/R_\mathrm{h}$")
+axes.set_ylim(-lim,lim)
+axes.set_xlim(-lim,lim)
+
+primaryhill = plt.Circle((cospx[i]-sinpy[i], sinpx[i]+cospy[i]), Rhill[0]/Rhill[0], fc="none", ec="teal")
+secondaryhill = plt.Circle((cossx[i]-sinsy[i], sinsx[i]+cossy[i]), Rhill[1]/Rhill[0], fc="none", ec="hotpink")
+impactorhill = plt.Circle((cosix[i]-siniy[i], sinix[i]+cosiy[i]), Rhill[2]/Rhill[0], fc="none", ec="sienna")
+axes.add_artist(primaryhill)
+axes.add_artist(secondaryhill)
+axes.add_artist(impactorhill)
+
+axes.plot(cospx[0:i]-sinpy[0:i], sinpx[0:i]+cospy[0:i], c="teal", lw=1.5)
+axes.plot(cossx[0:i]-sinsy[0:i], sinsx[0:i]+cossy[0:i], c="hotpink", lw=1.5)
+axes.plot(cosix[0:i]-siniy[0:i], sinix[0:i]+cosiy[0:i], c="sienna", lw=1.5)
+
+axes.plot(cospx[i]-sinpy[i], sinpx[i]+cospy[i], c="teal", marker='o', label="primary")
+axes.plot(cossx[i]-sinsy[i], sinsx[i]+cossy[i], c="hotpink", marker='o', label="secondary")
+axes.plot(cosix[i]-siniy[i], sinix[i]+cosiy[i], c="sienna", marker='o', label="impactor")
+# axes.grid()
+axes.legend()
+# fig.savefig(f'./img/chaotic_encounters_{sim_name}.pdf', bbox_inches='tight')
+# %%
 '''2D ANIMATION OF OUTCOME OF SIMULATION'''
 lim = 8
 
@@ -186,28 +213,4 @@ def animate(i):
 
 anim = animation.FuncAnimation(fig, animate, frames=Noutputs, interval=1)
 # %%
-'''2D PLOT OF OUTCOME OF SIMULATION'''
-lim = 10
-fig, axes = plt.subplots(1, figsize=(10, 10))
-axes.set_xlabel("$x/R_\mathrm{h}$")
-axes.set_ylabel("$y/R_\mathrm{h}$")
-axes.set_ylim(-lim,lim)
-axes.set_xlim(-lim,lim)
-
-primaryhill = plt.Circle((cospx[-1]-sinpy[-1], sinpx[-1]+cospy[-1]), Rhill[0]/Rhill[0], fc="none", ec="tab:orange")
-secondaryhill = plt.Circle((cossx[-1]-sinsy[-1], sinsx[-1]+cossy[-1]), Rhill[1]/Rhill[0], fc="none", ec="tab:blue")
-impactorhill = plt.Circle((cosix[-1]-siniy[-1], sinix[-1]+cosiy[-1]), Rhill[2]/Rhill[0], fc="none", ec="tab:green")
-axes.add_artist(primaryhill)
-axes.add_artist(secondaryhill)
-axes.add_artist(impactorhill)
-
-axes.plot(cospx-sinpy, sinpx+cospy, label="primary", c="teal", lw=1.5)
-axes.plot(cossx-sinsy, sinsx+cossy, label="secondary", c="hotpink", lw=1.5)
-axes.plot(cosix-siniy, sinix+cosiy, label="impactor", c="sienna", lw=1.5)
-
-axes.plot(cospx[-1]-sinpy[-1], sinpx[-1]+cospy[-1], c="teal", marker='o')
-axes.plot(cossx[-1]-sinsy[-1], sinsx[-1]+cossy[-1], c="hotpink", marker='o')
-axes.plot(cosix[-1]-siniy[-1], sinix[-1]+cosiy[-1], c="sienna", marker='o')
-axes.grid()
-axes.legend()
-# fig.savefig('./result5.pdf', bbox_inches='tight')
+x

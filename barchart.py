@@ -49,15 +49,16 @@ disrupted = [33, 18, 5]
 swapped = [6, 14, 12]
 
 x = np.arange(len(labels))  # the label locations
-width = 0.12  # the width of the bars
+width = 0.18  # the width of the bars
+# color=['#003f5c','#58508d','#bc5090','#ff6361'], edgecolor="black")
+fig, ax = plt.subplots(1, figsize=(5, 4))
+rects1 = ax.bar(x - width*1.5, bound, width, label='Bound', color="#58508d", edgecolor="black")
+rects2 = ax.bar(x - width/2, swapped, width, label='Swapped', color="#bc5090", edgecolor="black")
+rects2 = ax.bar(x + width/2, disrupted, width, label='Disrupted', color="#ff6361", edgecolor="black")
+rects2 = ax.bar(x + width*1.5, collisions, width, label='Collided', color="#ffa600", edgecolor="black")
 
-fig, ax = plt.subplots(1, figsize=(6, 5))
-rects1 = ax.bar(x - width*1.5, bound, width, label='Bound')
-rects2 = ax.bar(x - width/2, swapped, width, label='Swapped')
-rects2 = ax.bar(x + width/2, disrupted, width, label='Disrupted')
-rects2 = ax.bar(x + width*1.5, collisions, width, label='Collisions')
-
-ax.set_ylabel('Total')
+ax.grid(color='black', linestyle='--', linewidth=1, axis='y', alpha=0.2)
+ax.set_ylabel('Number of encounter')
 ax.set_xticks(x)
 ax.set_xticklabels(labels)
 ax.set_ylim(0,120)

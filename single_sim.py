@@ -23,20 +23,21 @@ m1 = 4./3.*np.pi*dens*s1**3                # mass of primary calculated from den
 m2 = 4./3.*np.pi*dens*s2**3                # mass of secondary calculated from density and radius
 rhill = rsun*(m1/msun/3.)**(1./3.)        # Hill radius of primary
 
-a = 0.4*rhill                            # separation of binary
+a = 0.05*rhill                            # separation of binary
 e = 0
 inc = np.deg2rad(0)
 
 pbin = 2.*np.pi/np.sqrt(g*(m1+m2)/a**3)            # orbital period of binary around the sun
 t = 2.*np.pi/np.sqrt(g*msun/rsun**3)            # orbital period of binary around the sun
-noutputs = 200            # number of outputs
+noutputs = 1000            # number of outputs
 p, s, imp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3)) # position
 vp, vs, vimp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3)) # velocity
 totaltime = t*1
 times = np.linspace(0,totaltime, noutputs) # create times for integrations
 
+f = np.random.rand()*2*np.pi
 f = 0
-omega = 0
+omega = np.pi/2
 Omega = 0
 
 timer = timed() # start timer to time simulations
@@ -48,18 +49,18 @@ inc_total = []
 
 n_encounters = 1
 
-sim_name = "single_sim_inc5_0"
-lim = 10
+# sim_name = "single_sim_inc5_0"
+# lim = 10
 for j in range(n_encounters):
     # simp = rndm(10, 200, g=-1.6, size=1)*1e3    # impactor radius
     # b0 = np.random.uniform(-8,8)
     
-    inc_imp = np.deg2rad(30)
-    e_imp = 0.3
+    inc_imp = np.deg2rad(0)
+    e_imp = 0
 
     
     simp = 100e3
-    b = 2.5*rhill                          # impact parameter
+    b = 20.5*rhill                          # impact parameter
     mimp = 4./3.*np.pi*dens*simp**3
     n_bin = np.sqrt(g*msun/rsun)**3        # mean motion of binary COM
     n_imp = np.sqrt(g*msun/(rsun+b))**3    # mean motion of impactor
@@ -84,6 +85,7 @@ for j in range(n_encounters):
     
     print(f_0)
     
+    timer = timed() # start timer to time simulations
 
     def setupSimulation():
         sim = rebound.Simulation()              # initialize rebound simulation
@@ -138,9 +140,11 @@ for j in range(n_encounters):
                 imp[k] = [ps["impactor"].x, ps["impactor"].y, ps["impactor"].z]
                 vimp[k] = [ps["impactor"].vx, ps["impactor"].vy, ps["impactor"].vz]
                 
-            
+      
         m1 = sim.particles[0].m
         m1 = sim.particles[1].m
+        
+    print(timed()-timer) # finish timer
                 
     orbit = sim.particles[1].calculate_orbit(sim.particles[0])
     a = orbit.a
@@ -198,6 +202,47 @@ for j in range(n_encounters):
     sinpx, sinpy = np.sin(angles)*pref[:,0], np.sin(angles)*pref[:,1]
     sinsx, sinsy = np.sin(angles)*sref[:,0], np.sin(angles)*sref[:,1]
     sinix, siniy = np.sin(angles)*impref[:,0], np.sin(angles)*impref[:,1]
+
+
+    lim = 8
+    fig, axes = plt.subplots(1, figsize=(5,5))
+    axes.set_xlabel("$x/R_\mathrm{H}$")
+    axes.set_ylabel("$y/R_\mathrm{H}$")
+    axes.set_ylim(-lim,lim)
+    axes.set_xlim(-lim,lim)
+    
+    i = -120
+    ii = i
+    
+    color1 = "teal"
+    color2 = "hotpink"
+    color3 = "sienna"
+    
+    Rhillprim = rsun*(m1/msun/3.)**(1./3.)/rhill
+    Rhillsec = rsun*(m2/msun/3.)**(1./3.)/rhill
+    Rhillimp = rsun*(mimp/msun/3.)**(1./3.)/rhill
+    # axes.grid()
+    primaryhill = plt.Circle((cospx[i]-sinpy[i], sinpx[i]+cospy[i]), Rhillprim, fc="none", ec=color1)
+    axes.add_artist(primaryhill)
+    secondaryhill = plt.Circle((cossx[i]-sinsy[i], sinsx[i]+cossy[i]), Rhillsec, fc="none", ec=color2)
+    axes.add_artist(secondaryhill)
+    impactorhill = plt.Circle((cosix[i]-siniy[i], sinix[i]+cosiy[i]), Rhillimp, fc="none", ec=color3)
+    axes.add_artist(impactorhill)
+    lw = 1.2
+    ms = 5
+    axes.plot(cospx[0:i]-sinpy[0:i], sinpx[0:i]+cospy[0:i], c=color1, lw=lw)
+    axes.plot(cossx[0:i]-sinsy[0:i], sinsx[0:i]+cossy[0:i], c=color2, lw=lw)
+    axes.plot(cosix[0:ii]-siniy[0:ii], sinix[0:ii]+cosiy[0:ii], c=color3, lw=lw)
+    axes.plot(cospx[i]-sinpy[i], sinpx[i]+cospy[i], c=color1, marker='o', ms=ms, label="primary")
+    axes.plot(cossx[i]-sinsy[i], sinsx[i]+cossy[i], c=color2, marker='o', ms=ms, label="secondary")
+    axes.plot(cosix[i]-siniy[i], sinix[i]+cosiy[i], c=color3, marker='o', ms=ms, label="impactor")
+    # axes.text(-4.5, -4.5, 't = {} Years'.format(int(times[i]/(year))), fontsize=12)
+    
+    # axes.grid()
+    axes.legend()
+    # fig.savefig(f'./img/chaotic_encounters_e_2.pdf', bbox_inches='tight')
+    
+    # %%
     
 
 # lim = 500
@@ -292,47 +337,6 @@ anim = animation.FuncAnimation(fig, animate, init_func=init, frames=noutputs, in
     anim = animation.FuncAnimation(fig, animate, frames=noutputs, interval=1)
     
     # %%
-
-
-    
-
-    
-    # lim = 8
-    # fig, axes = plt.subplots(1, figsize=(5,5))
-    # axes.set_xlabel("$x/R_\mathrm{H}$")
-    # axes.set_ylabel("$y/R_\mathrm{H}$")
-    # axes.set_ylim(-lim,lim)
-    # axes.set_xlim(-lim,lim)
-    
-    # i = -1
-    
-    # color1 = "teal"
-    # color2 = "hotpink"
-    # color3 = "sienna"
-    
-    # Rhillprim = rsun*(m1/msun/3.)**(1./3.)/rhill
-    # Rhillsec = rsun*(m2/msun/3.)**(1./3.)/rhill
-    # Rhillimp = rsun*(mimp/msun/3.)**(1./3.)/rhill
-    # # axes.grid()
-    # primaryhill = plt.Circle((cospx[i]-sinpy[i], sinpx[i]+cospy[i]), Rhillprim, fc="none", ec=color1)
-    # axes.add_artist(primaryhill)
-    # secondaryhill = plt.Circle((cossx[i]-sinsy[i], sinsx[i]+cossy[i]), Rhillsec, fc="none", ec=color2)
-    # axes.add_artist(secondaryhill)
-    # impactorhill = plt.Circle((cosix[i]-siniy[i], sinix[i]+cosiy[i]), Rhillimp, fc="none", ec=color3)
-    # axes.add_artist(impactorhill)
-    # lw = 1.2
-    # ms = 5
-    # axes.plot(cospx[0:i]-sinpy[0:i], sinpx[0:i]+cospy[0:i], c=color1, lw=lw)
-    # axes.plot(cossx[0:i]-sinsy[0:i], sinsx[0:i]+cossy[0:i], c=color2, lw=lw)
-    # axes.plot(cosix[0:i]-siniy[0:i], sinix[0:i]+cosiy[0:i], c=color3, lw=lw)
-    # axes.plot(cospx[i]-sinpy[i], sinpx[i]+cospy[i], c=color1, marker='o', ms=ms, label="primary")
-    # axes.plot(cossx[i]-sinsy[i], sinsx[i]+cossy[i], c=color2, marker='o', ms=ms, label="secondary")
-    # axes.plot(cosix[i]-siniy[i], sinix[i]+cosiy[i], c=color3, marker='o', ms=ms, label="impactor")
-    # # axes.text(-4.5, -4.5, 't = {} Years'.format(int(times[i]/(year))), fontsize=12)
-    
-    # # axes.grid()
-    # axes.legend()
-    # fig.savefig(f'./img/example_changes2.pdf', bbox_inches='tight')
 
 # %%
 

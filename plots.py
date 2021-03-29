@@ -10,7 +10,7 @@ au = 1.496e11
 rsun = 44.*au
 Msun = 1.9891e30
 
-sim_name = 'inc_random_one'
+sim_name = 'wide_equalmass_ecc0_4'
 filenames = glob(f'./results/{sim_name}*')
 
 b_all = np.zeros(len(filenames))
@@ -98,33 +98,44 @@ for i, collision in enumerate(collisions):
         coll_params[i] = params
     
 # %%
-fig, ax = plt.subplots(1, figsize=(9,9))
-s = 150
-ax.scatter(b_all, simp_all, s=1, marker="x", c="black")
-ax.scatter(b_all[bound[:,0]], simp_all[bound[:,0]], label='prim-sec', s=s, c="tab:blue", edgecolors="black")
-ax.scatter(b_all[bound[:,1]], simp_all[bound[:,1]], label='prim-imp', s=s, c="yellow", edgecolors="black")
-ax.scatter(b_all[bound[:,2]], simp_all[bound[:,2]], label='sec-imp', s=s, c="lime", edgecolors="black")
-ax.scatter(coll_params[coll_params[:,2] == 1][:,1], coll_params[coll_params[:,2] == 1][:,0], marker='X', s=s, c="tab:blue", edgecolors="black")
-ax.scatter(coll_params[coll_params[:,2] == 2][:,1], coll_params[coll_params[:,2] == 2][:,0], marker='X', s=s, c="yellow", edgecolors="black")
-ax.scatter(coll_params[coll_params[:,2] == 3][:,1], coll_params[coll_params[:,2] == 3][:,0], marker='X', s=s, c="lime", edgecolors="black")
+fig, ax = plt.subplots(1, figsize=(5,5))
+s = 120
+c1 = "#444e86"
+c2 = "#c34f8e"
+c3 = "#ff6e54"
+c4 = ''
+# ax.scatter(b_all, simp_all, s=1, marker="o", c="black")
+ax.scatter(b_all[bound[:,0]], simp_all[bound[:,0]], label='Prim-Sec', s=s, c=c1, marker='o', edgecolor=c4)
+ax.scatter(b_all[bound[:,1]], simp_all[bound[:,1]], label='Prim-Imp', s=s, c=c2, edgecolor=c4)
+ax.scatter(b_all[bound[:,2]], simp_all[bound[:,2]], label='Sec-Imp', s=s, c=c3, edgecolor=c4)
+ax.scatter(coll_params[coll_params[:,2] == 1][:,1], coll_params[coll_params[:,2] == 1][:,0], marker='x', s=s*0.6, c=c1, edgecolor=c4)
+ax.scatter(coll_params[coll_params[:,2] == 2][:,1], coll_params[coll_params[:,2] == 2][:,0], marker='x', s=s*0.6, c=c2, edgecolor=c4)
+ax.scatter(coll_params[coll_params[:,2] == 3][:,1], coll_params[coll_params[:,2] == 3][:,0], marker='x', s=s*0.6, c=c3, edgecolor=c4)
 ax.set_xlabel("Impact parameter (R$_H$)")
 ax.set_ylabel("Impactor radius (km)")
 # ax.set_title(f'initial semi-major axis = 0.4 R$_H$', y=1, pad=15, fontdict={'fontsize': 14})
-ax.legend(loc='upper center', bbox_to_anchor=(0.5, 1.04), ncol=3, fancybox=True, shadow=True)
+ax.legend(loc='upper center', bbox_to_anchor=(0.49, 1.06), ncol=3, fancybox=True, shadow=True)
 # ax.set_yticks(np.asarray((np.unique(simp_all)), dtype=int),)
 # ax.set_xticks(np.round(np.unique(b_all), 2))
 # plt.xlim(100,350)simp
-# plt.savefig(f"./img/{sim_name}_final_bound.pdf", bbox_inches='tight')
+plt.savefig(f"./img/{sim_name}_final_bound1.pdf", bbox_inches='tight')
 # %%
-total_space = len(b_all)
-number_of_bound = len(b_all[bound[:,0]])
-number_of_swapped = len(b_all[bound[:,1]]) + len(b_all[bound[:,2]])
+number_of_bound = np.count_nonzero(bound[:,0])
+number_of_swapped1 = np.count_nonzero(bound[:,1])
+number_of_swapped2 = np.count_nonzero(bound[:,2])
 number_of_collisions = len(collisions)
-number_of_disrupted = total_space - (number_of_bound + number_of_swapped + number_of_collisions)
-fig, ax = plt.subplots(1, figsize=(10,10))
-plt.bar([1,2,3,4], [number_of_bound,number_of_swapped,number_of_disrupted,number_of_collisions])
-plt.xticks([1,2,3,4], ('bound', 'swapped', 'disrupted', 'collided'))
-# plt.savefig(f"./img/{sim_name}_dist.png", bbox_inches='tight')
+disrupted = [not bound[i].any() for i in range(len(bound))]
+number_of_disrupted = np.count_nonzero(disrupted)
+
+fig, ax = plt.subplots(1, figsize=(5,4))
+ax.bar([1,2,3,4], [number_of_bound,number_of_swapped1,number_of_swapped2,number_of_disrupted], width=1, color=['#444e86','#c34f8e','#ff6e54','#ffa600'], edgecolor="black")
+
+ax.set_ylabel('Number of encounter')
+
+ax.grid(color='black', linestyle='--', linewidth=1, axis='y', alpha=0.2)
+
+plt.xticks([1,2,3,4], ('Bound', 'Prim-Imp', 'Sec-Imp', 'Disrupted'))
+plt.savefig(f"./img/{sim_name}_dist.pdf", bbox_inches='tight')
 # %%
 
 data = {'bound':  number_of_bound,
@@ -148,7 +159,7 @@ for i, item in enumerate(np.unique(simp_all)):
 binary_e[binary_e > 1] = np.nan
 binary_e = np.round(binary_e, 2)
 
-fig, ax = plt.subplots(1, figsize=(10, 8))
+fig, ax = plt.subplots(1, figsize=(5, 5))
 ax = sns.heatmap(binary_e, 
                  # annot=True,
                  linewidths=0.5, 
@@ -161,7 +172,7 @@ ax.invert_yaxis()
 # plt.title(f"Final eccentricity - {sim_name}")
 plt.xlabel("Impact parameter (Hill radii)")
 plt.ylabel("Impactor radius (km)")
-# plt.savefig(f"./img/{sim_name}_final_eccentricity.pdf", bbox_inches='tight')
+plt.savefig(f"./img/{sim_name}_final_eccentricity.pdf", bbox_inches='tight')
 # %%
 binary_a = np.ones((len(np.unique(simp_all)), len(np.unique(b_all))))
 
