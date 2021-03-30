@@ -23,21 +23,20 @@ m1 = 4./3.*np.pi*dens*s1**3                # mass of primary calculated from den
 m2 = 4./3.*np.pi*dens*s2**3                # mass of secondary calculated from density and radius
 rhill = rsun*(m1/msun/3.)**(1./3.)        # Hill radius of primary
 
-a = 0.05*rhill                            # separation of binary
+a = 0.2*rhill                            # separation of binary
 e = 0
 inc = np.deg2rad(0)
 
 pbin = 2.*np.pi/np.sqrt(g*(m1+m2)/a**3)            # orbital period of binary around the sun
 t = 2.*np.pi/np.sqrt(g*msun/rsun**3)            # orbital period of binary around the sun
-noutputs = 1000            # number of outputs
+noutputs = 100            # number of outputs
 p, s, imp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3)) # position
 vp, vs, vimp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3)) # velocity
 totaltime = t*1
 times = np.linspace(0,totaltime, noutputs) # create times for integrations
 
-f = np.random.rand()*2*np.pi
 f = 0
-omega = np.pi/2
+omega = 0
 Omega = 0
 
 timer = timed() # start timer to time simulations
@@ -47,20 +46,20 @@ a_total = []
 e_total = []
 inc_total = []
 
-n_encounters = 1
+n_encounters = 2000
 
-# sim_name = "single_sim_inc5_0"
+sim_name = "single_sim_highecc_4"
 # lim = 10
 for j in range(n_encounters):
-    # simp = rndm(10, 200, g=-1.6, size=1)*1e3    # impactor radius
-    # b0 = np.random.uniform(-8,8)
-    
-    inc_imp = np.deg2rad(0)
-    e_imp = 0
+    # print(j)
+    simp = rndm(10, 200, g=-1.6, size=1)*1e3    # impactor radius
+    b = np.random.uniform(-8,8)*rhill
+    inc_imp = np.random.uniform(0,np.deg2rad(5))
+    e_imp = np.random.uniform(0,0.5)
 
     
-    simp = 100e3
-    b = 20.5*rhill                          # impact parameter
+    # simp = 100e3
+    # b = -5*rhill                          # impact parameter
     mimp = 4./3.*np.pi*dens*simp**3
     n_bin = np.sqrt(g*msun/rsun)**3        # mean motion of binary COM
     n_imp = np.sqrt(g*msun/(rsun+b))**3    # mean motion of impactor
@@ -83,7 +82,7 @@ for j in range(n_encounters):
     
     f_0 = 2 * np.arctan2( np.sqrt(1+e_imp)*np.sin(E_0/2) , np.sqrt(1-e_imp)*np.cos(E_0/2) )
     
-    print(f_0)
+    # print(f_0)
     
     timer = timed() # start timer to time simulations
 
@@ -144,7 +143,7 @@ for j in range(n_encounters):
         m1 = sim.particles[0].m
         m1 = sim.particles[1].m
         
-    print(timed()-timer) # finish timer
+    # print(timed()-timer) # finish timer
                 
     orbit = sim.particles[1].calculate_orbit(sim.particles[0])
     a = orbit.a
@@ -155,6 +154,8 @@ for j in range(n_encounters):
     Omega = orbit.Omega
     omega = orbit.omega
     f = orbit.f
+    
+
     
     R, V, mu, hz, h_mag = np.zeros((noutputs,3)), np.zeros((noutputs,3)), np.zeros((noutputs,3)), np.zeros((noutputs,3)), np.zeros((noutputs,3))
     R[:,0] = np.linalg.norm(p-s, axis=1)
@@ -202,8 +203,20 @@ for j in range(n_encounters):
     sinpx, sinpy = np.sin(angles)*pref[:,0], np.sin(angles)*pref[:,1]
     sinsx, sinsy = np.sin(angles)*sref[:,0], np.sin(angles)*sref[:,1]
     sinix, siniy = np.sin(angles)*impref[:,0], np.sin(angles)*impref[:,1]
+    
+a_total = np.array(a_total).flatten()/rhill
+e_total = np.array(e_total).flatten()
+inc_total = np.array(inc_total).flatten()
 
+a_total = np.reshape(a_total, (noutputs*n_encounters, 1))
+e_total = np.reshape(e_total, (noutputs*n_encounters, 1))
+inc_total = np.reshape(inc_total, (noutputs*n_encounters, 1))
 
+save_data = np.hstack((a_total, e_total, inc_total))
+
+np.savetxt(f"./data/{sim_name}", save_data)
+    
+    # %%
     lim = 8
     fig, axes = plt.subplots(1, figsize=(5,5))
     axes.set_xlabel("$x/R_\mathrm{H}$")
@@ -242,10 +255,10 @@ for j in range(n_encounters):
     axes.legend()
     # fig.savefig(f'./img/chaotic_encounters_e_2.pdf', bbox_inches='tight')
     
-    # %%
+        # %%
     
 
-# lim = 500
+lim = 10
 
 color1 = "teal"
 color2 = "hotpink"
@@ -345,7 +358,7 @@ anim = animation.FuncAnimation(fig, animate, init_func=init, frames=noutputs, in
     color2 = "hotpink"
     color3 = "sienna"
     lw = 1.2
-    ms = 5np.arccos((rsun+b)*(1-e_imp**2)/(e_imp*(rsun+b)) - 1/e_imp)
+    ms = np.arccos((rsun+b)*(1-e_imp**2)/(e_imp*(rsun+b)) - 1/e_imp)
     lim = 40*au
     fig = plt.figure(figsize=(10,10))
     axes = fig.add_subplot(111, projection='3d')
@@ -392,19 +405,8 @@ anim = animation.FuncAnimation(fig, animate, init_func=init, frames=noutputs, in
 
 
 # %%
-a_total = np.array(a_total).flatten()/rhill
-e_total = np.array(e_total).flatten()
-inc_total = np.array(inc_total).flatten()
 
-a_total = np.reshape(a_total, (noutputs*n_encounters, 1))
-e_total = np.reshape(e_total, (noutputs*n_encounters, 1))
-inc_total = np.reshape(inc_total, (noutputs*n_encounters, 1))
 
-save_data = np.hstack((a_total, e_total, inc_total))
-
-# np.savetxt(f"./data/{sim_name}", save_data)
-
-print(timed()-timer) # finish timer
 # %% 
 
 
@@ -463,7 +465,7 @@ plt.grid('both')
 plt.legend()
 plt.savefig("./img/changes_dr2.pdf", bbox_inches='tight')
 # %%
-y = e_final
+y = e_total
 plt.figure(figsize=(5,3))
 # plt.title(f"Integrator={sim.integrator} -- Impactor radius={simp/1e3} km -- b={b/Rhill} hill radii")
 plt.plot(times/year, y[:,0], label="prim-sec", lw=1)
@@ -475,7 +477,7 @@ plt.xlim(0, np.amax(times)/year)
 plt.ylim(0, 1)
 plt.grid('both')
 plt.legend()
-plt.savefig(f"./img/changes_eccentricity2.pdf", bbox_inches='tight')
+# plt.savefig(f"./img/changes_eccentricity2.pdf", bbox_inches='tight')
 # %%
 y = cj
 plt.figure(figsize=(9,4))
