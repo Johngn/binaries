@@ -5,7 +5,7 @@ import matplotlib as matplotlib
 matplotlib.rcParams.update({'figure.max_open_warning': 0})
 import mpl_toolkits.mplot3d.axes3d as p3
 from powerlaw import rndm
-from scipy.stats import powerlaw
+# from scipy.stats import powerlaw
 from scipy.optimize import fsolve
 from timeit import default_timer as timed
 from matplotlib import animation
@@ -18,21 +18,21 @@ rsun = 44.*au                                  # distance from centre of mass of
 year = 365.25*24.*60.*60.                   # number of seconds in a year
 dens = 700.
 
-s1, s2 = 100e3, 100e3                         # radius of primary and of secondary
+s1, s2 = 100e3, 50e3                         # radius of primary and of secondary
 m1 = 4./3.*np.pi*dens*s1**3                # mass of primary calculated from density and radius
 m2 = 4./3.*np.pi*dens*s2**3                # mass of secondary calculated from density and radius
 rhill = rsun*(m1/msun/3.)**(1./3.)        # Hill radius of primary
 
 a = 0.2*rhill                            # separation of binary
 e = 0
-inc = np.deg2rad(0)
+inc = np.deg2rad(45)
 
 pbin = 2.*np.pi/np.sqrt(g*(m1+m2)/a**3)            # orbital period of binary around the sun
 t = 2.*np.pi/np.sqrt(g*msun/rsun**3)            # orbital period of binary around the sun
-noutputs = 100            # number of outputs
+noutputs = 10           # number of outputs
 p, s, imp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3)) # position
 vp, vs, vimp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3)) # velocity
-totaltime = t*1
+totaltime = t*2
 times = np.linspace(0,totaltime, noutputs) # create times for integrations
 
 f = 0
@@ -45,18 +45,26 @@ collision_totals = 0
 a_total = []
 e_total = []
 inc_total = []
+mass_total = []
+b_total = []
+e_imp_total = []
+inc_imp_total = []
 
-n_encounters = 2000
+n_encounters = 1
 
-sim_name = "single_sim_highecc_4"
+sim_name = "testtest"
 # lim = 10
 for j in range(n_encounters):
     # print(j)
-    simp = rndm(10, 200, g=-1.6, size=1)*1e3    # impactor radius
+    simp = rndm(10, 300, g=-1.6, size=1)*1e3    # impactor radius
     b = np.random.uniform(-8,8)*rhill
-    inc_imp = np.random.uniform(0,np.deg2rad(5))
-    e_imp = np.random.uniform(0,0.5)
-
+    # inc_imp = np.random.uniform(0, np.deg2rad(5))
+    inc_imp = np.random.rayleigh(2)
+    e_imp = np.random.rayleigh(0.05)
+    # inc_imp = 0
+    # e_imp = 0
+    # b = 200.4*rhill
+    # simp = 100e3
     
     # simp = 100e3
     # b = -5*rhill                          # impact parameter
@@ -186,6 +194,11 @@ for j in range(n_encounters):
     a_total.append(a_final[:,0])
     inc_total.append(inc_final[:,0])
     
+    mass_total.append(np.ones(noutputs)*mimp)
+    b_total.append(np.ones(noutputs)*b)
+    e_imp_total.append(np.ones(noutputs)*e_imp)
+    inc_imp_total.append(np.ones(noutputs)*inc_imp)
+    
     bound = np.logical_and(np.logical_and(energy < 0, np.isfinite(energy)), R < Rhill_largest)[-1]
     
     omegak = np.sqrt(g*msun/rsun**3)
@@ -207,24 +220,32 @@ for j in range(n_encounters):
 a_total = np.array(a_total).flatten()/rhill
 e_total = np.array(e_total).flatten()
 inc_total = np.array(inc_total).flatten()
+mass_total = np.array(mass_total).flatten()
+b_total = np.array(b_total).flatten()/rhill
+e_imp_total = np.array(e_imp_total).flatten()
+inc_imp_total = np.array(inc_imp_total).flatten()
 
 a_total = np.reshape(a_total, (noutputs*n_encounters, 1))
 e_total = np.reshape(e_total, (noutputs*n_encounters, 1))
 inc_total = np.reshape(inc_total, (noutputs*n_encounters, 1))
+mass_total = np.reshape(mass_total, (noutputs*n_encounters, 1))
+b_total = np.reshape(b_total, (noutputs*n_encounters, 1))
+e_imp_total = np.reshape(e_imp_total, (noutputs*n_encounters, 1))
+inc_imp_total = np.reshape(inc_imp_total, (noutputs*n_encounters, 1))
 
-save_data = np.hstack((a_total, e_total, inc_total))
+save_data = np.hstack((a_total, e_total, inc_total, mass_total, b_total, e_imp_total, inc_imp_total))
 
 np.savetxt(f"./data/{sim_name}", save_data)
     
-    # %%
-    lim = 8
-    fig, axes = plt.subplots(1, figsize=(5,5))
-    axes.set_xlabel("$x/R_\mathrm{H}$")
-    axes.set_ylabel("$y/R_\mathrm{H}$")
+# %%
+    lim = 3
+    fig, axes = plt.subplots(1, figsize=(4,4))
+    axes.set_xlabel("$x/r_\mathrm{H}$")
+    axes.set_ylabel("$y/r_\mathrm{H}$")
     axes.set_ylim(-lim,lim)
     axes.set_xlim(-lim,lim)
     
-    i = -120
+    i = -200
     ii = i
     
     color1 = "teal"
@@ -248,12 +269,12 @@ np.savetxt(f"./data/{sim_name}", save_data)
     axes.plot(cosix[0:ii]-siniy[0:ii], sinix[0:ii]+cosiy[0:ii], c=color3, lw=lw)
     axes.plot(cospx[i]-sinpy[i], sinpx[i]+cospy[i], c=color1, marker='o', ms=ms, label="primary")
     axes.plot(cossx[i]-sinsy[i], sinsx[i]+cossy[i], c=color2, marker='o', ms=ms, label="secondary")
-    axes.plot(cosix[i]-siniy[i], sinix[i]+cosiy[i], c=color3, marker='o', ms=ms, label="impactor")
+    # axes.plot(cosix[i]-siniy[i], sinix[i]+cosiy[i], c=color3, marker='o', ms=ms, label="impactor")
     # axes.text(-4.5, -4.5, 't = {} Years'.format(int(times[i]/(year))), fontsize=12)
     
     # axes.grid()
     axes.legend()
-    # fig.savefig(f'./img/chaotic_encounters_e_2.pdf', bbox_inches='tight')
+    fig.savefig(f'./img/high_ecc_instability_example.pdf', bbox_inches='tight')
     
         # %%
     
@@ -353,39 +374,44 @@ anim = animation.FuncAnimation(fig, animate, init_func=init, frames=noutputs, in
 
 # %%
 
-    i = -1
+    i = -501
     color1 = "teal"
     color2 = "hotpink"
     color3 = "sienna"
     lw = 1.2
-    ms = np.arccos((rsun+b)*(1-e_imp**2)/(e_imp*(rsun+b)) - 1/e_imp)
-    lim = 40*au
-    fig = plt.figure(figsize=(10,10))
+    lim = 44
+    
+    fig = plt.figure(figsize=(6,6))
     axes = fig.add_subplot(111, projection='3d')
-    axes.set_xlabel("$x/R_\mathrm{h}$")
-    axes.set_ylabel("$y/R_\mathrm{h}$")
-    axes.set_zlabel("$z/R_\mathrm{h}$") 
+    # axes.set_xlabel("$x/R_\mathrm{h}$")
+    # axes.set_ylabel("$y/R_\mathrm{h}$")
+    # axes.set_zlabel("$z/R_\mathrm{h}$")
+    axes.set_xlabel("x/AU")
+    axes.set_ylabel("y/AU")
+    axes.set_zlabel("z/AU")
     axes.set_xlim3d([-lim, lim])    
     axes.set_ylim3d([-lim, lim])
     axes.set_zlim3d([-lim, lim])
-    
-    axes.plot(p[0:i,0], p[0:i,1], p[0:i,2], c=color1, lw=lw*2)
-    axes.plot(s[0:i,0], s[0:i,1], s[0:i,2], c=color2, lw=lw)
-    axes.plot(imp[0:i,0], imp[0:i,1], imp[0:i,2], c=color3, lw=lw)
-    axes.scatter(p[i,0], p[i,1], p[i,2], c=color1, s=70, label="primary")
-    axes.scatter(s[i,0], s[i,1], s[i,2], c=color2, s=50, label="secondary")
-    axes.scatter(imp[i,0], imp[i,1], imp[i,2], c=color3, s=50, label="impactor")
+    factor = au
+    axes.plot(p[0:i,0]/factor, p[0:i,1]/factor, p[0:i,2]/factor, c=color1, lw=lw*2)
+    axes.plot(s[0:i,0]/factor, s[0:i,1]/factor, s[0:i,2]/factor, c=color2, lw=lw)
+    axes.plot(imp[0:i,0]/factor, imp[0:i,1]/factor, imp[0:i,2]/factor, c=color3, lw=lw)
+    axes.scatter(p[i,0]/factor, p[i,1]/factor, p[i,2]/factor, c=color1, s=70, label="primary")
+    axes.scatter(s[i,0]/factor, s[i,1]/factor, s[i,2]/factor, c=color2, s=40, label="secondary")
+    axes.scatter(imp[i,0]/factor, imp[i,1]/factor, imp[i,2]/factor, c=color3, s=30, label="impactor")
     axes.scatter(0,0,0, c='gold', s=100)
     axes.legend()
+    
+    # fig.savefig(f'./img/timing_example.pdf', bbox_inches='tight')
 
 
     # %%
-
+    i = -200
     color1 = "teal"
     color2 = "hotpink"
     color3 = "sienna"
-    lim = 2
-    fig = plt.figure(figsize=(8,8))
+    lim = 2.8
+    fig = plt.figure(figsize=(6,6))
     axes = fig.add_subplot(111, projection='3d')
     axes.set_xlabel("$x/R_\mathrm{h}$")
     axes.set_ylabel("$y/R_\mathrm{h}$")
@@ -402,6 +428,8 @@ anim = animation.FuncAnimation(fig, animate, init_func=init, frames=noutputs, in
     axes.scatter(cosix[i]-siniy[i], sinix[i]+cosiy[i], impref[i,2], c=color3, s=50, label="impactor")
         
     axes.legend()
+    
+    fig.savefig(f'./img/results_3D_example.pdf', bbox_inches='tight')
 
 
 # %%

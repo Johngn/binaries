@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 tnos = pd.read_table('./data/TNOs.txt', names='-', skiprows=1)
 tnos = tnos['-'] # each row is just one long string
@@ -21,13 +22,17 @@ data_clean = np.vstack((data_high, data_low))
 resonant = np.logical_and(data_clean[:,2] > 39, data_clean[:,2] < 40.3)
 resonant_objs = data_clean[resonant]
 
-classical = np.logical_and(data_clean[:,2] > 41, data_clean[:,2] < 48.7) # select objects with range of 'a'
+classical = np.logical_and(data_clean[:,2] > 41, data_clean[:,2] < 48) # select objects with range of 'a'
 low_ecc = data_clean[:,1] < 0.3
 low_inc = data_clean[:,0] < 37
 
 low_ecc_inc = np.logical_and(low_ecc, low_inc)
 cold = np.logical_and(data_clean[:,0] < 5, low_ecc_inc) # low inclination
 hot = np.logical_and(data_clean[:,0] > 5, low_ecc_inc) # high inclination
+cold = data_clean[:,0] < 5 # low inclination
+hot = data_clean[:,0] > 5 # high inclination
+
+data_classical = data_clean[classical]
 
 cold_classical = np.logical_and(cold, classical)
 data_cold_classical = data_clean[cold_classical]
@@ -40,16 +45,18 @@ df.to_csv('./data/tnos_clean', index=None)
 # %%
 data_clean = pd.read_csv('./data/tnos_clean')
 
-fig, ax = plt.subplots(2, figsize=(8,8))
+fig, ax = plt.subplots(2, figsize=(7,7))
 fig.subplots_adjust(hspace=0)
 
-s = 25
+s = 6
 alpha = 1
+lw = 0.1
+edgecolor = ''
 
-ax[0].scatter(data_clean['a'],data_clean['e'], s=s, alpha=alpha, color="dimgray", edgecolors="black")
-ax[0].scatter(data_hot_classical[:,2],data_hot_classical[:,1], alpha=alpha, s=s, color='darkturquoise', label='Hot classicals', edgecolors='black')
-ax[0].scatter(data_cold_classical[:,2],data_cold_classical[:,1], alpha=alpha, s=s, color='red', label='Cold classicals', edgecolors='black')
-ax[0].scatter(resonant_objs[:,2],resonant_objs[:,1], alpha=alpha, s=s, color='limegreen', label='Plutinos', edgecolors='black')
+ax[0].scatter(data_clean['a'],data_clean['e'], s=s, alpha=alpha, color="dimgray", edgecolors=edgecolor, linewidth=lw)
+ax[0].scatter(data_hot_classical[:,2],data_hot_classical[:,1], alpha=alpha, s=s, color='darkturquoise', label='Hot classicals', edgecolors=edgecolor, linewidth=lw)
+ax[0].scatter(data_cold_classical[:,2],data_cold_classical[:,1], alpha=alpha, s=s, color='red', label='Cold classicals', edgecolors=edgecolor, linewidth=lw)
+ax[0].scatter(resonant_objs[:,2],resonant_objs[:,1], alpha=alpha, s=s, color='limegreen', label='Plutinos', edgecolors=edgecolor, linewidth=lw)
 # ax[0].scatter(39.482, 0.2488, s=200, label='Pluto', color='darkorange', edgecolors='black')
 # ax[0].scatter(30.11, 0.008678, s=150,  label='Neptune', color='darkviolet', edgecolors='black')
 ax[0].set_ylim(0, 0.4)
@@ -59,10 +66,10 @@ ax[0].set_xticks(np.arange(0))
 ax[0].set_ylabel(r'Eccentricity')
 # ax[0].set_xlabel('Semi-major axis [AU]')
 
-ax[1].scatter(data_clean['a'],data_clean['i'], s=s, alpha=alpha, color='dimgray', edgecolors='black')
-ax[1].scatter(data_cold_classical[:,2],data_cold_classical[:,0], s=s, alpha=alpha, color='red', edgecolors='black')
-ax[1].scatter(data_hot_classical[:,2],data_hot_classical[:,0], s=s, alpha=alpha, color='darkturquoise', edgecolors='black')
-ax[1].scatter(resonant_objs[:,2],resonant_objs[:,0], s=s, alpha=alpha, color='limegreen', edgecolors='black')
+ax[1].scatter(data_clean['a'],data_clean['i'], s=s, alpha=alpha, color='dimgray', edgecolors=edgecolor, linewidth=lw)
+ax[1].scatter(data_cold_classical[:,2],data_cold_classical[:,0], s=s, alpha=alpha, color='red', edgecolors=edgecolor, linewidth=lw)
+ax[1].scatter(data_hot_classical[:,2],data_hot_classical[:,0], s=s, alpha=alpha, color='darkturquoise', edgecolors=edgecolor, linewidth=lw)
+ax[1].scatter(resonant_objs[:,2],resonant_objs[:,0], s=s, alpha=alpha, color='limegreen', edgecolors=edgecolor, linewidth=lw)
 # ax[1].scatter(39.482, 17.16, s=200, label='Pluto', color='darkorange', edgecolors='black')
 # ax[1].scatter(30.11, 1.77, s=150,  label='Neptune', color ='darkviolet', edgecolors='black')
 ax[1].set_ylim(0, 45)
@@ -75,3 +82,94 @@ ax[1].set_xlabel('Semi-major axis [AU]')
 ax[0].legend()
 
 fig.savefig('./img/cckbos.pdf', bbox_inches='tight')
+
+# %%
+data_cold_classical_no_zero_ecc = data_cold_classical[data_cold_classical[:,1] > 0]
+data_hot_classical_no_zero_ecc = data_hot_classical[data_hot_classical[:,1] > 0]
+
+bins = 10
+
+fig, ax = plt.subplots(1, figsize=(5,4))
+
+sns.distplot(np.random.rayleigh(2, 10000), bins=200, kde=True, hist=False,
+             kde_kws={"color": "darkred", "lw": 1})
+sns.distplot(np.random.rayleigh(10, 10000), bins=200, kde=True, hist=False,
+             kde_kws={"color": "blue", "lw": 1})
+
+sns.distplot(data_cold_classical_no_zero_ecc[:,0], bins=bins, kde=False, norm_hist=True,
+                   hist_kws={"histtype": "step", "linewidth": 4, "color":"red"}, label="Cold-classicals")
+# sns.distplot(data_cold_classical_no_zero_ecc[:,0], bins=bins, kde=False, color="red", norm_hist=True, label="Cold-classicals")
+
+sns.distplot(data_hot_classical_no_zero_ecc[:,0], bins=20, kde=False, norm_hist=True,
+                   hist_kws={"histtype": "step", "linewidth": 4, "color": "blue"}, label="Hot-classicals")
+# sns.distplot(data_hot_classical_no_zero_ecc[:,0], bins=bins, kde=False, color="darkturquoise", norm_hist=True, label="Hot-classicals")
+# ax.set_title(r'a = 0.4 R${_h}$')
+ax.set_xlim(-1)
+plt.legend()
+ax.set_xlabel('Inclination [$^{\circ}$]')
+plt.savefig(f"./img/inclination_distplot.pdf", bbox_inches='tight')
+
+# %%
+
+bins = 30
+
+fig, ax = plt.subplots(1, figsize=(5,4))
+
+sns.distplot(np.random.rayleigh(0.05, 10000), bins=200, kde=True, hist=False,
+             kde_kws={"color": "darkred", "lw": 1})
+sns.distplot(np.random.rayleigh(0.11, 10000), bins=200, kde=True, hist=False,
+              kde_kws={"color": "blue", "lw": 1})
+
+sns.distplot(data_cold_classical_no_zero_ecc[:,1], bins=bins, kde=False, norm_hist=True,
+                   hist_kws={"histtype": "step", "linewidth": 4, "color":"red"}, label="Cold-classicals")
+# sns.distplot(data_cold_classical_no_zero_ecc[:,1], bins=bins, kde=False, color="red", norm_hist=True, label="Cold-classicals")
+
+
+sns.distplot(data_hot_classical_no_zero_ecc[:,1], bins=bins, kde=False, norm_hist=True,
+                   hist_kws={"histtype": "step", "linewidth": 4, "color": "blue"}, label="Hot-classicals")
+# sns.distplot(data_hot_classical_no_zero_ecc[:,1], bins=bins, kde=False, color="darkturquoise", norm_hist=True, label="Hot-classicals")
+# ax.set_title(r'a = 0.4 R${_h}$')
+# ax.set_xlim(0,1)
+plt.legend()
+ax.set_xlabel('Eccentricity')
+plt.savefig(f"./img/eccentricity_distplot.pdf", bbox_inches='tight')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
