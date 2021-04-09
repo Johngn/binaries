@@ -6,7 +6,7 @@ noutputs = 10
 
 x_ticks = np.linspace(0,n_encounters, n_encounters*noutputs)
 
-sim_name = "single_verywide_equalmass_0ecc"
+sim_name = "single_wide_equalmass_5inc"
 
 n_sims = 5
 
@@ -48,14 +48,14 @@ for i in range(n_sims):
     
 # %%
 fig, axes = plt.subplots(3,1, figsize=(10,7))
-fig.subplots_adjust(hspace=0.15)
+# fig.subplots_adjust(hspace=0.15)
 
 for i in range(n_sims):
     
     axes[0].plot(x_ticks, a_mavg[:,i], lw=1.5, alpha=1)
     # axes[0].scatter(a_ended[i][0]/10, a_ended[i][1], s=100, marker='X')
     # axes[0].scatter(60285.0,0.6666479, s=100)
-    # axes[0].set_ylim(0, 1)
+    axes[0].set_ylim(0, 1)
     axes[0].set_xlim(0,n_encounters)
     axes[0].set_ylabel(f"Mutual orbital separation [r$_H$]")
     # axes[0].grid()
@@ -65,7 +65,7 @@ for i in range(n_sims):
     
     axes[1].plot(x_ticks, e_mavg[:,i], lw=1.5, alpha=1)
     # axes[1].scatter(e_ended[i][0]/10, e_ended[i][1], s=100, marker='X')
-    # axes[1].set_ylim(0, 1)
+    axes[1].set_ylim(0, 1)
     axes[1].set_xlim(0,n_encounters)
     axes[1].set_ylabel("Eccentricity")
     # axes[1].set_xlabel("Cumulative encounters")
@@ -79,10 +79,15 @@ for i in range(n_sims):
     
     axes[2].plot(x_ticks, i_mavg[:,i], lw=1.5, alpha=1)
     # axes[2].scatter(i_ended[i][0]/10, i_ended[i][1], s=100, marker='X')
-    # axes[2].set_ylim(0, 10)
+    axes[2].set_ylim(0, 10)
     axes[2].set_xlim(0,n_encounters)
     axes[2].set_ylabel("Inclination [$^{\circ}$]")
     axes[2].set_xlabel("Cumulative encounters")
     # axes[2].grid()
 
 fig.savefig(f'./img/single_follow_{sim_name}.pdf', bbox_inches='tight')
+# %%
+r_a = 0.1
+r_p = 0.01
+
+e = (r_a - r_p)/(r_a + r_p)
