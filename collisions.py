@@ -52,7 +52,7 @@ escape_speed = np.sqrt(2*g*m/radius)     # escape speed for each body
 fragmentation = collision_speed > escape_speed        # collision causes fragmentation if speed greater than escape speed
 fragmentation = q_r > gravitational_binding_energy
 # %%
-sim_name = 'chaos_wide_equalmass_b-3_imp-100'
+sim_name = 'chaos_wide_10mass_b-2.7_imp-100_frandom'
 collisions = glob(f'./thesis_results/collision_{sim_name}*')
 # collisions = glob(f'./rebound/mastersproject/binaries/results/collision_*')
 fragmentation = np.zeros((len(collisions), 2))
@@ -117,14 +117,8 @@ for i, collision in enumerate(collisions):
     # impact_param.append(re.findall("\d+\.\d+", collision)[1])
     
     # print(collision_speed, re.findall("\d+\.\d+", collision))
-# %%
-fig, ax = plt.subplots(1, figsize=(5,4))
-ax.scatter(dv_all, theta_all, s=5, marker='D', color="slategrey")
-# ax.set_xlim(62.5, 63.2)
-ax.set_xlabel('Collision speed [m/s]')
-ax.set_ylabel(r'Collision angle [$^\circ$]')
-plt.savefig(f"./img/collision_scatter_{sim_name}.pdf", bbox_inches="tight")
-# %%
+    
+    
 bins = 50
 
 fig, ax = plt.subplots(1, figsize=(5,4))
@@ -136,6 +130,14 @@ sns.distplot(dv_all, bins=bins, kde=False, color="darkblue", norm_hist=True,)
 # ax.set_xlim(0,1)
 ax.set_xlabel('Collision speed [m/s]')
 plt.savefig(f"./img/collision_{sim_name}.pdf", bbox_inches='tight')
+# %%
+fig, ax = plt.subplots(1, figsize=(5,4))
+ax.scatter(dv_all, theta_all, s=5, marker='D', color="slategrey")
+# ax.set_xlim(62.5, 63.2)
+ax.set_xlabel('Collision speed [m/s]')
+ax.set_ylabel(r'Collision angle [$^\circ$]')
+plt.savefig(f"./img/collision_scatter_{sim_name}.pdf", bbox_inches="tight")
+# %%
 # %%
 fig, ax = plt.subplots(1, figsize=(11,8))
 sns.distplot(theta_all, bins=bins, kde=False)

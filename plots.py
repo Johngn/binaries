@@ -11,7 +11,7 @@ au = 1.496e11
 rsun = 44.*au
 Msun = 1.9891e30
 
-sim_name = 'verytight_equalmass_ecc0_0_'
+sim_name = 'wide_equalmass_ecc0_0_'
 filenames = glob(f'./thesis_results/{sim_name}*')
 
 b_all = np.zeros(len(filenames))
@@ -22,7 +22,7 @@ a_all = np.zeros((len(filenames),3))
 bound = np.zeros((len(filenames), 3))
 
 for i, sim in enumerate(filenames):
-    
+        
     data = np.array(pd.read_csv(sim, index_col=0))
 
     times = data[:,0]
@@ -149,6 +149,34 @@ plt.colorbar(mpl.cm.ScalarMappable(norm=norm, cmap=cm), label='Eccentricity')
 
 plt.savefig(f"./img/{sim_name}_final_eccentricity.pdf", bbox_inches='tight')
 # %%
+test0 = a_all[:,0]
+test1 = a_all[:,1]
+test2 = a_all[:,2]
+test0[a_all[:,0] > 1] = 0
+test1[a_all[:,1] > 1] = 0
+test2[a_all[:,2] > 1] = 0
+test0[a_all[:,0] < 0] = 0
+test1[a_all[:,1] < 0] = 0
+test2[a_all[:,2] < 0] = 0
+test = test0+test1+test2
+c4 = ''
+fig, ax = plt.subplots(1, figsize=(4,4))
+cm = plt.cm.get_cmap('YlGnBu')
+
+ax.scatter(b_all[bound[:,0]], simp_all[bound[:,0]], label='Prim-Sec', s=s, vmin=0, vmax=1,
+           c=test[bound[:,0]], marker='s', edgecolor=c4, cmap=cm)
+ax.scatter(b_all[bound[:,1]], simp_all[bound[:,1]], label='Prim-Imp', s=s*0.5, vmin=0, vmax=1,
+           c=test[bound[:,1]], marker='D', edgecolor=c4, cmap=cm)
+ax.scatter(b_all[bound[:,2]], simp_all[bound[:,2]], label='Sec-Imp', s=s*0.5, vmin=0, vmax=1,   
+           c=test[bound[:,2]], marker='D', edgecolor=c4, cmap=cm)
+ax.set_xlabel("Impact parameter [$r_{\mathrm{H}, prim}$]")
+ax.set_ylabel("Impactor radius [km]")
+# plt.colorbar(sc)
+norm = mpl.colors.Normalize(vmin=0, vmax=1)
+plt.colorbar(mpl.cm.ScalarMappable(norm=norm, cmap=cm), label='Mutual orbital separation [$r_{\mathrm{H}}$]')
+
+plt.savefig(f"./img/{sim_name}_final_semimajoraxis.pdf", bbox_inches='tight')
+# %%
 
 b_all = np.round(b_all, 2)
 binary_e = np.ones((len(np.unique(simp_all)), len(np.unique(b_all))))
@@ -179,36 +207,9 @@ ax = sns.heatmap(binary_e,
 ax.invert_yaxis()
 plt.ylabel("Impactor radius [km]")
 plt.xlabel("Impact parameter [$r_{\mathrm{H}, prim}$]")
-plt.savefig(f"./img/{sim_name}_final_eccentricity.pdf", bbox_inches='tight')
+# plt.savefig(f"./img/{sim_name}_final_eccentricity.pdf", bbox_inches='tight')
 
-# %%
-test0 = a_all[:,0]
-test1 = a_all[:,1]
-test2 = a_all[:,2]
-test0[a_all[:,0] > 1] = 0
-test1[a_all[:,1] > 1] = 0
-test2[a_all[:,2] > 1] = 0
-test0[a_all[:,0] < 0] = 0
-test1[a_all[:,1] < 0] = 0
-test2[a_all[:,2] < 0] = 0
-test = test0+test1+test2
-c4 = ''
-fig, ax = plt.subplots(1, figsize=(4,4))
-cm = plt.cm.get_cmap('YlGnBu')
 
-ax.scatter(b_all[bound[:,0]], simp_all[bound[:,0]], label='Prim-Sec', s=s, vmin=0, vmax=1,
-           c=test[bound[:,0]], marker='s', edgecolor=c4, cmap=cm)
-ax.scatter(b_all[bound[:,1]], simp_all[bound[:,1]], label='Prim-Imp', s=s*0.5, vmin=0, vmax=1,
-           c=test[bound[:,1]], marker='D', edgecolor=c4, cmap=cm)
-ax.scatter(b_all[bound[:,2]], simp_all[bound[:,2]], label='Sec-Imp', s=s*0.5, vmin=0, vmax=1,   
-           c=test[bound[:,2]], marker='D', edgecolor=c4, cmap=cm)
-ax.set_xlabel("Impact parameter [$r_{\mathrm{H}, prim}$]")
-ax.set_ylabel("Impactor radius [km]")
-# plt.colorbar(sc)
-norm = mpl.colors.Normalize(vmin=0, vmax=1)
-plt.colorbar(mpl.cm.ScalarMappable(norm=norm, cmap=cm), label='Mutual orbital separation [$r_{\mathrm{H}}$]')
-
-plt.savefig(f"./img/{sim_name}_final_semimajoraxis.pdf", bbox_inches='tight')
 # %%
 binary_a = np.ones((len(np.unique(simp_all)), len(np.unique(b_all))))
 
@@ -280,16 +281,16 @@ total = len(filenames)
 number_of_bound = np.count_nonzero(bound[:,0])/total
 number_of_swapped1 = np.count_nonzero(bound[:,1])/total
 number_of_swapped2 = np.count_nonzero(bound[:,2])/total
-number_of_collisions = len(collisions)
+number_of_collisions = len(collisions)/total
 disrupted = [not bound[i].any() for i in range(len(bound))]
 number_of_disrupted = np.count_nonzero(disrupted)/total
 
 fig, ax = plt.subplots(1, figsize=(5,4))
-ax.bar([1,2,3,4], [number_of_bound,number_of_swapped1,number_of_swapped2,number_of_disrupted] , width=1, color=['#444e86','#c34f8e','#ff6e54','#ffa600'], edgecolor="black")
+ax.bar([1,2,3,4], [number_of_bound,number_of_swapped1+number_of_swapped2,number_of_disrupted,number_of_collisions] , width=1, color=['#444e86','#955196','#ff6e54','#ffa600'], edgecolor="black")
 
 # ax.set_ylabel('Number of encounter')
 
 ax.grid(color='black', linestyle='--', linewidth=1, axis='y', alpha=0.2)
-
-plt.xticks([1,2,3,4], ('Prim-Sec', 'Prim-Imp', 'Sec-Imp', 'Disrupted'))
+plt.ylim(0,1)
+plt.xticks([1,2,3,4,5], ('Bound', 'Swapped', 'Disrupted','Collided'))
 plt.savefig(f"./img/{sim_name}_dist.pdf", bbox_inches='tight')

@@ -81,7 +81,7 @@ ax[1].set_xlabel('Semi-major axis [AU]')
 # ax.grid()
 ax[0].legend()
 
-fig.savefig('./img/cckbos.pdf', bbox_inches='tight')
+# fig.savefig('./img/cckbos.pdf', bbox_inches='tight')
 
 # %%
 data_cold_classical_no_zero_ecc = data_cold_classical[data_cold_classical[:,1] > 0]
@@ -108,7 +108,7 @@ sns.distplot(np.random.rayleigh(10, 100000), bins=200, kde=True, hist=False,
 ax.set_xlim(-2, 50)
 plt.legend()
 ax.set_xlabel('Inclination [$^{\circ}$]')
-plt.savefig(f"./img/inclination_distplot.pdf", bbox_inches='tight')
+# plt.savefig(f"./img/inclination_distplot.pdf", bbox_inches='tight')
 
 # %%
 
@@ -133,7 +133,7 @@ sns.distplot(data_hot_classical_no_zero_ecc[:,1], bins=bins, kde=False, norm_his
 ax.set_xlim(-0.02,0.4)
 plt.legend()
 ax.set_xlabel('Eccentricity')
-plt.savefig(f"./img/eccentricity_distplot.pdf", bbox_inches='tight')
+# plt.savefig(f"./img/eccentricity_distplot.pdf", bbox_inches='tight')
 
 
 

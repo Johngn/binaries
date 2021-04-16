@@ -18,25 +18,25 @@ rsun = 44.*au                                  # distance from centre of mass of
 year = 365.25*24.*60.*60.                   # number of seconds in a year
 dens = 700.
 
-s1, s2 = 100e3, 50e3                         # radius of primary and of secondary
+s1, s2 = 100e3, 100e3                         # radius of primary and of secondary
 m1 = 4./3.*np.pi*dens*s1**3                # mass of primary calculated from density and radius
 m2 = 4./3.*np.pi*dens*s2**3                # mass of secondary calculated from density and radius
 rhill = rsun*(m1/msun/3.)**(1./3.)        # Hill radius of primary
 
 a = 0.2*rhill                            # separation of binary
-e = 0
-inc = np.deg2rad(45)
+e = 0.5
+inc = np.deg2rad(0)
 
 pbin = 2.*np.pi/np.sqrt(g*(m1+m2)/a**3)            # orbital period of binary around the sun
 t = 2.*np.pi/np.sqrt(g*msun/rsun**3)            # orbital period of binary around the sun
-noutputs = 10           # number of outputs
+noutputs = 300           # number of outputs
 p, s, imp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3)) # position
 vp, vs, vimp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3)) # velocity
-totaltime = t*2
+totaltime = t
 times = np.linspace(0,totaltime, noutputs) # create times for integrations
 
-f = 0
-omega = 0
+f = np.random.uniform()*2*np.pi
+omega = np.random.uniform()*2*np.pi
 Omega = 0
 
 timer = timed() # start timer to time simulations
@@ -55,22 +55,23 @@ n_encounters = 1
 sim_name = "testtest"
 # lim = 10
 for j in range(n_encounters):
+    theta = 0.0015
     # print(j)
-    simp = rndm(10, 300, g=-1.6, size=1)*1e3    # impactor radius
-    b = np.random.uniform(-8,8)*rhill
+    # simp = rndm(10, 300, g=-1.6, size=1)*1e3    # impactor radius
+    # b = np.random.uniform(-8,8)*rhill
     # inc_imp = np.random.uniform(0, np.deg2rad(5))
-    inc_imp = np.random.rayleigh(2)
-    e_imp = np.random.rayleigh(0.05)
-    # inc_imp = 0
-    # e_imp = 0
-    # b = 200.4*rhill
-    # simp = 100e3
+    # inc_imp = np.random.rayleigh(2)
+    # e_imp = np.random.rayleigh(0.05)
+    inc_imp = np.deg2rad(0)
+    e_imp = 0
+    b = 3*rhill
+    simp = 100e3
     
-    # simp = 100e3
-    # b = -5*rhill                          # impact parameter
+    # # simp = 100e3
+    # # b = -5*rhill                          # impact parameter
     mimp = 4./3.*np.pi*dens*simp**3
-    n_bin = np.sqrt(g*msun/rsun)**3        # mean motion of binary COM
-    n_imp = np.sqrt(g*msun/(rsun+b))**3    # mean motion of impactor
+    n_bin = np.sqrt(g*msun/rsun**3)        # mean motion of binary COM
+    n_imp = np.sqrt(g*msun/(rsun+b)**3)    # mean motion of impactor
     
     
     # f_enc   = np.arccos((rsun+b)*(1-e_imp**2)/(e_imp*(rsun+b)) - 1/e_imp)  # angle at which close encounter occurs
@@ -102,7 +103,8 @@ for j in range(n_encounters):
         sim.add(m=m2, r=s2, a=a, e=e, omega=omega, f=f, inc=inc, Omega=Omega, hash="secondary")
         sim.add(m=msun, a=rsun, f=np.pi, hash="sun")
         sim.move_to_com()
-        sim.add(m=mimp, r=simp, a=rsun+b, e=e_imp, omega=np.pi-f_enc, f=f_0, inc=inc_imp, Omega=0, hash="impactor")
+        sim.add(m=mimp, r=simp, a=rsun+b, f=theta, hash="impactor")
+        # sim.add(m=mimp, r=simp, a=rsun+b, e=e_imp, omega=np.pi-f_enc, f=f_0, inc=inc_imp, Omega=0, hash="impactor")
         return sim
     
     sim = setupSimulation()
@@ -238,14 +240,14 @@ save_data = np.hstack((a_total, e_total, inc_total, mass_total, b_total, e_imp_t
 np.savetxt(f"./data/{sim_name}", save_data)
     
 # %%
-    lim = 3
+    lim = 10
     fig, axes = plt.subplots(1, figsize=(4,4))
     axes.set_xlabel("$x/r_\mathrm{H}$")
     axes.set_ylabel("$y/r_\mathrm{H}$")
     axes.set_ylim(-lim,lim)
     axes.set_xlim(-lim,lim)
     
-    i = -200
+    i = -1
     ii = i
     
     color1 = "teal"
@@ -269,12 +271,12 @@ np.savetxt(f"./data/{sim_name}", save_data)
     axes.plot(cosix[0:ii]-siniy[0:ii], sinix[0:ii]+cosiy[0:ii], c=color3, lw=lw)
     axes.plot(cospx[i]-sinpy[i], sinpx[i]+cospy[i], c=color1, marker='o', ms=ms, label="primary")
     axes.plot(cossx[i]-sinsy[i], sinsx[i]+cossy[i], c=color2, marker='o', ms=ms, label="secondary")
-    # axes.plot(cosix[i]-siniy[i], sinix[i]+cosiy[i], c=color3, marker='o', ms=ms, label="impactor")
+    axes.plot(cosix[i]-siniy[i], sinix[i]+cosiy[i], c=color3, marker='o', ms=ms, label="impactor")
     # axes.text(-4.5, -4.5, 't = {} Years'.format(int(times[i]/(year))), fontsize=12)
     
     # axes.grid()
     axes.legend()
-    fig.savefig(f'./img/high_ecc_instability_example.pdf', bbox_inches='tight')
+    # fig.savefig(f'./img/high_ecc_instability_example.pdf', bbox_inches='tight')
     
         # %%
     
@@ -374,7 +376,7 @@ anim = animation.FuncAnimation(fig, animate, init_func=init, frames=noutputs, in
 
 # %%
 
-    i = -501
+    i = -151
     color1 = "teal"
     color2 = "hotpink"
     color3 = "sienna"
@@ -386,9 +388,9 @@ anim = animation.FuncAnimation(fig, animate, init_func=init, frames=noutputs, in
     # axes.set_xlabel("$x/R_\mathrm{h}$")
     # axes.set_ylabel("$y/R_\mathrm{h}$")
     # axes.set_zlabel("$z/R_\mathrm{h}$")
-    axes.set_xlabel("x/AU")
-    axes.set_ylabel("y/AU")
-    axes.set_zlabel("z/AU")
+    axes.set_xlabel("$x/\mathrm{AU}$")
+    axes.set_ylabel("$y/\mathrm{AU}$")
+    axes.set_zlabel("$z/\mathrm{AU}$")
     axes.set_xlim3d([-lim, lim])    
     axes.set_ylim3d([-lim, lim])
     axes.set_zlim3d([-lim, lim])
@@ -402,7 +404,7 @@ anim = animation.FuncAnimation(fig, animate, init_func=init, frames=noutputs, in
     axes.scatter(0,0,0, c='gold', s=100)
     axes.legend()
     
-    # fig.savefig(f'./img/timing_example.pdf', bbox_inches='tight')
+    fig.savefig(f'./img/timing_example.pdf', bbox_inches='tight')
 
 
     # %%

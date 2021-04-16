@@ -2,6 +2,7 @@
 import rebound
 import numpy as np
 import pandas as pd
+from scipy.optimize import fsolve
 from timeit import default_timer as timed
 
 
@@ -33,13 +34,13 @@ headers = ['time','b',
 
 coll_headers = ['time','body','r','m','x','y','z','vx','vy','vz']
 
-sim_name = "thesis_test"
+sim_name = "chaos_thesis_test"
 
-simp = np.arange(50e3,210e3,10e3) # create range of impactor sizes to loop through
-b = np.arange(2,4.1,0.2) # create range of impact parameters to loop through
+# simp = np.arange(50e3,210e3,50e3) # create range of impactor sizes to loop through
+# b = np.arange(2,6.1,1) # create range of impact parameters to loop through
 
-# simp = np.ones(5)*100e3
-# b = np.ones(1)*3
+simp = np.ones(5)*100e3
+b = np.ones(1)*3
 
 
 timer = timed() # start timer to time simulations
@@ -50,15 +51,38 @@ for j in range(len(b)):             # loop through each impact parameter
         bhill = b[j]*rhill # impact parameter
         mimp = 4./3.*np.pi*dens*simp[i]**3   # mass of impactor
         theta = 0.0015  # true anomaly of impactor
+        inc_imp = np.random.rayleigh(2)
+        e_imp = np.random.rayleigh(0.05)
         
-        # e = np.random.uniform()*0.5
-        inc = 0
-        omega = 0
-        Omega = 0
-        f = np.random.uniform()*2*np.pi
-        # inc = np.random.uniform()*2*np.pi
-        # omega = np.random.uniform()*2*np.pi
-        # Omega = np.random.uniform()*2*np.pi
+        e = np.random.uniform()*0.5
+        inc = np.random.uniform()*2*np.pi
+        omega = np.random.uniform()*2*np.pi
+        Omega = np.random.uniform()*2*np.pi
+        # inc = 0
+        # omega = 0
+        # Omega = 0
+        # f = np.random.uniform()*2*np.pi
+        
+        # n_bin = np.sqrt(g*msun/rsun)**3        # mean motion of binary COM
+        # n_imp = np.sqrt(g*msun/(rsun+bhill))**3    # mean motion of impactor
+        
+        
+        # # f_enc   = np.arccos((rsun+b)*(1-e_imp**2)/(e_imp*(rsun+b)) - 1/e_imp)  # angle at which close encounter occurs
+        # f_enc   = np.arccos(-e_imp)  # always needs to be in second quadrant
+        # # E       = np.arctan( np.sqrt(1-e_imp**2) * np.sin(f_enc) / (e_imp + np.cos(f_enc)) ) # E at encounter    
+        # E       = np.arctan2( np.sqrt(1-e_imp**2) * np.sin(f_enc), e_imp + np.cos(f_enc))
+        # M       = E - e_imp*np.sin(E)           # mean anomaly at encounter
+        # t_enc   = np.pi/n_bin                   # time it takes for binary COM to get to crossover point
+        # M_0     = n_imp*-t_enc + M              # mean anomaly at start of sim
+    
+        # def func(x):
+        #     return x-e_imp*np.sin(x) - M_0
+        
+        # E_0 = fsolve(func, 1)
+        
+        # # f_0 = np.arccos( (np.cos(E_0) - e_imp) / (1 - e_imp*np.cos(E_0)) )
+        
+        # f_0 = 2 * np.arctan2( np.sqrt(1+e_imp)*np.sin(E_0/2) , np.sqrt(1-e_imp)*np.cos(E_0/2) )
         
         def setupSimulation():
             sim = rebound.Simulation()              # initialize rebound simulation
@@ -69,6 +93,7 @@ for j in range(len(b)):             # loop through each impact parameter
             sim.add(m=msun, a=rsun, f=np.pi, hash="sun")
             sim.move_to_com()
             sim.add(m=mimp, r=simp[i], a=rsun+bhill, f=theta, hash="impactor")
+            # sim.add(m=mimp, r=simp[i], a=rsun+bhill, e=e_imp, omega=np.pi-f_enc, f=f_0, inc=inc_imp, Omega=0, hash="impactor")
             return sim
             
         sim = setupSimulation()
@@ -97,8 +122,8 @@ for j in range(len(b)):             # loop through each impact parameter
                     collided.append([sim.t, item.index, item.r, item.m, item.x, item.y, item.z, item.vx, item.vy, item.vz])
             collided = np.array(collided) 
             df_coll = pd.DataFrame(collided)
-            # df_coll.to_csv(f'./results/collision_{sim_name}_{np.round(simp[i]/1e3, 1)}_{np.round(b[j], 1)}.csv', header=coll_headers)
-            df_coll.to_csv(f'./thesis_results/collision_{sim_name}_{i}.csv', header=coll_headers)
+            df_coll.to_csv(f'./thesis_results/collision_{sim_name}_{np.round(simp[i]/1e3, 1)}_{np.round(b[j], 1)}.csv', header=coll_headers)
+            #df_coll.to_csv(f'./thesis_results/collision_{sim_name}_{i}.csv', header=coll_headers)
             
             sim.collision_resolve = 'merge'
         
@@ -137,7 +162,7 @@ for j in range(len(b)):             # loop through each impact parameter
         
         df = pd.DataFrame(particles)
         
-        # df.to_csv(f'./results/{sim_name}_{np.round(simp[i]/1e3, 1)}_{np.round(b[j], 1)}.csv', header=headers)
-        df.to_csv(f'./thesis_results/{sim_name}_{i}.csv', header=headers)
+        df.to_csv(f'./thesis_results/{sim_name}_{np.round(simp[i]/1e3, 1)}_{np.round(b[j], 1)}.csv', header=headers)
+        #df.to_csv(f'./thesis_results/{sim_name}_{i}.csv', header=headers)
             
 print(timed()-timer) # finish timer
