@@ -11,7 +11,7 @@ au = 1.496e11
 rsun = 44.*au
 Msun = 1.9891e30
 
-sim_name = 'wide_equalmass_ecc0_0_'
+sim_name = 'verywide_equalmass_impinc1_ecc0_0_'
 filenames = glob(f'./thesis_results/{sim_name}*')
 
 b_all = np.zeros(len(filenames))
@@ -120,7 +120,7 @@ ax.legend(loc='upper center', bbox_to_anchor=(0.49, 1.06), ncol=3, fancybox=True
 # ax.set_yticks(np.asarray((np.unique(simp_all)), dtype=int),)
 # ax.set_xticks(np.round(np.unique(b_all), 2))
 # plt.xlim(100,350)simp
-plt.savefig(f"./img/{sim_name}_final_bound.pdf", bbox_inches='tight')
+# plt.savefig(f"./img/{sim_name}_final_bound.pdf", bbox_inches='tight')
 
 
 # %%
@@ -147,7 +147,7 @@ ax.set_ylabel("Impactor radius [km]")
 norm = mpl.colors.Normalize(vmin=0, vmax=1)
 plt.colorbar(mpl.cm.ScalarMappable(norm=norm, cmap=cm), label='Eccentricity')
 
-plt.savefig(f"./img/{sim_name}_final_eccentricity.pdf", bbox_inches='tight')
+# plt.savefig(f"./img/{sim_name}_final_eccentricity.pdf", bbox_inches='tight')
 # %%
 test0 = a_all[:,0]
 test1 = a_all[:,1]
@@ -175,7 +175,7 @@ ax.set_ylabel("Impactor radius [km]")
 norm = mpl.colors.Normalize(vmin=0, vmax=1)
 plt.colorbar(mpl.cm.ScalarMappable(norm=norm, cmap=cm), label='Mutual orbital separation [$r_{\mathrm{H}}$]')
 
-plt.savefig(f"./img/{sim_name}_final_semimajoraxis.pdf", bbox_inches='tight')
+# plt.savefig(f"./img/{sim_name}_final_semimajoraxis.pdf", bbox_inches='tight')
 # %%
 
 b_all = np.round(b_all, 2)

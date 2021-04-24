@@ -23,8 +23,8 @@ m1 = 4./3.*np.pi*dens*s1**3                # mass of primary calculated from den
 m2 = 4./3.*np.pi*dens*s2**3                # mass of secondary calculated from density and radius
 rhill = rsun*(m1/msun/3.)**(1./3.)        # Hill radius of primary
 
-a = 0.2*rhill                            # separation of binary
-e = 0.5
+a = 0.11*rhill                            # separation of binary
+e = 0
 inc = np.deg2rad(0)
 
 pbin = 2.*np.pi/np.sqrt(g*(m1+m2)/a**3)            # orbital period of binary around the sun
@@ -50,9 +50,12 @@ b_total = []
 e_imp_total = []
 inc_imp_total = []
 
-n_encounters = 1
+print(t**2/pbin*np.sqrt(1-e)**(3/2))
 
-sim_name = "testtest"
+n_encounters = 1
+# sim_name = "testtest"
+
+timer = timed()
 # lim = 10
 for j in range(n_encounters):
     theta = 0.0015
@@ -64,7 +67,7 @@ for j in range(n_encounters):
     # e_imp = np.random.rayleigh(0.05)
     inc_imp = np.deg2rad(0)
     e_imp = 0
-    b = 3*rhill
+    b = 268*rhill
     simp = 100e3
     
     # # simp = 100e3
@@ -148,12 +151,12 @@ for j in range(n_encounters):
             if all_ps[3] in existing_ps:
                 imp[k] = [ps["impactor"].x, ps["impactor"].y, ps["impactor"].z]
                 vimp[k] = [ps["impactor"].vx, ps["impactor"].vy, ps["impactor"].vz]
-                
+          
       
         m1 = sim.particles[0].m
         m1 = sim.particles[1].m
         
-    # print(timed()-timer) # finish timer
+    print(timed()-timer) # finish timer
                 
     orbit = sim.particles[1].calculate_orbit(sim.particles[0])
     a = orbit.a
@@ -237,10 +240,10 @@ inc_imp_total = np.reshape(inc_imp_total, (noutputs*n_encounters, 1))
 
 save_data = np.hstack((a_total, e_total, inc_total, mass_total, b_total, e_imp_total, inc_imp_total))
 
-np.savetxt(f"./data/{sim_name}", save_data)
+# np.savetxt(f"./data/{sim_name}", save_data)
     
 # %%
-    lim = 10
+    lim = 5
     fig, axes = plt.subplots(1, figsize=(4,4))
     axes.set_xlabel("$x/r_\mathrm{H}$")
     axes.set_ylabel("$y/r_\mathrm{H}$")
@@ -258,25 +261,40 @@ np.savetxt(f"./data/{sim_name}", save_data)
     Rhillsec = rsun*(m2/msun/3.)**(1./3.)/rhill
     Rhillimp = rsun*(mimp/msun/3.)**(1./3.)/rhill
     # axes.grid()
-    primaryhill = plt.Circle((cospx[i]-sinpy[i], sinpx[i]+cospy[i]), Rhillprim, fc="none", ec=color1)
-    axes.add_artist(primaryhill)
-    secondaryhill = plt.Circle((cossx[i]-sinsy[i], sinsx[i]+cossy[i]), Rhillsec, fc="none", ec=color2)
-    axes.add_artist(secondaryhill)
-    impactorhill = plt.Circle((cosix[i]-siniy[i], sinix[i]+cosiy[i]), Rhillimp, fc="none", ec=color3)
-    axes.add_artist(impactorhill)
+    # primaryhill = plt.Circle((cospx[i]-sinpy[i], sinpx[i]+cospy[i]), Rhillprim, fc="none", ec=color1)
+    # axes.add_artist(primaryhill)
+    # secondaryhill = plt.Circle((cossx[i]-sinsy[i], sinsx[i]+cossy[i]), Rhillsec, fc="none", ec=color2)
+    # axes.add_artist(secondaryhill)
+    # impactorhill = plt.Circle((cosix[i]-siniy[i], sinix[i]+cosiy[i]), Rhillimp, fc="none", ec=color3)
+    # axes.add_artist(impactorhill)
     lw = 1.2
     ms = 5
     axes.plot(cospx[0:i]-sinpy[0:i], sinpx[0:i]+cospy[0:i], c=color1, lw=lw)
     axes.plot(cossx[0:i]-sinsy[0:i], sinsx[0:i]+cossy[0:i], c=color2, lw=lw)
-    axes.plot(cosix[0:ii]-siniy[0:ii], sinix[0:ii]+cosiy[0:ii], c=color3, lw=lw)
-    axes.plot(cospx[i]-sinpy[i], sinpx[i]+cospy[i], c=color1, marker='o', ms=ms, label="primary")
-    axes.plot(cossx[i]-sinsy[i], sinsx[i]+cossy[i], c=color2, marker='o', ms=ms, label="secondary")
-    axes.plot(cosix[i]-siniy[i], sinix[i]+cosiy[i], c=color3, marker='o', ms=ms, label="impactor")
+    axes.plot(cosix[0:ii]-siniy[0:ii], sinix[0:ii]+cosiy[0:i], c=color3, lw=lw)
+    axes.scatter(cospx[i]-sinpy[i], sinpx[i]+cospy[i], c=color1, label="primary")
+    axes.scatter(cossx[i]-sinsy[i], sinsx[i]+cossy[i], c=color2, label="secondary")
+    axes.scatter(cosix[i]-siniy[i], sinix[i]+cosiy[i], c=color3, label="impactor")
+    
+    # axes.plot(cospx[0:i]-sinpy[0:i], pref[0:i,2], c=color1, lw=lw)
+    # axes.plot(cossx[0:i]-sinsy[0:i], sref[0:i,2], c=color2, lw=lw)
+    # axes.plot(cosix[0:ii]-siniy[0:ii], impref[0:i,2], c=color3, lw=lw)
+    # axes.scatter(cospx[i]-sinpy[i], pref[i,2], c=color1, label="primary")
+    # axes.scatter(cossx[i]-sinsy[i], sref[i,2], c=color2, label="secondary")
+    # axes.scatter(cosix[i]-siniy[i], impref[i,2], c=color3, label="impactor")
+    
+    # axes.plot(sinpx[0:i]+cospy[0:i], pref[0:i,2], c=color1,plt lw=lw)
+    # axes.plot(sinsx[0:i]+cossy[0:i], sref[0:i,2], c=color2, lw=lw)
+    # axes.plot(sinix[0:i]+cosiy[0:i], impref[0:i,2], c=color3, lw=lw)
+    # axes.scatter(sinpx[i]+cospy[i], pref[i,2], c=color1, label="primary")
+    # axes.scatter(sinsx[i]+cossy[i], sref[i,2], c=color2, label="secondary")
+    # axes.scatter(sinix[i]+cosiy[i], impref[i,2], c=color3, label="impactor")
+    
     # axes.text(-4.5, -4.5, 't = {} Years'.format(int(times[i]/(year))), fontsize=12)
     
-    # axes.grid()
+    axes.grid()
     axes.legend()
-    # fig.savefig(f'./img/high_ecc_instability_example.pdf', bbox_inches='tight')
+    fig.savefig(f'./img/3D_example_2D_xy.pdf', bbox_inches='tight')
     
         # %%
     
@@ -404,20 +422,20 @@ anim = animation.FuncAnimation(fig, animate, init_func=init, frames=noutputs, in
     axes.scatter(0,0,0, c='gold', s=100)
     axes.legend()
     
-    fig.savefig(f'./img/timing_example.pdf', bbox_inches='tight')
+    # fig.savefig(f'./img/timing_example.pdf', bbox_inches='tight')
 
 
     # %%
-    i = -200
+    i = -1
     color1 = "teal"
     color2 = "hotpink"
     color3 = "sienna"
-    lim = 2.8
-    fig = plt.figure(figsize=(6,6))
+    lim = 3
+    fig = plt.figure(figsize=(5,5))
     axes = fig.add_subplot(111, projection='3d')
-    axes.set_xlabel("$x/R_\mathrm{h}$")
-    axes.set_ylabel("$y/R_\mathrm{h}$")
-    axes.set_zlabel("$z/R_\mathrm{h}$") 
+    axes.set_xlabel("$x/r_\mathrm{H}$")
+    axes.set_ylabel("$y/r_\mathrm{H}$")
+    axes.set_zlabel("$z/r_\mathrm{H}$") 
     axes.set_xlim3d([-lim, lim])
     axes.set_ylim3d([-lim, lim])
     axes.set_zlim3d([-lim, lim])
@@ -431,7 +449,7 @@ anim = animation.FuncAnimation(fig, animate, init_func=init, frames=noutputs, in
         
     axes.legend()
     
-    fig.savefig(f'./img/results_3D_example.pdf', bbox_inches='tight')
+    fig.savefig(f'./img/results_3D_example_thesis.pdf', bbox_inches='tight')
 
 
 # %%

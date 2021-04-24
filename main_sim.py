@@ -67,22 +67,22 @@ for j in range(len(b)):             # loop through each impact parameter
         # n_imp = np.sqrt(g*msun/(rsun+bhill))**3    # mean motion of impactor
         
         
-        # # f_enc   = np.arccos((rsun+b)*(1-e_imp**2)/(e_imp*(rsun+b)) - 1/e_imp)  # angle at which close encounter occurs
-        # f_enc   = np.arccos(-e_imp)  # always needs to be in second quadrant
-        # # E       = np.arctan( np.sqrt(1-e_imp**2) * np.sin(f_enc) / (e_imp + np.cos(f_enc)) ) # E at encounter    
-        # E       = np.arctan2( np.sqrt(1-e_imp**2) * np.sin(f_enc), e_imp + np.cos(f_enc))
-        # M       = E - e_imp*np.sin(E)           # mean anomaly at encounter
-        # t_enc   = np.pi/n_bin                   # time it takes for binary COM to get to crossover point
-        # M_0     = n_imp*-t_enc + M              # mean anomaly at start of sim
+        # f_enc   = np.arccos((rsun+b)*(1-e_imp**2)/(e_imp*(rsun+b)) - 1/e_imp)  # angle at which close encounter occurs
+        f_enc   = np.arccos(-e_imp)  # always needs to be in second quadrant
+        # E       = np.arctan( np.sqrt(1-e_imp**2) * np.sin(f_enc) / (e_imp + np.cos(f_enc)) ) # E at encounter    
+        E       = np.arctan2( np.sqrt(1-e_imp**2) * np.sin(f_enc), e_imp + np.cos(f_enc))
+        M       = E - e_imp*np.sin(E)           # mean anomaly at encounter
+        t_enc   = np.pi/n_bin                   # time it takes for binary COM to get to crossover point
+        M_0     = n_imp*-t_enc + M              # mean anomaly at start of sim
     
-        # def func(x):
-        #     return x-e_imp*np.sin(x) - M_0
+        def func(x):
+            return x-e_imp*np.sin(x) - M_0
         
-        # E_0 = fsolve(func, 1)
+        E_0 = fsolve(func, 1)
         
-        # # f_0 = np.arccos( (np.cos(E_0) - e_imp) / (1 - e_imp*np.cos(E_0)) )
+        # f_0 = np.arccos( (np.cos(E_0) - e_imp) / (1 - e_imp*np.cos(E_0)) )
         
-        # f_0 = 2 * np.arctan2( np.sqrt(1+e_imp)*np.sin(E_0/2) , np.sqrt(1-e_imp)*np.cos(E_0/2) )
+        f_0 = 2 * np.arctan2( np.sqrt(1+e_imp)*np.sin(E_0/2) , np.sqrt(1-e_imp)*np.cos(E_0/2) )
         
         def setupSimulation():
             sim = rebound.Simulation()              # initialize rebound simulation
