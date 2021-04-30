@@ -23,7 +23,7 @@ m1 = 4./3.*np.pi*dens*s1**3                # mass of primary calculated from den
 m2 = 4./3.*np.pi*dens*s2**3                # mass of secondary calculated from density and radius
 rhill = rsun*(m1/msun/3.)**(1./3.)        # Hill radius of primary
 
-a = 0.11*rhill                            # separation of binary
+a = 0.25*rhill                            # separation of binary
 e = 0
 inc = np.deg2rad(0)
 
@@ -32,8 +32,12 @@ t = 2.*np.pi/np.sqrt(g*msun/rsun**3)            # orbital period of binary aroun
 noutputs = 300           # number of outputs
 p, s, imp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3)) # position
 vp, vs, vimp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3)) # velocity
-totaltime = t
+totaltime = t*1.5
 times = np.linspace(0,totaltime, noutputs) # create times for integrations
+
+b = 4*rhill
+Omega_K = np.sqrt(g*msun/rsun**3)
+v_shear = -1.5*Omega_K*b
 
 f = np.random.uniform()*2*np.pi
 omega = np.random.uniform()*2*np.pi
@@ -50,7 +54,7 @@ b_total = []
 e_imp_total = []
 inc_imp_total = []
 
-print(t**2/pbin*np.sqrt(1-e)**(3/2))
+# print(t**2/pbin*np.sqrt(1-e)**(3/2))
 
 n_encounters = 1
 # sim_name = "testtest"
@@ -67,7 +71,7 @@ for j in range(n_encounters):
     # e_imp = np.random.rayleigh(0.05)
     inc_imp = np.deg2rad(0)
     e_imp = 0
-    b = 268*rhill
+    # b = 3.6*rhill
     simp = 100e3
     
     # # simp = 100e3
@@ -170,7 +174,7 @@ for j in range(n_encounters):
     
 
     
-    R, V, mu, hz, h_mag = np.zeros((noutputs,3)), np.zeros((noutputs,3)), np.zeros((noutputs,3)), np.zeros((noutputs,3)), np.zeros((noutputs,3))
+    R, V, mu, hz, h_mag, e_plot = np.zeros((noutputs,3)), np.zeros((noutputs,3)), np.zeros((noutputs,3)), np.zeros((noutputs,3)), np.zeros((noutputs,3)), np.zeros((noutputs,3))
     R[:,0] = np.linalg.norm(p-s, axis=1)
     R[:,1] = np.linalg.norm(p-imp, axis=1)
     R[:,2] = np.linalg.norm(s-imp, axis=1)
@@ -243,7 +247,7 @@ save_data = np.hstack((a_total, e_total, inc_total, mass_total, b_total, e_imp_t
 # np.savetxt(f"./data/{sim_name}", save_data)
     
 # %%
-    lim = 5
+    lim = 7
     fig, axes = plt.subplots(1, figsize=(4,4))
     axes.set_xlabel("$x/r_\mathrm{H}$")
     axes.set_ylabel("$y/r_\mathrm{H}$")
@@ -260,21 +264,21 @@ save_data = np.hstack((a_total, e_total, inc_total, mass_total, b_total, e_imp_t
     Rhillprim = rsun*(m1/msun/3.)**(1./3.)/rhill
     Rhillsec = rsun*(m2/msun/3.)**(1./3.)/rhill
     Rhillimp = rsun*(mimp/msun/3.)**(1./3.)/rhill
-    # axes.grid()
-    # primaryhill = plt.Circle((cospx[i]-sinpy[i], sinpx[i]+cospy[i]), Rhillprim, fc="none", ec=color1)
-    # axes.add_artist(primaryhill)
-    # secondaryhill = plt.Circle((cossx[i]-sinsy[i], sinsx[i]+cossy[i]), Rhillsec, fc="none", ec=color2)
-    # axes.add_artist(secondaryhill)
-    # impactorhill = plt.Circle((cosix[i]-siniy[i], sinix[i]+cosiy[i]), Rhillimp, fc="none", ec=color3)
-    # axes.add_artist(impactorhill)
-    lw = 1.2
-    ms = 5
+    
+    primaryhill = plt.Circle((cospx[i]-sinpy[i], sinpx[i]+cospy[i]), Rhillprim, fc="none", ec=color1)
+    axes.add_artist(primaryhill)
+    secondaryhill = plt.Circle((cossx[i]-sinsy[i], sinsx[i]+cossy[i]), Rhillsec, fc="none", ec=color2)
+    axes.add_artist(secondaryhill)
+    impactorhill = plt.Circle((cosix[i]-siniy[i], sinix[i]+cosiy[i]), Rhillimp, fc="none", ec=color3)
+    axes.add_artist(impactorhill)
+    lw = 1
+    ms = 25
     axes.plot(cospx[0:i]-sinpy[0:i], sinpx[0:i]+cospy[0:i], c=color1, lw=lw)
     axes.plot(cossx[0:i]-sinsy[0:i], sinsx[0:i]+cossy[0:i], c=color2, lw=lw)
     axes.plot(cosix[0:ii]-siniy[0:ii], sinix[0:ii]+cosiy[0:i], c=color3, lw=lw)
-    axes.scatter(cospx[i]-sinpy[i], sinpx[i]+cospy[i], c=color1, label="primary")
-    axes.scatter(cossx[i]-sinsy[i], sinsx[i]+cossy[i], c=color2, label="secondary")
-    axes.scatter(cosix[i]-siniy[i], sinix[i]+cosiy[i], c=color3, label="impactor")
+    axes.scatter(cospx[i]-sinpy[i], sinpx[i]+cospy[i], c=color1, s=ms, label="primary")
+    axes.scatter(cossx[i]-sinsy[i], sinsx[i]+cossy[i], c=color2, s=ms, label="secondary")
+    axes.scatter(cosix[i]-siniy[i], sinix[i]+cosiy[i], c=color3, s=ms, label="impactor")
     
     # axes.plot(cospx[0:i]-sinpy[0:i], pref[0:i,2], c=color1, lw=lw)
     # axes.plot(cossx[0:i]-sinsy[0:i], sref[0:i,2], c=color2, lw=lw)
@@ -292,9 +296,10 @@ save_data = np.hstack((a_total, e_total, inc_total, mass_total, b_total, e_imp_t
     
     # axes.text(-4.5, -4.5, 't = {} Years'.format(int(times[i]/(year))), fontsize=12)
     
-    axes.grid()
+    # axes.grid()
+    # axes.legend(loc='lower left')
     axes.legend()
-    fig.savefig(f'./img/3D_example_2D_xy.pdf', bbox_inches='tight')
+    # fig.savefig(f'./img/chaotic_encounters_e_2.pdf', bbox_inches='tight')
     
         # %%
     
@@ -481,7 +486,7 @@ anim.save(f, writer=writervideo)
 # n = 2*np.pi/t                               # mean motion of binary around the sun
 
 # cj = n**2*(x**2 + y**2) + 2*(mu/dr + mu/dr) - vx**2 - vy**2 # jacobian constant
-
+# %%
 y = energy
 plt.figure(figsize=(5,3))
 # plt.title(f"Integrator={sim.integrator} -- Impactor radius={simp/1e3} km -- b={b/Rhill} hill radii")
@@ -489,11 +494,11 @@ plt.plot(times/year, y[:,0], label="prim-sec", lw=1)
 plt.plot(times/year, y[:,1], label="prim-imp", lw=1)
 plt.plot(times/year, y[:,2], label="sec-imp", lw=1)
 plt.axhline(y=0, ls="--", color="black", lw=1)
-plt.xlabel("Time (years)")
-plt.ylabel("Energy (J/kg)")
+plt.xlabel("Time [years]")
+plt.ylabel("Energy [J/kg]")
 plt.xlim(0, np.amax(times)/year)
-plt.ylim(-2, 30)
-plt.grid('both')
+plt.ylim(-2,10)
+# plt.grid('both')
 plt.legend()
 plt.savefig(f"./img/changes_energy2.pdf", bbox_inches='tight')
 # %%
@@ -501,31 +506,32 @@ y = R
 plt.figure(figsize=(5,3))
 # plt.title(f"Integrator={sim.integrator} -- Impactor radius={simp/1e3} km -- b={b/Rhill} hill radii")
 plt.plot(times/year, y[:,0]/rhill, label="prim-sec", lw=1)
-color2 = "hotpink"
-color3 = "sienna"
 plt.plot(times/year, y[:,1]/rhill, label="prim-imp", lw=1)
 plt.plot(times/year, y[:,2]/rhill, label="sec-imp", lw=1)
-plt.xlabel("Time (years)")
-plt.ylabel("Distance (Hill Radii)")
+plt.xlabel("Time [years]")
+plt.ylabel("Distance [$r_\mathrm{H}$]")
 plt.xlim(0, np.amax(times)/year)
-plt.ylim(0, 20)
-plt.grid('both')
-plt.legend()
+plt.ylim(0, 4)
+# plt.grid('both')
+plt.legend(loc='upper left')
 plt.savefig("./img/changes_dr2.pdf", bbox_inches='tight')
 # %%
-y = e_total
+e_mavg = np.zeros(noutputs)
+yy = e_final[:,0]
+e_mavg = [np.mean(yy[i-1:i]) for i in range(len(yy))]
+y = e_final
 plt.figure(figsize=(5,3))
 # plt.title(f"Integrator={sim.integrator} -- Impactor radius={simp/1e3} km -- b={b/Rhill} hill radii")
 plt.plot(times/year, y[:,0], label="prim-sec", lw=1)
 plt.plot(times/year, y[:,1], label="prim-imp", lw=1)
 plt.plot(times/year, y[:,2], label="sec-imp", lw=1)
 plt.xlabel("Time (years)")
-plt.ylabel("eccentricity")
+plt.ylabel("Eccentricity")
 plt.xlim(0, np.amax(times)/year)
-plt.ylim(0, 1)
-plt.grid('both')
+plt.ylim(0, 0.5)
+# plt.grid('both')
 plt.legend()
-# plt.savefig(f"./img/changes_eccentricity2.pdf", bbox_inches='tight')
+plt.savefig(f"./img/changes_eccentricity2.pdf", bbox_inches='tight')
 # %%
 y = cj
 plt.figure(figsize=(9,4))

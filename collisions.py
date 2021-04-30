@@ -90,6 +90,7 @@ for i, collision in enumerate(collisions):
     dr = np.linalg.norm(position_vector)              # distance between bodies
     
     dv = np.linalg.norm(velocity_vector)              # collision speed
+    # print(dv)
     
     position_unit_vector = position_vector/dr
     
@@ -105,9 +106,10 @@ for i, collision in enumerate(collisions):
     
     M_tot = m[0]+m[1]
     mu = m[0]*m[1]/M_tot
-    q_r = 0.5*mu*collision_speed**2
+    q_r = 0.5*mu*dv**2
     
     gravitational_binding_energy = 3*g*m**2/(5*radius)
+    print(gravitational_binding_energy)
     
     b = B/dr
     
@@ -117,8 +119,8 @@ for i, collision in enumerate(collisions):
     b_crit = np.amax(radius)/dr
     
     escape_speed = np.sqrt(2*g*m/radius)     # escape speed for each body
-    fragmentation[i] = collision_speed / escape_speed     # collision causes fragmentation if speed greater than escape speed
-    # fragmentation[i] = q_r > gravitational_binding_energy
+    fragmentation[i] = dv / escape_speed     # collision causes fragmentation if speed greater than escape speed
+    # fragmentation[i] = q_r / gravitational_binding_energy
     
     # simp_all.append(re.findall("\d+\.\d+", collision)[0])
     # impact_param.append(re.findall("\d+\.\d+", collision)[1])
@@ -132,9 +134,9 @@ theta_all = theta_all[~nan_filter]
 bins = 50
 
 fig, ax = plt.subplots(1, figsize=(5,4))
-sns.distplot(dv_all, bins=bins, kde=False, norm_hist=True,
-                  hist_kws={"histtype": "step", "linewidth": 1,
-                            "alpha": 1, "color": "black"})
+# sns.distplot(dv_all, bins=bins, kde=False, norm_hist=True,
+#                   hist_kws={"histtype": "step", "linewidth": 1,
+#                             "alpha": 1, "color": "black"})
 sns.distplot(dv_all, bins=bins, kde=False, color="darkblue", norm_hist=True,)
 # ax.set_title(r'a = 0.4 R${_h}$')
 # ax.set_xlim(0,1)
@@ -151,7 +153,8 @@ plt.savefig(f"./img/collision_scatter_{sim_name}.pdf", bbox_inches="tight")
 fig, ax = plt.subplots(1, figsize=(5,4))
 ax.set_xlabel('Collision speed [m/s]')
 ax.set_ylabel(r'Collision angle [$^\circ$]')
-plt.hist2d(dv_all, theta_all, bins=10, cmap='plasma', density=True)
+h = plt.hist2d(dv_all, theta_all, bins=12, cmap='plasma', density=True)
+plt.colorbar(h[3])
 plt.savefig(f"./img/collision_hist2d_{sim_name}.pdf", bbox_inches="tight")
 # %%
 fig, ax = plt.subplots(1, figsize=(11,8))

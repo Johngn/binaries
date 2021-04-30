@@ -11,7 +11,7 @@ au = 1.496e11
 rsun = 44.*au
 Msun = 1.9891e30
 
-sim_name = 'verywide_equalmass_impinc1_ecc0_0_'
+sim_name = 'verywide_equalmass_impinc01_ecc0_0_'
 filenames = glob(f'./thesis_results/{sim_name}*')
 
 b_all = np.zeros(len(filenames))

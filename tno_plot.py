@@ -28,7 +28,7 @@ scattered2 = np.logical_and(np.logical_and(a > 55.7, a < 62), np.logical_and(e >
 scattered3 = np.logical_and(np.logical_and(a > 62, a < 72), np.logical_and(e > 0.4, e < 0.6))
 scattered4 = np.logical_and(np.logical_and(a > 72, a < 80), np.logical_and(e > 0.45, e < 0.6))
 
-scattered5 = np.logical_and(np.logical_and(a > 34, a < 36), np.logical_and(e > 0, e < 0.2))
+scattered5 = np.logical_and(np.logical_and(a > 34, a < 36), np.logical_and(e > 0.1, e < 0.2))
 scattered6 = np.logical_and(np.logical_and(a > 37, a < 49), np.logical_and(e > 0.1, e < 0.2))
 
 
@@ -43,6 +43,9 @@ s = 4
 alpha = 1
 lw = 0.1
 edgecolor = ''
+
+ax[0].plot(ees30, lw=0.5, color='black')
+ax[0].plot(ees40, lw=0.5, color='black')
 
 ax[0].scatter(0,0, alpha=alpha, s=20, color='blue', label='Hot classicals')
 ax[0].scatter(0,0, alpha=alpha, s=20, color='red', label='Cold classicals')
@@ -60,16 +63,14 @@ ax[0].scatter(a[hot],e[hot], alpha=alpha, s=s, color='blue', edgecolors=edgecolo
 ax[0].scatter(a[hot2],e[hot2], alpha=alpha, s=s, color='blue', edgecolors=edgecolor, linewidth=lw)
 ax[0].scatter(a[cold],e[cold], alpha=alpha, s=s, color='red', edgecolors=edgecolor, linewidth=lw)
 ax[0].scatter(a[plutinos],e[plutinos], alpha=alpha, s=s, color='limegreen', edgecolors=edgecolor, linewidth=lw)
-# ax[0].scatter(39.482, 0.2488, s=200, label='Pluto', color='darkorange', edgecolors='black')
-# ax[0].scatter(30.11, 0.008678, s=150,  label='Neptune', color='darkviolet', edgecolors='black')
+# ax[0].scatter(39.482, 0.2488, s=100, label='Pluto', color='darkgreen', edgecolors='')
+ax[0].scatter(30.11, 0.008678, s=100,  label='Neptune', color='steelblue', edgecolors='')
 ax[0].set_ylim(0, .5)
-ax[0].set_xlim(30, 80)
+ax[0].set_xlim(28, 80)
 ax[0].set_xticks(np.arange(0))
 # ax[0].axvline(44)
 ax[0].set_ylabel(r'Eccentricity')
 # ax[0].set_xlabel('Semi-major axis [AU]')
-ax[0].plot(ees30, lw=0.5, color='black')
-ax[0].plot(ees40, lw=0.5, color='black')
 ax[0].legend()
 
 
@@ -84,10 +85,10 @@ ax[1].scatter(data[cold,3],data[cold,0], s=s, alpha=alpha, color='red', edgecolo
 ax[1].scatter(data[hot,3],data[hot,0], s=s, alpha=alpha, color='blue', edgecolors=edgecolor, linewidth=lw)
 ax[1].scatter(data[hot2,3],data[hot2,0], s=s, alpha=alpha, color='blue', edgecolors=edgecolor, linewidth=lw)
 ax[1].scatter(data[plutinos,3],data[plutinos,0], s=s, alpha=alpha, color='limegreen', edgecolors=edgecolor, linewidth=lw)
-# ax[1].scatter(39.482, 17.16, s=200, label='Pluto', color='darkorange', edgecolors='black')
-# ax[1].scatter(30.11, 1.77, s=150,  label='Neptune', color ='darkviolet', edgecolors='black')
+# ax[1].scatter(39.482, 17.16, s=100, label='Pluto', color='darkgreen', edgecolors='')
+ax[1].scatter(30.11, 1.77, s=100,  label='Neptune', color ='steelblue', edgecolors='')
 ax[1].set_ylim(0, 50)
-ax[1].set_xlim(30,80)
+ax[1].set_xlim(28,80)
 ax[1].set_yticks(np.arange(0,46,5))
 # ax[1].axvline(44)
 ax[1].set_ylabel(r'Inclination [$^\circ$]')
@@ -116,19 +117,19 @@ bins = 20
 
 fig, ax = plt.subplots(1, figsize=(5,4))
 
-sns.distplot(e[cold], bins=bins, kde=False, norm_hist=True,
-                   hist_kws={"histtype": "step", "linewidth": 4, "color":"red"}, label="Cold-classicals")
-# sns.distplot(data_cold_classical_no_zero_ecc[:,0], bins=bins, kde=False, color="red", norm_hist=True, label="Cold-classicals")
+# sns.distplot(e[cold], bins=bins, kde=False, norm_hist=True,
+#                    hist_kws={"histtype": "step", "linewidth": 4, "color":"red"}, label="Cold-classicals")
+# # sns.distplot(data_cold_classical_no_zero_ecc[:,0], bins=bins, kde=False, color="red", norm_hist=True, label="Cold-classicals")
 
-sns.distplot(e[hot], bins=20, kde=False, norm_hist=True,
-                   hist_kws={"histtype": "step", "linewidth": 4, "color": "blue"}, label="Hot-classicals")
-# sns.distplot(data_hot_classical_no_zero_ecc[:,0], bins=bins, kde=False, color="darkturquoise", norm_hist=True, label="Hot-classicals")
+# sns.distplot(e[hot], bins=20, kde=False, norm_hist=True,
+#                    hist_kws={"histtype": "step", "linewidth": 4, "color": "blue"}, label="Hot-classicals")
+# sns.distplot(e[hot], bins=bins, kde=False, color="darkturquoise", norm_hist=True, label="Hot-classicals")
 
 
-# sns.distplot(np.random.rayleigh(2, 1000000), bins=200, kde=True, hist=False,
-#               kde_kws={"color": "darkred", "lw": 1}, label='$\sigma$ = 2')
-# sns.distplot(np.random.rayleigh(8, 1000000), bins=200, kde=True, hist=False,
-#              kde_kws={"color": "blue", "lw": 1}, label='$\sigma$ = 10')
+sns.distplot(np.random.rayleigh(2, 1000000), bins=200, kde=True, norm_hist=False,
+               kde_kws={"color": "darkred", "lw": 1})
+# sns.distplot(np.random.rayleigh(8, 1000000), bins=200, kde=True, norm_hist=True,
+#               kde_kws={"color": "blue", "lw": 1}, label='$\sigma$ = 10')
 
 # ax.set_xlim(-2, 50)
 plt.legend()
@@ -146,7 +147,7 @@ sns.distplot(np.random.rayleigh(0.05, 1000000), bins=200, kde=True, hist=False,
 sns.distplot(np.random.rayleigh(0.11, 1000000), bins=200, kde=True, hist=False,
               kde_kws={"color": "blue", "lw": 1}, label='$\sigma$ = 0.1')
 
-sns.distplot(data_cold_classical_no_zero_ecc[:,1], bins=bins, kde=False, norm_hist=True,
+sns.distplot(i[cold], bins=bins, kde=False, norm_hist=True,
                    hist_kws={"histtype": "step", "linewidth": 4, "color":"red"}, label="Cold-classicals")
 # sns.distplot(data_cold_classical_no_zero_ecc[:,1], bins=bins, kde=False, color="red", norm_hist=True, label="Cold-classicals")
 
@@ -187,7 +188,7 @@ axe.set_xlabel('Inclination [$^{\circ}$]')
 axe.legend()
 axe.grid()
 
-plt.savefig(f"./img/inclination_distplot.pdf", bbox_inches='tight')
+# plt.savefig(f"./img/inclination_distplot.pdf", bbox_inches='tight')
 
 # %%
 import numpy as np
@@ -196,27 +197,27 @@ import matplotlib.pyplot as plt
 
 fig, axe = plt.subplots()
 
-x0 = data_cold_classical_no_zero_ecc[:,1]
+x0 = e[cold]
 loc, scale = stats.rayleigh.fit(x0)
 xl = np.linspace(x0.min(), x0.max(), 100)
 axe.plot(xl, stats.rayleigh(scale=scale, loc=loc).pdf(xl), c='red')
-sns.distplot(data_cold_classical_no_zero_ecc[:,1], bins=bins, kde=False, norm_hist=True,
+sns.distplot(e[cold], bins=25, kde=False, norm_hist=True,
                    hist_kws={"histtype": "step", "linewidth": 3, "color":"red"}, label="Cold-classicals")
 
 
-x0 = data_hot_classical_no_zero_ecc[:,1]
+x0 = e[hot]
 loc, scale = stats.rayleigh.fit(x0)
 xl = np.linspace(x0.min(), x0.max(), 100)
 axe.plot(xl, stats.rayleigh(scale=scale, loc=loc).pdf(xl), c='blue')
-sns.distplot(data_hot_classical_no_zero_ecc[:,1], bins=bins, kde=False, norm_hist=True,
+sns.distplot(e[hot], bins=35, kde=False, norm_hist=True,
                    hist_kws={"histtype": "step", "linewidth": 3, "color":"blue"}, label="Hot-classicals")
 
 axe.set_xlabel('Eccentricity')
-# axe.set_xlim(-0.02,0.4)
+axe.set_xlim(-0.02,0.4)
 axe.legend()
-axe.grid()
+# axe.grid()
 
-plt.savefig(f"./img/eccentricity_distplot.pdf", bbox_inches='tight')
+# plt.savefig(f"./img/eccentricity_distplot.pdf", bbox_inches='tight')
 
 
 
