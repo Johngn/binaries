@@ -109,7 +109,7 @@ ax[1].axvline(43.7, color='black', linewidth=0.7, label="7:4", ls='--')
 ax[1].axvline(47.8, color='black', linewidth=0.7, label="2:1", ls='--')
 ax[1].axvline(55.3, color='black', linewidth=0.7, label="5:2", ls='--')
 
-fig.savefig('./img/cckbos.pdf', bbox_inches='tight')
+# fig.savefig('./img/cckbos.pdf', bbox_inches='tight')
 
 # %%
 hot = np.logical_and(classical, i > 5)
@@ -117,21 +117,21 @@ bins = 20
 
 fig, ax = plt.subplots(1, figsize=(5,4))
 
-# sns.distplot(e[cold], bins=bins, kde=False, norm_hist=True,
-#                    hist_kws={"histtype": "step", "linewidth": 4, "color":"red"}, label="Cold-classicals")
-# # sns.distplot(data_cold_classical_no_zero_ecc[:,0], bins=bins, kde=False, color="red", norm_hist=True, label="Cold-classicals")
+sns.distplot(i[cold], bins=bins, kde=False, norm_hist=True,
+                    hist_kws={"histtype": "step", "linewidth": 4, "color":"red"}, label="Cold-classicals")
+# sns.distplot(data_cold_classical_no_zero_ecc[:,0], bins=bins, kde=False, color="red", norm_hist=True, label="Cold-classicals")
 
-# sns.distplot(e[hot], bins=20, kde=False, norm_hist=True,
-#                    hist_kws={"histtype": "step", "linewidth": 4, "color": "blue"}, label="Hot-classicals")
+sns.distplot(i[hot], bins=40, kde=False, norm_hist=True,
+                    hist_kws={"histtype": "step", "linewidth": 4, "color": "blue"}, label="Hot-classicals")
 # sns.distplot(e[hot], bins=bins, kde=False, color="darkturquoise", norm_hist=True, label="Hot-classicals")
 
 
-sns.distplot(np.random.rayleigh(2, 1000000), bins=200, kde=True, norm_hist=False,
-               kde_kws={"color": "darkred", "lw": 1})
+# sns.distplot(np.random.rayleigh(2, 1000000), bins=200, kde=True, norm_hist=False,
+               # kde_kws={"color": "darkred", "lw": 1})
 # sns.distplot(np.random.rayleigh(8, 1000000), bins=200, kde=True, norm_hist=True,
 #               kde_kws={"color": "blue", "lw": 1}, label='$\sigma$ = 10')
 
-# ax.set_xlim(-2, 50)
+ax.set_xlim(0, 50)
 plt.legend()
 ax.set_xlabel('Inclination [$^{\circ}$]')
 # plt.savefig(f"./img/inclination_distplot.pdf", bbox_inches='tight')

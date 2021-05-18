@@ -23,13 +23,13 @@ m1 = 4./3.*np.pi*dens*s1**3                # mass of primary calculated from den
 m2 = 4./3.*np.pi*dens*s2**3                # mass of secondary calculated from density and radius
 rhill = rsun*(m1/msun/3.)**(1./3.)        # Hill radius of primary
 
-a = 0.25*rhill                            # separation of binary
+a = 0.4*rhill                            # separation of binary
 e = 0
 inc = np.deg2rad(0)
 
 pbin = 2.*np.pi/np.sqrt(g*(m1+m2)/a**3)            # orbital period of binary around the sun
 t = 2.*np.pi/np.sqrt(g*msun/rsun**3)            # orbital period of binary around the sun
-noutputs = 300           # number of outputs
+noutputs = 1000           # number of outputs
 p, s, imp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3)) # position
 vp, vs, vimp = np.zeros((noutputs, 3)), np.zeros((noutputs, 3)), np.zeros((noutputs, 3)) # velocity
 totaltime = t*1.5
@@ -69,10 +69,10 @@ for j in range(n_encounters):
     # inc_imp = np.random.uniform(0, np.deg2rad(5))
     # inc_imp = np.random.rayleigh(2)
     # e_imp = np.random.rayleigh(0.05)
-    inc_imp = np.deg2rad(0)
-    e_imp = 0
-    # b = 3.6*rhill
-    simp = 100e3
+    inc_imp = np.deg2rad(90)
+    e_imp = 0.5
+    b = 3.1*rhill
+    simp = 80e3
     
     # # simp = 100e3
     # # b = -5*rhill                          # impact parameter
@@ -304,28 +304,28 @@ save_data = np.hstack((a_total, e_total, inc_total, mass_total, b_total, e_imp_t
         # %%
     
 
-lim = 10
+lim = 7
 
 color1 = "teal"
 color2 = "hotpink"
 color3 = "sienna"
 lw = 1.5
-ms = 5
+ms = 6
 
-fig, axes = plt.subplots(1, figsize=(9, 9))
+fig, axes = plt.subplots(1, figsize=(6, 6))
 axes.set_xlabel("$x/R_\mathrm{h}$")
 axes.set_ylabel("$y/R_\mathrm{h}$")
 axes.set_ylim(-lim,lim)
 axes.set_xlim(-lim,lim)
-primaryline, = axes.plot([], [], label="primary", c=color1, lw=lw)
-secondaryline, = axes.plot([], [], label="secondary", c=color2, lw=lw)
-impactorline, = axes.plot([], [], label="impactor", c=color3, lw=lw)
-primarydot, = axes.plot([], [], marker="o", ms=ms, c=color1)   
-secondarydot, = axes.plot([], [], marker="o", ms=ms, c=color2)
-impactordot, = axes.plot([], [], marker="o", ms=ms, c=color3)
+primaryline, = axes.plot([], [], c=color1, lw=lw)
+secondaryline, = axes.plot([], [], c=color2, lw=lw)
+impactorline, = axes.plot([], [], c=color3, lw=lw)
+primarydot, = axes.plot([], [], marker="o", ms=ms, c=color1, label="primary", )   
+secondarydot, = axes.plot([], [], marker="o", ms=ms, c=color2, label="secondary")
+impactordot, = axes.plot([], [], marker="o", ms=ms, c=color3, label="impactor")
 text = axes.text(-lim+(lim/10), lim-(lim/10), '', fontsize=15)
 axes.legend()
-axes.grid()
+# axes.grid()
 
 rhillprim = rsun*(m1/msun/3.)**(1./3.)/rhill
 rhillsec = rsun*(m2/msun/3.)**(1./3.)/rhill
@@ -354,7 +354,7 @@ def animate(i):
     text.set_text('{} Years'.format(int(times[i]/(year))))
     return primarydot, secondarydot, impactordot, primaryline, secondaryline, impactorline, primaryhill, secondaryhill, impactorhill, text
 
-anim = animation.FuncAnimation(fig, animate, init_func=init, frames=noutputs, interval=1)
+anim = animation.FuncAnimation(fig, animate, init_func=init, frames=noutputs, interval=1, blit=True)
 # %%
     color1 = "teal"
     color2 = "hotpink"
@@ -431,7 +431,7 @@ anim = animation.FuncAnimation(fig, animate, init_func=init, frames=noutputs, in
 
 
     # %%
-    i = -1
+    i = -70
     color1 = "teal"
     color2 = "hotpink"
     color3 = "sienna"
@@ -454,7 +454,7 @@ anim = animation.FuncAnimation(fig, animate, init_func=init, frames=noutputs, in
         
     axes.legend()
     
-    fig.savefig(f'./img/results_3D_example_thesis.pdf', bbox_inches='tight')
+    fig.savefig(f'./img/presentation_3D_seminar.pdf', bbox_inches='tight')
 
 
 # %%
@@ -465,7 +465,7 @@ anim = animation.FuncAnimation(fig, animate, init_func=init, frames=noutputs, in
 
 # %%
 plt.rcParams['animation.ffmpeg_path'] = '/usr/bin/ffmpeg'
-f = f'videos/ps_animation_3.mp4' 
+f = f'videos/portfolio_anim_1.mp4' 
 writervideo = FFMpegWriter(fps=100) # ffmpeg must be installed
 anim.save(f, writer=writervideo)
 

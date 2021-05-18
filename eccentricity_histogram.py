@@ -19,7 +19,7 @@ sns.distplot(e, bins=bins, kde=False, color="teal", norm_hist=False,)
 # ax.set_xlim(0,1)
 ax.set_xlabel('Eccentricity')
 
-plt.savefig(f"./img/eccentricity_histogram.pdf", bbox_inches='tight')
+# plt.savefig(f"./img/eccentricity_histogram.pdf", bbox_inches='tight')
 
 # %%
 a = np.array([
