@@ -13,10 +13,10 @@ disrupted = [0.0219, 0.0311, 0.04578, 0.11904]
 collisions = [0.047, 0.0677, 0.0366, 0.0457]
 
 
-# bound = [0.8278, 0.8095, 0.7655, 0.7106]
-# swapped = [0.0952+0.0732, 0.0915+0.0622, 0.0805+0.0769, 0.0512+0.0751]
-# disrupted = [0.0384, 0.0677, 0.1043, 0.1904]
-# collisions = [0.0457, 0.04212, 0.0457, 0.04212]
+bound = [0.8278, 0.8095, 0.7655, 0.7106]
+swapped = [0.0952+0.0732, 0.0915+0.0622, 0.0805+0.0769, 0.0512+0.0751]
+disrupted = [0.0384, 0.0677, 0.1043, 0.1904]
+collisions = [0.0457, 0.04212, 0.0457, 0.04212]
 
 
 
@@ -31,10 +31,10 @@ rects3 = ax.bar(x + width/2, disrupted, width, label='Disrupted', color="#ff6e54
 rects4 = ax.bar(x + width*1.5, collisions, width, label='Collided', color="#ffa600", edgecolor="black")
 
 ax.grid(color='black', linestyle='--', linewidth=1, axis='y', alpha=0.2)
-# ax.set_ylabel('Number of encounter')
+ax.set_ylabel('Fraction of encounters')
 ax.set_xticks(x)
 ax.set_xticklabels(labels)
 ax.set_ylim(0,1.05)
 ax.legend()
 
-fig.savefig('./img/totals_equalmass.pdf', bbox_inches='tight')
+fig.savefig('./img/totals_10mass.pdf', bbox_inches='tight')

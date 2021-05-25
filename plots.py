@@ -11,7 +11,7 @@ au = 1.496e11
 rsun = 44.*au
 Msun = 1.9891e30
 
-sim_name = 'verywide_equalmass_impinc01_ecc0_0_'
+sim_name = 'chaos_wide_equalmass_b-3.2_imp-160_allrandom'
 filenames = glob(f'./thesis_results/{sim_name}*')
 
 b_all = np.zeros(len(filenames))
@@ -292,5 +292,6 @@ ax.bar([1,2,3,4], [number_of_bound,number_of_swapped1+number_of_swapped2,number_
 
 ax.grid(color='black', linestyle='--', linewidth=1, axis='y', alpha=0.2)
 plt.ylim(0,1)
+ax.set_ylabel('Fraction of encounters')
 plt.xticks([1,2,3,4,5], ('Bound', 'Swapped', 'Disrupted','Collided'))
 plt.savefig(f"./img/{sim_name}_dist.pdf", bbox_inches='tight')

@@ -59,7 +59,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from glob import glob
 
-sim_name = 'chaos_wide_equalmass_b-3_imp-100_frandom'
+sim_name = 'chaos_wide_10mass_b-2.7_imp-100_frandom'
 collisions = glob(f'./thesis_results/collision_{sim_name}*')
 # collisions = glob(f'./rebound/mastersproject/binaries/results/collision_*')
 fragmentation = np.zeros((len(collisions), 2))
@@ -137,11 +137,13 @@ fig, ax = plt.subplots(1, figsize=(5,4))
 # sns.distplot(dv_all, bins=bins, kde=False, norm_hist=True,
 #                   hist_kws={"histtype": "step", "linewidth": 1,
 #                             "alpha": 1, "color": "black"})
-sns.distplot(dv_all, bins=bins, kde=False, color="darkblue", norm_hist=True,)
+sns.distplot(collision_speed_all, bins=bins, kde=False, color="darkblue", norm_hist=False,)
 # ax.set_title(r'a = 0.4 R${_h}$')
 # ax.set_xlim(0,1)
 ax.set_xlabel('Collision speed [m/s]')
-plt.savefig(f"./img/collision_{sim_name}.pdf", bbox_inches='tight')
+ax.set_ylabel('Number of collisions')
+
+plt.savefig(f"./img/collision_{sim_name}2.pdf", bbox_inches='tight')
 # %%
 fig, ax = plt.subplots(1, figsize=(5,4))
 ax.scatter(dv_all, theta_all, s=5, marker='D', color="slategrey")
@@ -153,8 +155,9 @@ plt.savefig(f"./img/collision_scatter_{sim_name}.pdf", bbox_inches="tight")
 fig, ax = plt.subplots(1, figsize=(5,4))
 ax.set_xlabel('Collision speed [m/s]')
 ax.set_ylabel(r'Collision angle [$^\circ$]')
-h = plt.hist2d(dv_all, theta_all, bins=12, cmap='plasma', density=True)
-plt.colorbar(h[3])
+h = plt.hist2d(dv_all, theta_all, bins=12, cmap='plasma', density=True, label="test")
+cbar = plt.colorbar(h[3])
+cbar.set_label('Fraction of collisions')
 plt.savefig(f"./img/collision_hist2d_{sim_name}.pdf", bbox_inches="tight")
 # %%
 fig, ax = plt.subplots(1, figsize=(11,8))

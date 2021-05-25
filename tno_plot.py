@@ -113,53 +113,56 @@ ax[1].axvline(55.3, color='black', linewidth=0.7, label="5:2", ls='--')
 
 # %%
 hot = np.logical_and(classical, i > 5)
+bins = 8
+
+fig, ax = plt.subplots(1, figsize=(5,4))
+
+sns.distplot(i[cold], bins=bins, kde=False, norm_hist=True,
+                    hist_kws={"histtype": "step", "linewidth": 3, "color":"red"}, label="Cold classicals")
+
+sns.distplot(i[hot], bins=50, kde=False, norm_hist=True,
+                    hist_kws={"histtype": "step", "linewidth": 3, "color": "blue"}, label="Hot classicals")
+
+
+sns.distplot(np.random.rayleigh(2, 1000000), bins=200, kde=True, norm_hist=False, hist=False,
+                kde_kws={"color": "darkred", "lw": 1},
+                hist_kws={"histtype": "step", "linewidth": 4, "color":"red"})
+sns.distplot(np.random.rayleigh(10, 1000000), bins=200, kde=True, norm_hist=True, hist=False,
+                kde_kws={"color": "blue", "lw": 1},
+                hist_kws={"histtype": "step", "linewidth": 4, "color":"red"})
+
+ax.set_xlim(0, 50)
+plt.legend()
+plt.grid()
+ax.set_xlabel('Inclination [$^{\circ}$]')
+ax.set_ylabel('N')
+plt.savefig(f"./img/inclination_distplot.pdf", bbox_inches='tight')
+
+# %%
+
 bins = 20
 
 fig, ax = plt.subplots(1, figsize=(5,4))
 
-sns.distplot(i[cold], bins=bins, kde=False, norm_hist=True,
-                    hist_kws={"histtype": "step", "linewidth": 4, "color":"red"}, label="Cold-classicals")
-# sns.distplot(data_cold_classical_no_zero_ecc[:,0], bins=bins, kde=False, color="red", norm_hist=True, label="Cold-classicals")
+sns.distplot(e[cold], bins=bins, kde=False, norm_hist=True,
+                    hist_kws={"histtype": "step", "linewidth": 3, "color":"red"}, label="Cold classicals")
 
-sns.distplot(i[hot], bins=40, kde=False, norm_hist=True,
-                    hist_kws={"histtype": "step", "linewidth": 4, "color": "blue"}, label="Hot-classicals")
-# sns.distplot(e[hot], bins=bins, kde=False, color="darkturquoise", norm_hist=True, label="Hot-classicals")
+sns.distplot(e[hot], bins=60, kde=False, norm_hist=True,
+                    hist_kws={"histtype": "step", "linewidth": 3, "color": "blue"}, label="Hot classicals")
 
-
-# sns.distplot(np.random.rayleigh(2, 1000000), bins=200, kde=True, norm_hist=False,
-               # kde_kws={"color": "darkred", "lw": 1})
-# sns.distplot(np.random.rayleigh(8, 1000000), bins=200, kde=True, norm_hist=True,
-#               kde_kws={"color": "blue", "lw": 1}, label='$\sigma$ = 10')
-
-ax.set_xlim(0, 50)
-plt.legend()
-ax.set_xlabel('Inclination [$^{\circ}$]')
-# plt.savefig(f"./img/inclination_distplot.pdf", bbox_inches='tight')
-
-# %%
-
-bins = 30
-
-fig, ax = plt.subplots(1, figsize=(5,4))
-
-sns.distplot(np.random.rayleigh(0.05, 1000000), bins=200, kde=True, hist=False,
-             kde_kws={"color": "darkred", "lw": 1}, label='$\sigma$ = 0.05')
-sns.distplot(np.random.rayleigh(0.11, 1000000), bins=200, kde=True, hist=False,
-              kde_kws={"color": "blue", "lw": 1}, label='$\sigma$ = 0.1')
-
-sns.distplot(i[cold], bins=bins, kde=False, norm_hist=True,
-                   hist_kws={"histtype": "step", "linewidth": 4, "color":"red"}, label="Cold-classicals")
-# sns.distplot(data_cold_classical_no_zero_ecc[:,1], bins=bins, kde=False, color="red", norm_hist=True, label="Cold-classicals")
-
-
-sns.distplot(data_hot_classical_no_zero_ecc[:,1], bins=bins, kde=False, norm_hist=True,
-                   hist_kws={"histtype": "step", "linewidth": 4, "color": "blue"}, label="Hot-classicals")
-# sns.distplot(data_hot_classical_no_zero_ecc[:,1], bins=bins, kde=False, color="darkturquoise", norm_hist=True, label="Hot-classicals")
+sns.distplot(np.random.rayleigh(0.05, 1000000), bins=200, kde=True, norm_hist=False, hist=False,
+                kde_kws={"color": "darkred", "lw": 1},
+                hist_kws={"histtype": "step", "linewidth": 4, "color":"red"})
+sns.distplot(np.random.rayleigh(0.11, 1000000), bins=200, kde=True, norm_hist=True, hist=False,
+                kde_kws={"color": "blue", "lw": 1},
+                hist_kws={"histtype": "step", "linewidth": 4, "color":"red"})
 # ax.set_title(r'a = 0.4 R${_h}$')
-ax.set_xlim(-0.02,0.4)
+ax.set_xlim(-0.02,0.35)
 plt.legend()
+plt.grid()
 ax.set_xlabel('Eccentricity')
-# plt.savefig(f"./img/eccentricity_distplot.pdf", bbox_inches='tight')
+ax.set_ylabel('N')
+plt.savefig(f"./img/eccentricity_distplot.pdf", bbox_inches='tight')
 
 # %%
 import numpy as np
